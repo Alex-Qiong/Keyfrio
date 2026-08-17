@@ -1,0 +1,179 @@
+import React, { useRef } from 'react';
+import { useEditor } from '../../context/EditorContext';
+import { formatSMPTE, snapTime } from '../../utils/time';
+
+interface TimelineRulerProps {
+  totalWidth: number;
+}
+
+export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
+  const {
+    zoom,
+    seek,
+    currentTime,
+    inPoint,
+    outPoint,
+    snapping,
+    project,
+  } = useEditor();
+
+  const rulerRef = useRef<HTMLDivElement | null>(null);
+
+  // Interval calculation based on zoom level (pixels per second)
+  let majorSec = 5;
+  let subSec = 1;
+
+  if (zoom >= 80) {
+    majorSec = 1;
+    subSec = 0.2;
+  } else if (zoom >= 40) {
+    majorSec = 2;
+    subSec = 0.5;
+  } else if (zoom >= 20) {
+    majorSec = 5;
+    subSec = 1;
+  } else {
+    majorSec = 10;
+    subSec = 2;
+  }
+
+  const duration = totalWidth / zoom + 10;
+  const majorTicksCount = Math.ceil(duration / majorSec);
+
+  const getSnapPoints = (): number[] => {
+    const points: number[] = [0];
+    project.tracks.forEach((t) => {
+      t.clips.forEach((c) => {
+        points.push(c.start);
+        points.push(c.start + c.duration);
+      });
+    });
+    return points;
+  };
+
+  const handleSeekFromEvent = (e: MouseEvent | React.MouseEvent) => {
+    if (!rulerRef.current) return;
+    const rect = rulerRef.current.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    let targetTime = Math.max(0, clickX / zoom);
+
+    if (snapping) {
+      const snapPoints = getSnapPoints();
+      targetTime = snapTime(targetTime, snapPoints, 8 / zoom);
+    }
+
+    seek(targetTime);
+  };
+
+  const handleRulerMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    handleSeekFromEvent(e);
+
+    const onMouseMove = (moveEvent: MouseEvent) => {
+      handleSeekFromEvent(moveEvent);
+    };
+
+    const onMouseUp = () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    };
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+  };
+
+  // In / Out range styling
+  const inPx = inPoint !== null ? inPoint * zoom : null;
+  const outPx = outPoint !== null ? outPoint * zoom : null;
+  const playheadX = currentTime * zoom;
+
+  return (
+    <div
+      ref={rulerRef}
+      onMouseDown={handleRulerMouseDown}
+      className="h-6 bg-[#101116] border-b border-[#20222a] relative select-none cursor-pointer overflow-hidden shrink-0"
+      style={{ width: `${totalWidth}px` }}
+    >
+      {/* In / Out Work Area Region */}
+      {inPx !== null && outPx !== null && outPx > inPx && (
+        <div
+          className="absolute top-0 bottom-0 bg-blue-500/20 border-x border-blue-400 pointer-events-none z-10"
+          style={{
+            left: `${inPx}px`,
+            width: `${outPx - inPx}px`,
+          }}
+        />
+      )}
+
+      {/* In Point Flag */}
+      {inPx !== null && (
+        <div
+          className="absolute top-0 bottom-0 w-0.5 bg-blue-400 z-20 pointer-events-none"
+          style={{ left: `${inPx}px` }}
+        >
+          <div className="absolute top-0 left-0 bg-blue-500 text-white font-mono text-[7px] px-0.5 rounded-br font-bold">
+            IN
+          </div>
+        </div>
+      )}
+
+      {/* Out Point Flag */}
+      {outPx !== null && (
+        <div
+          className="absolute top-0 bottom-0 w-0.5 bg-blue-400 z-20 pointer-events-none"
+          style={{ left: `${outPx}px` }}
+        >
+          <div className="absolute top-0 right-0 bg-blue-500 text-white font-mono text-[7px] px-0.5 rounded-bl font-bold">
+            OUT
+          </div>
+        </div>
+      )}
+
+      {/* Major & Minor Ruler Ticks and Timestamps */}
+      {Array.from({ length: majorTicksCount }).map((_, i) => {
+        const time = i * majorSec;
+        const left = time * zoom;
+
+        return (
+          <div key={i} className="absolute top-0 bottom-0 pointer-events-none" style={{ left: `${left}px` }}>
+            {/* Major tick mark */}
+            <div className="h-2.5 w-px bg-[#3e4152]" />
+            {/* Time label */}
+            <span className="absolute top-2 left-1 text-[8px] font-mono text-neutral-400 whitespace-nowrap select-none">
+              {formatSMPTE(time)}
+            </span>
+
+            {/* Sub ticks */}
+            {Array.from({ length: Math.floor(majorSec / subSec) - 1 }).map((_, subIdx) => {
+              const subLeft = (subIdx + 1) * subSec * zoom;
+              return (
+                <div
+                  key={subIdx}
+                  className="absolute top-0 h-1 w-px bg-[#262833]"
+                  style={{ left: `${subLeft}px` }}
+                />
+              );
+            })}
+          </div>
+        );
+      })}
+
+      {/* Playhead Scrubber Cap on Ruler */}
+      <div
+        className="absolute top-0 bottom-0 pointer-events-none z-30 flex items-center justify-center"
+        style={{
+          left: `${playheadX}px`,
+          transform: 'translateX(-50%)',
+        }}
+      >
+        <div
+          className="w-3.5 h-4 bg-red-500 hover:bg-red-400 cursor-ew-resize pointer-events-auto flex items-center justify-center shadow-lg transition-transform hover:scale-110 active:scale-125"
+          style={{
+            clipPath: 'polygon(0% 0%, 100% 0%, 100% 65%, 50% 100%, 0% 65%)',
+          }}
+        >
+          <div className="w-1 h-1.5 bg-white rounded-full opacity-90" />
+        </div>
+      </div>
+    </div>
+  );
+};

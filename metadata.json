@@ -1,0 +1,12 @@
+{
+  "name": "Keyfrio Video Editor",
+  "description": "Keyfrio - Edit every moment. Shape every story. Professional web-based video editing platform with multi-track timeline, GPU effects, Lottie animations, and AI creative tools.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
+
