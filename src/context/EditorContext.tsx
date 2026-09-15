@@ -871,14 +871,6 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return count;
   }, [userAssets, project.tracks]);
 
-  // Modals state
-  const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false);
-  const [isRecordModalOpen, setIsRecordModalOpen] = useState<boolean>(false);
-  const [recordMode, setRecordMode] = useState<'screen' | 'camera' | 'audio'>('camera');
-  const [isShortcutsModalOpen, setIsShortcutsModalOpen] = useState<boolean>(false);
-  const [isAiModalOpen, setIsAiModalOpen] = useState<boolean>(false);
-  const [isAiCopilotDrawerOpen, setIsAiCopilotDrawerOpen] = useState<boolean>(false);
-
   // History stack for Undo/Redo
   const [history, setHistory] = useState<HistorySnapshot[]>([]);
   const [historyIndex, setHistoryIndex] = useState<number>(-1);
