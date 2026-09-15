@@ -97,7 +97,15 @@ const MainAppContent: React.FC = () => {
       <div className="flex-1 flex overflow-hidden min-h-0">
         <SidebarTabs />
         <div className="w-76 bg-[#131419] border-r border-[#20222a] flex flex-col shrink-0 overflow-hidden">
-          {renderActiveSidebar()}
+          <Suspense
+            fallback={
+              <div className="flex flex-1 items-center justify-center text-xs text-neutral-500">
+                正在加载面板…
+              </div>
+            }
+          >
+            {renderActiveSidebar()}
+          </Suspense>
         </div>
         <PreviewPlayer />
         <InspectorPanel />
