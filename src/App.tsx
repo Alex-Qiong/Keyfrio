@@ -28,7 +28,7 @@ const ProjectHome = lazy(() => import('./components/Home/ProjectHome').then((mod
 const LandingPage = lazy(() => import('./components/Landing/LandingPage').then((module) => ({ default: module.LandingPage })));
 
 const LoadingFallback: React.FC = () => (
-  <div className="flex h-screen w-screen items-center justify-center bg-[#070912] text-sm text-neutral-400">
+  <div className="flex h-screen w-screen items-center justify-center bg-[#f5f6f8] text-sm text-slate-500">
     正在加载 Keyfrio…
   </div>
 );
@@ -90,13 +90,13 @@ const MainAppContent: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-dvh w-full bg-[#0c0f18] text-neutral-200 overflow-hidden font-sans select-none animate-in fade-in duration-150">
+    <div className="keyfrio-editor-light flex flex-col h-dvh w-full bg-[#f5f6f8] text-slate-900 overflow-hidden font-sans select-none animate-in fade-in duration-150">
       <Navbar />
       <MediaRelinkBanner />
 
-      <div className="flex-1 flex overflow-hidden min-h-0 min-w-0">
+      <div className="flex-1 flex overflow-hidden min-h-0 min-w-0 gap-1.5 p-1.5 pb-0 bg-[#f5f6f8]">
         <SidebarTabs />
-        <div className="w-72 2xl:w-80 bg-[#141923] border-r border-[#252c3a] flex flex-col shrink-0 overflow-hidden">
+        <div className="w-[24vw] min-w-[300px] max-w-[430px] bg-white border border-[#dde1e7] rounded-lg flex flex-col shrink-0 overflow-hidden">
           <Suspense
             fallback={
               <div className="flex flex-1 items-center justify-center text-xs text-neutral-500">
