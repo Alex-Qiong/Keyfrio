@@ -326,13 +326,13 @@ export const PreviewPlayer: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="flex-1 flex flex-col bg-[#0b0c10] overflow-hidden select-none relative"
+      className="flex-1 flex flex-col bg-white border border-[#dde1e7] rounded-lg overflow-hidden select-none relative"
     >
       {/* Player Canvas Area */}
-      <div className="flex-1 flex items-center justify-center p-2.5 relative overflow-hidden bg-[#0d0e12]">
+      <div className="flex-1 flex items-center justify-center p-3 relative overflow-hidden bg-[#f8fafc]">
         {/* Aspect Ratio Box Wrapper */}
         <div
-          className="relative max-w-full max-h-full flex items-center justify-center shadow-xl rounded-lg overflow-hidden border border-[#20222a] bg-black"
+          className="relative max-w-full max-h-full flex items-center justify-center rounded-sm overflow-hidden border border-[#d9dee7] bg-black"
           style={{
             aspectRatio: `${project.resolution.width} / ${project.resolution.height}`,
           }}
@@ -360,10 +360,10 @@ export const PreviewPlayer: React.FC = () => {
 
           {/* Quick HUD badge when hovering */}
           <div className="absolute top-2 left-2 flex items-center gap-1 pointer-events-none opacity-60 hover:opacity-100 transition-opacity">
-            <span className="bg-[#101116]/80 backdrop-blur-xs px-1.5 py-0.5 rounded text-[9px] font-mono text-neutral-300 border border-[#20222a]">
+            <span className="bg-white/90 backdrop-blur-xs px-1.5 py-0.5 rounded text-[9px] font-mono text-slate-600 border border-slate-200">
               {project.resolution.aspectRatio} · {project.resolution.width}×{project.resolution.height}
             </span>
-            <span className="bg-[#101116]/80 backdrop-blur-xs px-1.5 py-0.5 rounded text-[9px] font-mono text-neutral-400 border border-[#20222a]">
+            <span className="bg-white/90 backdrop-blur-xs px-1.5 py-0.5 rounded text-[9px] font-mono text-slate-500 border border-slate-200">
               {project.fps} FPS
             </span>
           </div>
@@ -378,7 +378,7 @@ export const PreviewPlayer: React.FC = () => {
       </div>
 
       {/* Player Bottom Control Bar */}
-      <div className="h-9 bg-[#131419] border-t border-[#20222a] px-3 flex items-center justify-between text-xs text-neutral-300 shrink-0 select-none">
+      <div className="h-10 bg-white border-t border-[#dde1e7] px-3 flex items-center justify-between text-xs text-slate-600 shrink-0 select-none">
         {/* Left: Timecode / Position */}
         <div className="flex items-center gap-1.5">
           {isEditingTimecode ? (
