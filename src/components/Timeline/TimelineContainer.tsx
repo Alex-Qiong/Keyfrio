@@ -93,15 +93,15 @@ export const TimelineContainer: React.FC = () => {
   const outPx = outPoint !== null ? outPoint * zoom : null;
 
   return (
-    <div className="h-72 bg-[#0e0f14] border-t border-[#20222a] flex flex-col select-none shrink-0 z-20">
+    <div className="h-[46vh] min-h-[330px] bg-white border-t border-[#dde1e7] flex flex-col select-none shrink-0 z-20 mt-1.5">
       {/* Top Toolbar */}
       <TimelineToolbar />
 
       {/* 1. Dedicated Ruler Bar (Height: 24px) */}
-      <div className="h-6 bg-[#101116] border-b border-[#20222a] flex shrink-0 z-20">
+      <div className="h-7 bg-white border-b border-[#dde1e7] flex shrink-0 z-20">
         {/* Left Corner Box: Timecode + Quick Track Add (Fixed 192px) */}
-        <div className="w-48 bg-[#101116] border-r border-[#20222a] px-2 flex items-center justify-between text-[9px] font-semibold text-neutral-400 shrink-0">
-          <span className="font-mono text-cyan-400 font-bold tracking-wider">
+        <div className="w-24 bg-white border-r border-[#dde1e7] px-2 flex items-center justify-between text-[9px] font-semibold text-slate-500 shrink-0">
+          <span className="font-mono text-sky-500 font-bold tracking-wider">
             {formatSMPTE(currentTime)}
           </span>
           <div className="flex items-center gap-1">
@@ -138,7 +138,7 @@ export const TimelineContainer: React.FC = () => {
         <div
           ref={headerScrollRef}
           onWheel={handleHeaderWheel}
-          className="w-48 bg-[#131419] border-r border-[#20222a] flex flex-col shrink-0 z-20 shadow-md overflow-hidden"
+          className="w-24 bg-white border-r border-[#dde1e7] flex flex-col shrink-0 z-20 overflow-hidden"
         >
           {project.tracks.map((track, idx) => (
             <TrackHeader
@@ -155,7 +155,7 @@ export const TimelineContainer: React.FC = () => {
           ref={tracksScrollRef}
           onScroll={handleTracksScroll}
           onMouseDown={handleTimelineMouseDown}
-          className={`flex-1 flex flex-col overflow-x-auto overflow-y-auto relative bg-[#0d0e12] ${
+          className={`flex-1 flex flex-col overflow-x-auto overflow-y-auto relative bg-[#fbfcfe] ${
             toolMode === 'hand'
               ? isHandPanning
                 ? 'cursor-grabbing'
