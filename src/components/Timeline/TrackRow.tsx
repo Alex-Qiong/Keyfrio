@@ -106,11 +106,11 @@ export const TrackRow: React.FC<TrackRowProps> = ({ track, totalWidth }) => {
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onContextMenu={handleContextMenu}
-        className={`${getHeightClass()} border-b border-[#20222a] relative bg-[#0f1015] hover:bg-[#121319] transition-colors ${
+        className={`${getHeightClass()} border-b border-[#edf0f4] relative bg-[#fbfcfe] hover:bg-[#f7faff] transition-colors ${
           isHidden ? 'opacity-35 grayscale' : ''
         } ${
           isLocked
-            ? 'bg-[repeating-linear-gradient(45deg,#101115,#101115_10px,#14151a_10px,#14151a_20px)] cursor-not-allowed'
+            ? 'bg-[repeating-linear-gradient(45deg,#f6f7f9,#f6f7f9_10px,#eef1f5_10px,#eef1f5_20px)] cursor-not-allowed'
             : ''
         } ${isDragOver ? 'ring-2 ring-indigo-500/80 bg-indigo-950/20' : ''} ${
           toolMode === 'blade' ? 'cursor-crosshair' : ''
@@ -118,7 +118,7 @@ export const TrackRow: React.FC<TrackRowProps> = ({ track, totalWidth }) => {
         style={{ width: `${totalWidth}px` }}
       >
         {/* Background Sub-second grid lines */}
-        <div className="absolute inset-0 pointer-events-none opacity-10 bg-[linear-gradient(to_right,#ffffff15_1px,transparent_1px)] bg-[size:100px_100%]" />
+        <div className="absolute inset-0 pointer-events-none opacity-100 bg-[linear-gradient(to_right,#e8edf3_1px,transparent_1px)] bg-[size:100px_100%]" />
 
         {/* Drag over guide text */}
         {isDragOver && (
