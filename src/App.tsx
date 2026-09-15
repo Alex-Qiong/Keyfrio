@@ -48,7 +48,7 @@ const MainAppContent: React.FC = () => {
 
   if (currentView === 'landing') {
     return (
-      <div className="w-screen h-screen bg-[#07080b] overflow-y-auto overflow-x-hidden">
+      <div className="w-full h-dvh bg-[#07080b] overflow-y-auto overflow-x-hidden">
         <LandingPage />
         <CommonOverlays />
       </div>
@@ -57,7 +57,7 @@ const MainAppContent: React.FC = () => {
 
   if (currentView === 'home') {
     return (
-      <div className="w-screen h-screen bg-[#0a0b0e] overflow-y-auto overflow-x-hidden">
+      <div className="w-full h-dvh bg-[#0a0b0e] overflow-y-auto overflow-x-hidden">
         <ProjectHome />
         <CommonOverlays />
       </div>
@@ -90,13 +90,13 @@ const MainAppContent: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen w-screen bg-[#0c0d11] text-neutral-200 overflow-hidden font-sans select-none animate-in fade-in duration-150">
+    <div className="flex flex-col h-dvh w-full bg-[#0c0d11] text-neutral-200 overflow-hidden font-sans select-none animate-in fade-in duration-150">
       <Navbar />
       <MediaRelinkBanner />
 
-      <div className="flex-1 flex overflow-hidden min-h-0">
+      <div className="flex-1 flex overflow-hidden min-h-0 min-w-0">
         <SidebarTabs />
-        <div className="w-76 bg-[#131419] border-r border-[#20222a] flex flex-col shrink-0 overflow-hidden">
+        <div className="w-72 2xl:w-80 bg-[#131419] border-r border-[#20222a] flex flex-col shrink-0 overflow-hidden">
           <Suspense
             fallback={
               <div className="flex flex-1 items-center justify-center text-xs text-neutral-500">

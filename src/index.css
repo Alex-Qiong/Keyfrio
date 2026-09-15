@@ -1,14 +1,67 @@
 @import "tailwindcss";
 
+:root {
+  color-scheme: dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --surface-canvas: #0c0d11;
+  --surface-panel: #131419;
+  --surface-elevated: #191b22;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --accent-primary: #3b82f6;
+  --focus-ring: #60a5fa;
+}
+
 @layer base {
   * {
+    box-sizing: border-box;
     scrollbar-width: thin;
-    scrollbar-color: #24252f transparent;
+    scrollbar-color: #30323d transparent;
+  }
+
+  html,
+  body,
+  #root {
+    width: 100%;
+    min-width: 320px;
+    min-height: 100%;
+    margin: 0;
+    background: var(--surface-canvas);
+  }
+
+  body {
+    overflow: hidden;
+    color: #e5e7eb;
+    font-family:
+      Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    color: #ffffff;
+    background: rgba(59, 130, 246, 0.45);
   }
 
   ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
@@ -16,16 +69,29 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #282935;
-    border-radius: 4px;
+    background: #30323d;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background-clip: padding-box;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #3a3b4c;
+    background: #454856;
+    background-clip: padding-box;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
 .cursor-rotate-custom {
   cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M4 12a8 8 0 0 1 14.93-4M20 12a8 8 0 0 1-14.93 4' stroke='%23000000' stroke-width='4.5' stroke-linecap='round'/%3E%3Cpath d='M15 4h4v4M9 20H5v-4' stroke='%23000000' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M4 12a8 8 0 0 1 14.93-4M20 12a8 8 0 0 1-14.93 4' stroke='%23ffffff' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M15 4h4v4M9 20H5v-4' stroke='%2338bdf8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") 12 12, crosshair !important;
 }
-

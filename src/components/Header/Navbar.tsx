@@ -19,7 +19,6 @@ import {
   Radio,
   Database,
   Layers,
-  Home,
   Plus,
   HardDrive,
   AlertTriangle,
@@ -103,7 +102,7 @@ export const Navbar: React.FC = () => {
   };
 
   return (
-    <header className="h-11 bg-[#131419] border-b border-[#20222a] flex items-center justify-between px-3 text-xs text-neutral-200 select-none shrink-0 z-30">
+    <header className="h-12 bg-[#111218]/95 backdrop-blur-md border-b border-white/8 flex items-center justify-between px-4 text-xs text-neutral-200 select-none shrink-0 z-30">
       {/* Left: Brand + Project Manager & Name */}
       <div className="flex items-center gap-2.5">
         <div className="flex items-center gap-2 pr-2.5 border-r border-[#22242d]">
@@ -126,17 +125,6 @@ export const Navbar: React.FC = () => {
             </div>
           </button>
         </div>
-
-        {/* Back to Official Website */}
-        <button
-          id="navbar-landing-button"
-          onClick={openLanding}
-          className="flex items-center gap-1.5 bg-[#171821] hover:bg-[#1f212d] border border-[#272a38] text-neutral-300 hover:text-white px-2.5 py-1 rounded-md transition-colors cursor-pointer"
-          title="返回 Keyfrio 官网首页"
-        >
-          <Home className="w-3.5 h-3.5 text-blue-400" />
-          <span className="font-medium text-xs">官网</span>
-        </button>
 
         {/* Database Projects Library Button */}
         <button
@@ -170,6 +158,7 @@ export const Navbar: React.FC = () => {
               type="text"
               value={tempTitle}
               autoFocus
+              aria-label="工程名称"
               onChange={(e) => setTempTitle(e.target.value)}
               onBlur={handleTitleSubmit}
               onKeyDown={(e) => e.key === 'Enter' && handleTitleSubmit()}
@@ -207,6 +196,9 @@ export const Navbar: React.FC = () => {
           <div className="relative">
             <button
               onClick={() => setIsProjectMenuOpen((o) => !o)}
+              aria-label="打开工程文件菜单"
+              aria-haspopup="menu"
+              aria-expanded={isProjectMenuOpen}
               className="text-neutral-400 hover:text-white p-1.5 rounded-md hover:bg-[#1c1d25] transition-colors cursor-pointer"
               title="工程文件导入/导出"
             >
@@ -317,6 +309,7 @@ export const Navbar: React.FC = () => {
       <div className="flex items-center gap-1">
         <button
           onClick={undo}
+          aria-label="撤销"
           disabled={!canUndo}
           title="撤销 (Ctrl+Z)"
           className={`p-1.5 rounded-md hover:bg-[#1e202a] transition-colors cursor-pointer ${
@@ -327,6 +320,7 @@ export const Navbar: React.FC = () => {
         </button>
         <button
           onClick={redo}
+          aria-label="重做"
           disabled={!canRedo}
           title="重做 (Ctrl+Y)"
           className={`p-1.5 rounded-md hover:bg-[#1e202a] transition-colors cursor-pointer ${
@@ -365,7 +359,7 @@ export const Navbar: React.FC = () => {
         <button
           onClick={() => setIsSeqModalOpen(true)}
           className="flex items-center gap-1 bg-[#171821] hover:bg-[#1f212d] border border-[#272a38] text-neutral-300 hover:text-white px-2 py-1 rounded-md text-xs transition-colors cursor-pointer"
-          title="FreeCut 多序列管理器 (Sequences)"
+          title="Keyfrio 多序列管理器 (Sequences)"
         >
           <Layers className="w-3.5 h-3.5 text-sky-400" />
           <span className="hidden md:inline font-medium">序列</span>
@@ -378,7 +372,7 @@ export const Navbar: React.FC = () => {
         <button
           onClick={() => setIsStorageModalOpen(true)}
           className="flex items-center gap-1 bg-[#171821] hover:bg-[#1f212d] border border-[#272a38] text-neutral-300 hover:text-white px-2 py-1 rounded-md text-xs transition-colors cursor-pointer"
-          title="FreeCut 本地 OPFS 存储监控"
+          title="Keyfrio 本地 OPFS 存储监控"
         >
           <HardDrive className="w-3.5 h-3.5 text-emerald-400" />
           <span className="hidden lg:inline font-medium">OPFS</span>
@@ -399,6 +393,7 @@ export const Navbar: React.FC = () => {
 
         <button
           onClick={openShortcutsModal}
+          aria-label="打开快捷键指南"
           title="快捷键大全 (?)"
           className="p-1.5 text-neutral-400 hover:text-white hover:bg-[#1e202a] rounded-md transition-colors cursor-pointer"
         >
@@ -416,13 +411,13 @@ export const Navbar: React.FC = () => {
         </button>
       </div>
 
-      {/* FreeCut Sequence Manager Modal */}
+      {/* Keyfrio Sequence Manager Modal */}
       <SequenceManagerModal
         isOpen={isSeqModalOpen}
         onClose={() => setIsSeqModalOpen(false)}
       />
 
-      {/* FreeCut OPFS Storage Modal */}
+      {/* Keyfrio OPFS Storage Modal */}
       <StorageManagerModal
         isOpen={isStorageModalOpen}
         onClose={() => setIsStorageModalOpen(false)}
