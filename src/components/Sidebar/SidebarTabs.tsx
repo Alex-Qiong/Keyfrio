@@ -37,7 +37,7 @@ export const SidebarTabs: React.FC = () => {
   return (
     <aside
       aria-label="编辑工具"
-      className="w-15 bg-[#10141d] border-r border-white/8 flex flex-col items-center py-2 select-none shrink-0 z-20"
+      className="w-10 bg-white border border-[#dde1e7] rounded-lg flex flex-col items-center py-1.5 select-none shrink-0 z-20"
     >
       <nav className="flex flex-col gap-1 w-full px-1.5">
         {TABS.map((tab) => {
@@ -51,33 +51,33 @@ export const SidebarTabs: React.FC = () => {
               aria-label={tab.name}
               aria-pressed={isActive}
               onClick={() => setActiveSidebarTab(tab.id)}
-              className={`flex min-h-12 flex-col items-center justify-center rounded-lg w-full transition-colors group relative cursor-pointer ${
+              className={`flex min-h-9 flex-col items-center justify-center rounded-md w-full transition-colors group relative cursor-pointer ${
                 isActive
-                  ? 'bg-sky-400/12 text-white'
-                  : 'text-neutral-500 hover:text-neutral-200 hover:bg-white/5'
+                  ? 'bg-sky-50 text-sky-600'
+                  : 'text-slate-400 hover:text-slate-700 hover:bg-slate-100'
               }`}
             >
               <div className="relative flex items-center justify-center">
                 <Icon
                   aria-hidden="true"
-                  className={`w-[18px] h-[18px] transition-colors ${
-                    isActive ? 'text-sky-400' : 'text-current'
+                  className={`w-4 h-4 transition-colors ${
+                    isActive ? 'text-sky-500' : 'text-current'
                   }`}
                   strokeWidth={isActive ? 2.2 : 1.8}
                 />
                 {tab.badge && (
-                  <span className="absolute -top-2 -right-3 rounded bg-[#2d3648] px-1 text-[7px] font-semibold tracking-wide text-neutral-300">
+                    <span className="absolute -top-2 -right-3 rounded bg-slate-100 px-1 text-[7px] font-semibold tracking-wide text-slate-500 border border-slate-200">
                     {tab.badge}
                   </span>
                 )}
               </div>
-              <span className="mt-1 text-[10px] leading-none tracking-tight">
+              <span className="sr-only">
                 {tab.name}
               </span>
               {isActive && (
                 <span
                   aria-hidden="true"
-                  className="absolute inset-y-2 left-0 w-0.5 rounded-r bg-blue-400"
+                  className="absolute inset-y-2 left-0 w-0.5 rounded-r bg-sky-400"
                 />
               )}
             </button>
