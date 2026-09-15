@@ -1,22 +1,22 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  --surface-canvas: #0c0f18;
-  --surface-panel: #141923;
-  --surface-elevated: #1a2030;
-  --border-subtle: rgba(148, 163, 184, 0.14);
-  --accent-primary: #38bdf8;
-  --focus-ring: #7dd3fc;
+  --surface-canvas: #f5f6f8;
+  --surface-panel: #ffffff;
+  --surface-elevated: #f9fafb;
+  --border-subtle: #dde1e7;
+  --accent-primary: #2ea3f2;
+  --focus-ring: #2ea3f2;
 }
 
 @layer base {
   * {
     box-sizing: border-box;
     scrollbar-width: thin;
-    scrollbar-color: #30323d transparent;
+    scrollbar-color: #c7ced8 transparent;
   }
 
   html,
@@ -31,7 +31,7 @@
 
   body {
     overflow: hidden;
-    color: #e5e7eb;
+    color: #111827;
     font-family:
       Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
       sans-serif;
@@ -56,7 +56,7 @@
 
   ::selection {
     color: #ffffff;
-    background: rgba(56, 189, 248, 0.38);
+    background: rgba(46, 163, 242, 0.38);
   }
 
   ::-webkit-scrollbar {
@@ -69,14 +69,14 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #30323d;
+    background: #c7ced8;
     border: 1px solid transparent;
     border-radius: 999px;
     background-clip: padding-box;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #454856;
+    background: #aeb7c4;
     background-clip: padding-box;
   }
 }
@@ -94,4 +94,72 @@
 
 .cursor-rotate-custom {
   cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M4 12a8 8 0 0 1 14.93-4M20 12a8 8 0 0 1-14.93 4' stroke='%23000000' stroke-width='4.5' stroke-linecap='round'/%3E%3Cpath d='M15 4h4v4M9 20H5v-4' stroke='%23000000' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M4 12a8 8 0 0 1 14.93-4M20 12a8 8 0 0 1-14.93 4' stroke='%23ffffff' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M15 4h4v4M9 20H5v-4' stroke='%2338bdf8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") 12 12, crosshair !important;
+}
+
+.keyfrio-editor-light header {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-bottom-color: #dde1e7 !important;
+  color: #1f2937 !important;
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.04);
+}
+
+.keyfrio-editor-light .bg-\[\#111218\]\/95,
+.keyfrio-editor-light .bg-\[\#131419\],
+.keyfrio-editor-light .bg-\[\#101116\],
+.keyfrio-editor-light .bg-\[\#121319\],
+.keyfrio-editor-light .bg-\[\#171822\],
+.keyfrio-editor-light .bg-\[\#181921\],
+.keyfrio-editor-light .bg-\[\#1a1b22\],
+.keyfrio-editor-light .bg-\[\#181a24\],
+.keyfrio-editor-light .bg-\[\#1a1f2b\],
+.keyfrio-editor-light .bg-\[\#161720\],
+.keyfrio-editor-light .bg-\[\#16151c\] {
+  background-color: #ffffff !important;
+}
+
+.keyfrio-editor-light .bg-\[\#14151c\]\/50,
+.keyfrio-editor-light .bg-\[\#161720\],
+.keyfrio-editor-light .bg-\[\#171822\],
+.keyfrio-editor-light .bg-\[\#20222e\],
+.keyfrio-editor-light .hover\:bg-\[\#1e202c\]:hover,
+.keyfrio-editor-light .hover\:bg-\[\#1b1d27\]:hover,
+.keyfrio-editor-light .hover\:bg-\[\#1c1d27\]:hover,
+.keyfrio-editor-light .hover\:bg-\[\#202330\]:hover {
+  background-color: #f5f7fb !important;
+}
+
+.keyfrio-editor-light .border-\[\#20222a\],
+.keyfrio-editor-light .border-\[\#22242d\],
+.keyfrio-editor-light .border-\[\#232530\],
+.keyfrio-editor-light .border-\[\#242633\],
+.keyfrio-editor-light .border-\[\#252c3a\],
+.keyfrio-editor-light .border-\[\#262833\],
+.keyfrio-editor-light .border-\[\#262834\],
+.keyfrio-editor-light .border-\[\#2d3648\],
+.keyfrio-editor-light .border-white\/8 {
+  border-color: #dde1e7 !important;
+}
+
+.keyfrio-editor-light .text-white,
+.keyfrio-editor-light .text-neutral-200,
+.keyfrio-editor-light .text-neutral-300 {
+  color: #1f2937 !important;
+}
+
+.keyfrio-editor-light .text-neutral-400,
+.keyfrio-editor-light .text-neutral-500 {
+  color: #64748b !important;
+}
+
+.keyfrio-editor-light .bg-blue-600,
+.keyfrio-editor-light .bg-sky-500 {
+  background-color: #2ea3f2 !important;
+  color: #ffffff !important;
+}
+
+.keyfrio-editor-light input,
+.keyfrio-editor-light select {
+  background-color: #ffffff !important;
+  border-color: #d8dee8 !important;
+  color: #111827 !important;
 }
