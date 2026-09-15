@@ -90,7 +90,7 @@ export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
     <div
       ref={rulerRef}
       onMouseDown={handleRulerMouseDown}
-      className="h-6 bg-[#101116] border-b border-[#20222a] relative select-none cursor-pointer overflow-hidden shrink-0"
+      className="h-7 bg-white border-b border-[#dde1e7] relative select-none cursor-pointer overflow-hidden shrink-0"
       style={{ width: `${totalWidth}px` }}
     >
       {/* In / Out Work Area Region */}
@@ -136,9 +136,9 @@ export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
         return (
           <div key={i} className="absolute top-0 bottom-0 pointer-events-none" style={{ left: `${left}px` }}>
             {/* Major tick mark */}
-            <div className="h-2.5 w-px bg-[#3e4152]" />
+            <div className="h-2.5 w-px bg-[#c9d1dc]" />
             {/* Time label */}
-            <span className="absolute top-2 left-1 text-[8px] font-mono text-neutral-400 whitespace-nowrap select-none">
+            <span className="absolute top-2 left-1 text-[8px] font-mono text-slate-500 whitespace-nowrap select-none">
               {formatSMPTE(time)}
             </span>
 
@@ -148,7 +148,7 @@ export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
               return (
                 <div
                   key={subIdx}
-                  className="absolute top-0 h-1 w-px bg-[#262833]"
+                  className="absolute top-0 h-1 w-px bg-[#dbe1ea]"
                   style={{ left: `${subLeft}px` }}
                 />
               );
