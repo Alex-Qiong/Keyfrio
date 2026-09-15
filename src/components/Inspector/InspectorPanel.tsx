@@ -84,7 +84,7 @@ export const InspectorPanel: React.FC = () => {
   // If no clip is selected, render the rich Project Inspector
   if (!selectedClip) {
     return (
-      <aside className="w-80 xl:w-[340px] bg-[#131419] border-l border-[#20222a] flex flex-col p-3 text-neutral-300 select-none overflow-y-auto shrink-0 z-20">
+      <aside className="w-[24vw] min-w-[300px] max-w-[430px] bg-white border border-[#dde1e7] rounded-lg flex flex-col p-3 text-slate-700 select-none overflow-y-auto shrink-0 z-20">
         <ProjectInspectorTab project={project} />
       </aside>
     );
@@ -122,7 +122,7 @@ export const InspectorPanel: React.FC = () => {
   const TypeIcon = typeInfo.icon;
 
   return (
-    <aside className="w-80 xl:w-[340px] bg-[#131419] border-l border-[#20222a] flex flex-col text-neutral-300 select-none overflow-hidden shrink-0 z-20">
+    <aside className="w-[24vw] min-w-[300px] max-w-[430px] bg-white border border-[#dde1e7] rounded-lg flex flex-col text-slate-700 select-none overflow-hidden shrink-0 z-20">
       {/* 1. Header with Clip Name, Type Badge, and Quick Action Tools */}
       <div className="p-3 border-b border-[#20222a] flex flex-col gap-2 bg-[#101116]/80">
         <div className="flex items-center justify-between gap-2">
