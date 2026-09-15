@@ -37,7 +37,7 @@ export const SidebarTabs: React.FC = () => {
   return (
     <aside
       aria-label="编辑工具"
-      className="w-15 bg-[#0f1015] border-r border-white/8 flex flex-col items-center py-2 select-none shrink-0 z-20"
+      className="w-15 bg-[#10141d] border-r border-white/8 flex flex-col items-center py-2 select-none shrink-0 z-20"
     >
       <nav className="flex flex-col gap-1 w-full px-1.5">
         {TABS.map((tab) => {
@@ -53,7 +53,7 @@ export const SidebarTabs: React.FC = () => {
               onClick={() => setActiveSidebarTab(tab.id)}
               className={`flex min-h-12 flex-col items-center justify-center rounded-lg w-full transition-colors group relative cursor-pointer ${
                 isActive
-                  ? 'bg-blue-500/14 text-white'
+                  ? 'bg-sky-400/12 text-white'
                   : 'text-neutral-500 hover:text-neutral-200 hover:bg-white/5'
               }`}
             >
@@ -61,12 +61,12 @@ export const SidebarTabs: React.FC = () => {
                 <Icon
                   aria-hidden="true"
                   className={`w-[18px] h-[18px] transition-colors ${
-                    isActive ? 'text-blue-400' : 'text-current'
+                    isActive ? 'text-sky-400' : 'text-current'
                   }`}
                   strokeWidth={isActive ? 2.2 : 1.8}
                 />
                 {tab.badge && (
-                  <span className="absolute -top-2 -right-3 rounded bg-[#272a38] px-1 text-[7px] font-semibold tracking-wide text-neutral-300">
+                  <span className="absolute -top-2 -right-3 rounded bg-[#2d3648] px-1 text-[7px] font-semibold tracking-wide text-neutral-300">
                     {tab.badge}
                   </span>
                 )}

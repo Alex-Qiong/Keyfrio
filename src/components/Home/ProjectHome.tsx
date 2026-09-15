@@ -340,13 +340,13 @@ export const ProjectHome: React.FC = () => {
             className="flex items-center gap-1.5 bg-[#141620] hover:bg-[#1f2232] border border-[#26293a] text-neutral-300 hover:text-white px-3 py-1.5 rounded-xl text-xs transition-colors cursor-pointer"
             title="返回产品官网首页"
           >
-            <ArrowRight className="w-3.5 h-3.5 rotate-180 text-blue-400" />
+            <ArrowRight className="w-3.5 h-3.5 rotate-180 text-sky-400" />
             <span>返回官网首页</span>
           </button>
 
           {/* IndexedDB Status Tag */}
           <div className="hidden lg:flex items-center gap-1.5 bg-[#141620] border border-[#232738] px-2.5 py-1.5 rounded-xl text-xs text-neutral-400">
-            <Database className="w-3.5 h-3.5 text-blue-400" />
+            <Database className="w-3.5 h-3.5 text-sky-400" />
             <span>本地工程库</span>
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 ml-0.5" />
             <span className="text-neutral-300 font-mono text-[11px]">
@@ -358,7 +358,7 @@ export const ProjectHome: React.FC = () => {
           {project && (
             <button
               onClick={openEditor}
-              className="flex items-center gap-2 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 hover:from-blue-600/30 hover:to-indigo-600/30 border border-blue-500/40 text-blue-300 font-semibold px-3.5 py-1.5 rounded-xl text-xs transition-all cursor-pointer group shadow-sm"
+              className="flex items-center gap-2 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 hover:from-blue-600/30 hover:to-indigo-600/30 border border-sky-400/35 text-blue-300 font-semibold px-3.5 py-1.5 rounded-xl text-xs transition-all cursor-pointer group shadow-sm"
             >
               <span>进入工作台: <span className="text-white">{project.name}</span></span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
@@ -457,7 +457,7 @@ export const ProjectHome: React.FC = () => {
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-xs font-bold text-neutral-200">
-              <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+              <Sparkles className="w-3.5 h-3.5 text-sky-400" />
               <span>创作场景预设模板</span>
             </div>
             <div className="flex items-center gap-2 text-[11px] text-neutral-400">
@@ -494,7 +494,7 @@ export const ProjectHome: React.FC = () => {
                 </p>
               </div>
 
-              <div className="relative z-10 flex items-center justify-between text-[11px] text-blue-400 font-bold pt-2.5 border-t border-blue-500/20">
+              <div className="relative z-10 flex items-center justify-between text-[11px] text-sky-400 font-bold pt-2.5 border-t border-blue-500/20">
                 <span className="font-mono text-neutral-400 font-normal">多画幅可选</span>
                 <span className="flex items-center gap-1 group-hover:translate-x-0.5 transition-transform text-blue-300">
                   <span>弹窗配置</span>
@@ -556,7 +556,7 @@ export const ProjectHome: React.FC = () => {
                         title="上传你的原图作为背景"
                         className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 text-[9.5px] px-1.5 py-0.5 rounded bg-black/80 hover:bg-neutral-800 text-neutral-200 border border-white/20 shadow-md backdrop-blur-md"
                       >
-                        <ImagePlus className="w-3 h-3 text-blue-400" />
+                        <ImagePlus className="w-3 h-3 text-sky-400" />
                         <span>{hasCustom ? '换图' : '传原图'}</span>
                       </button>
 
@@ -590,7 +590,7 @@ export const ProjectHome: React.FC = () => {
                   {/* Bottom Row */}
                   <div className="relative z-10 flex items-center justify-between text-[11px] text-neutral-300 pt-2.5 border-t border-white/10">
                     <span className="font-mono text-neutral-400">{tmpl.aspect} • {tmpl.fps} FPS</span>
-                    <div className="text-blue-400 group-hover:text-blue-300 font-bold flex items-center gap-1 transition-colors">
+                    <div className="text-sky-400 group-hover:text-blue-300 font-bold flex items-center gap-1 transition-colors">
                       <span>立即使用</span>
                       <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                     </div>
@@ -605,7 +605,7 @@ export const ProjectHome: React.FC = () => {
         <div className="flex flex-col gap-3.5 pt-2">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2 text-sm font-bold text-white">
-              <FileVideo className="w-4 h-4 text-blue-400" />
+              <FileVideo className="w-4 h-4 text-sky-400" />
               <span>最近工程库</span>
               <span className="text-xs font-normal text-neutral-400 font-mono bg-[#141620] px-2 py-0.5 rounded-full border border-[#232738]">
                 {filteredProjects.length}
@@ -649,7 +649,7 @@ export const ProjectHome: React.FC = () => {
           {filteredProjects.length === 0 ? (
             <div className="bg-[#101118] border border-[#202334] rounded-2xl py-16 px-6 flex flex-col items-center justify-center text-center gap-3">
               <div className="w-14 h-14 rounded-2xl bg-[#171924] flex items-center justify-center text-neutral-500 mb-1">
-                <Film className="w-7 h-7 text-blue-400" />
+                <Film className="w-7 h-7 text-sky-400" />
               </div>
               <div className="text-base font-bold text-neutral-200">
                 {searchQuery ? '未找到匹配的工程' : '暂无保存的剪辑工程'}
@@ -695,7 +695,7 @@ export const ProjectHome: React.FC = () => {
                           referrerPolicy="no-referrer"
                         />
                       ) : (
-                        <div className="w-11 h-11 rounded-full border border-neutral-700/80 bg-[#121319] flex items-center justify-center text-neutral-400 group-hover:scale-110 group-hover:text-blue-400 group-hover:border-blue-500/50 transition-all">
+                        <div className="w-11 h-11 rounded-full border border-neutral-700/80 bg-[#121319] flex items-center justify-center text-neutral-400 group-hover:scale-110 group-hover:text-sky-400 group-hover:border-blue-500/50 transition-all">
                           <Play className="w-5 h-5 ml-0.5" />
                         </div>
                       )}
@@ -788,7 +788,7 @@ export const ProjectHome: React.FC = () => {
 
                       {/* Card Bottom Action Bar */}
                       <div className="flex items-center justify-between text-xs pt-2 border-t border-[#1b1e2c]">
-                        <span className="text-blue-400 group-hover:text-blue-300 font-semibold flex items-center gap-1">
+                        <span className="text-sky-400 group-hover:text-blue-300 font-semibold flex items-center gap-1">
                           打开工程 <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                         </span>
 

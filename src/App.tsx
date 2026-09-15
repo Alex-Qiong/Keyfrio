@@ -28,7 +28,7 @@ const ProjectHome = lazy(() => import('./components/Home/ProjectHome').then((mod
 const LandingPage = lazy(() => import('./components/Landing/LandingPage').then((module) => ({ default: module.LandingPage })));
 
 const LoadingFallback: React.FC = () => (
-  <div className="flex h-screen w-screen items-center justify-center bg-[#07080b] text-sm text-neutral-400">
+  <div className="flex h-screen w-screen items-center justify-center bg-[#070912] text-sm text-neutral-400">
     正在加载 Keyfrio…
   </div>
 );
@@ -48,7 +48,7 @@ const MainAppContent: React.FC = () => {
 
   if (currentView === 'landing') {
     return (
-      <div className="w-full h-dvh bg-[#07080b] overflow-y-auto overflow-x-hidden">
+      <div className="w-full h-dvh bg-[#070912] overflow-y-auto overflow-x-hidden">
         <LandingPage />
         <CommonOverlays />
       </div>
@@ -57,7 +57,7 @@ const MainAppContent: React.FC = () => {
 
   if (currentView === 'home') {
     return (
-      <div className="w-full h-dvh bg-[#0a0b0e] overflow-y-auto overflow-x-hidden">
+      <div className="w-full h-dvh bg-[#0b0e17] overflow-y-auto overflow-x-hidden">
         <ProjectHome />
         <CommonOverlays />
       </div>
@@ -90,13 +90,13 @@ const MainAppContent: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-dvh w-full bg-[#0c0d11] text-neutral-200 overflow-hidden font-sans select-none animate-in fade-in duration-150">
+    <div className="flex flex-col h-dvh w-full bg-[#0c0f18] text-neutral-200 overflow-hidden font-sans select-none animate-in fade-in duration-150">
       <Navbar />
       <MediaRelinkBanner />
 
       <div className="flex-1 flex overflow-hidden min-h-0 min-w-0">
         <SidebarTabs />
-        <div className="w-72 2xl:w-80 bg-[#131419] border-r border-[#20222a] flex flex-col shrink-0 overflow-hidden">
+        <div className="w-72 2xl:w-80 bg-[#141923] border-r border-[#252c3a] flex flex-col shrink-0 overflow-hidden">
           <Suspense
             fallback={
               <div className="flex flex-1 items-center justify-center text-xs text-neutral-500">

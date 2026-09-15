@@ -158,7 +158,7 @@ export const LandingPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#07080b] text-neutral-100 font-sans selection:bg-blue-500 selection:text-white relative overflow-x-hidden">
+    <div className="min-h-screen bg-[#070912] text-neutral-100 font-sans selection:bg-blue-500 selection:text-white relative overflow-x-hidden">
       {/* Background Decorative Gradients & Glows */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <div className="absolute -top-[20%] left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-gradient-to-b from-blue-600/15 via-purple-600/10 to-transparent blur-[120px] rounded-full" />
@@ -175,7 +175,7 @@ export const LandingPage: React.FC = () => {
       </div>
 
       {/* 1. Official Header / Navigation */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#07080b]/80 border-b border-[#1c1e27] transition-all">
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#070912]/80 border-b border-[#1c1e27] transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           {/* Brand Logo & Slogan */}
           <div className="flex items-center gap-3">
@@ -187,7 +187,7 @@ export const LandingPage: React.FC = () => {
               <div className="flex flex-col text-left">
                 <span className="text-lg font-black tracking-tight text-white flex items-center gap-1.5">
                   Keyfrio
-                  <span className="text-[9px] font-bold bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-400 border border-blue-500/30 px-1.5 py-0.5 rounded-full font-mono">
+                  <span className="text-[9px] font-bold bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-sky-400 border border-blue-500/30 px-1.5 py-0.5 rounded-full font-mono">
                     2.0
                   </span>
                 </span>
@@ -223,7 +223,7 @@ export const LandingPage: React.FC = () => {
               onClick={openHome}
               className="hidden sm:flex items-center gap-1.5 text-xs text-neutral-300 hover:text-white bg-[#14161f] hover:bg-[#1e202c] border border-[#242735] px-3 py-1.5 rounded-lg transition-colors cursor-pointer font-medium"
             >
-              <FolderOpen className="w-3.5 h-3.5 text-blue-400" />
+              <FolderOpen className="w-3.5 h-3.5 text-sky-400" />
               <span>工程项目库</span>
               {projectList.length > 0 && (
                 <span className="text-[10px] bg-blue-500/20 text-blue-300 px-1.5 py-0.2 rounded-full font-mono">
@@ -268,7 +268,7 @@ export const LandingPage: React.FC = () => {
 
         {/* Slogan & Description */}
         <p className="mt-6 text-base sm:text-lg lg:text-xl text-neutral-300 max-w-3xl leading-relaxed">
-          <strong className="text-blue-400 font-semibold">Keyfrio</strong> 是专为现代创作者打造的下一代 Web 原生多轨视音频剪辑系统。
+          <strong className="text-sky-400 font-semibold">Keyfrio</strong> 是专为现代创作者打造的下一代 Web 原生多轨视音频剪辑系统。
           无需下载安装，秒级加载 4K 实时渲染、GPU 粒子着色器、Lottie 矢量动效、ASC-CDL 调色与 AI 创意副驾驶。
         </p>
 
@@ -370,7 +370,7 @@ export const LandingPage: React.FC = () => {
             <div className="hidden lg:flex lg:col-span-3 flex-col gap-2 bg-[#0a0b10] p-2.5 rounded-xl border border-[#1d202c] text-left text-xs">
               <div className="flex items-center justify-between text-[11px] font-semibold text-neutral-300 pb-1 border-b border-[#1c1f2b]">
                 <span className="flex items-center gap-1.5">
-                  <Layers className="w-3 h-3 text-blue-400" />
+                  <Layers className="w-3 h-3 text-sky-400" />
                   <span>分轨图层 (Tracks)</span>
                 </span>
                 <span className="text-[10px] text-neutral-500 font-mono">4 Tracks</span>
@@ -379,7 +379,7 @@ export const LandingPage: React.FC = () => {
               <div className="flex flex-col gap-1.5 text-[10px]">
                 <div className="p-2 rounded-lg bg-blue-950/40 border border-blue-800/40 text-blue-200 flex items-center justify-between">
                   <span className="font-semibold">V1 4K 电影主画面</span>
-                  <span className="text-[9px] text-blue-400">00:00:12:00</span>
+                  <span className="text-[9px] text-sky-400">00:00:12:00</span>
                 </div>
                 <div className="p-2 rounded-lg bg-pink-950/40 border border-pink-800/40 text-pink-200 flex items-center justify-between">
                   <span className="font-semibold">T1 动态字幕 & 动效</span>
@@ -498,7 +498,7 @@ export const LandingPage: React.FC = () => {
                 {/* Scrubber & Timecode Bar */}
                 <div className="flex items-center justify-between text-[10px] font-mono text-neutral-400">
                   <div className="flex items-center gap-2">
-                    <span className="text-blue-400 font-bold">00:00:08:14</span>
+                    <span className="text-sky-400 font-bold">00:00:08:14</span>
                     <span>/</span>
                     <span>00:00:24:00</span>
                   </div>
@@ -542,7 +542,7 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* 4. Stats & Hardware Metric Strip */}
-      <section className="border-y border-[#1c1e28] bg-[#0c0d13]/60 py-10 relative z-10">
+      <section className="border-y border-[#202837] bg-[#0c0d13]/60 py-10 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           <div className="flex flex-col">
             <span className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent font-mono">
@@ -574,7 +574,7 @@ export const LandingPage: React.FC = () => {
       {/* 5. Core Feature Matrix (核心特性矩阵) */}
       <section id="features" className="py-20 lg:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-1.5 text-blue-400 font-mono text-xs uppercase tracking-wider font-semibold bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20 mb-3">
+          <div className="inline-flex items-center gap-1.5 text-sky-400 font-mono text-xs uppercase tracking-wider font-semibold bg-sky-400/10 px-3 py-1 rounded-full border border-blue-500/20 mb-3">
             <Cpu className="w-3.5 h-3.5" />
             <span>Power & Precision</span>
           </div>
@@ -589,14 +589,14 @@ export const LandingPage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Card 1: Multi-track Timeline */}
           <div className="bg-[#10121b] border border-[#212433] hover:border-blue-500/50 p-6 rounded-2xl transition-all duration-300 group hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] flex flex-col">
-            <div className="w-12 h-12 rounded-xl bg-blue-600/20 border border-blue-500/30 text-blue-400 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+            <div className="w-12 h-12 rounded-xl bg-blue-600/20 border border-blue-500/30 text-sky-400 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
               <Film className="w-6 h-6" />
             </div>
             <h3 className="text-lg font-bold text-white mb-2">多轨非线性自由时间线</h3>
             <p className="text-xs text-neutral-400 leading-relaxed mb-4 flex-1">
               无限音频、视频、文字、特效分轨堆叠。支持毫秒级磁性对齐、音视频自动分离绑定、无缝吸附与双声道真实波形可视化。
             </p>
-            <div className="flex items-center text-xs font-semibold text-blue-400 gap-1 group-hover:translate-x-1 transition-transform">
+            <div className="flex items-center text-xs font-semibold text-sky-400 gap-1 group-hover:translate-x-1 transition-transform">
               <span>查看多轨特性</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </div>
@@ -698,7 +698,7 @@ export const LandingPage: React.FC = () => {
 
             <button
               onClick={handleStartCreating}
-              className="mt-4 md:mt-0 inline-flex items-center gap-1.5 text-xs font-semibold text-blue-400 hover:text-blue-300 hover:underline cursor-pointer"
+              className="mt-4 md:mt-0 inline-flex items-center gap-1.5 text-xs font-semibold text-sky-400 hover:text-blue-300 hover:underline cursor-pointer"
             >
               <span>进入工程库浏览全部模板</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -736,7 +736,7 @@ export const LandingPage: React.FC = () => {
 
                 {/* Card Body */}
                 <div className="p-4 flex flex-col flex-1">
-                  <h4 className="font-bold text-sm text-white group-hover:text-blue-400 transition-colors">
+                  <h4 className="font-bold text-sm text-white group-hover:text-sky-400 transition-colors">
                     {template.title}
                   </h4>
                   <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed line-clamp-2 flex-1">
@@ -810,7 +810,7 @@ export const LandingPage: React.FC = () => {
             </div>
 
             {/* AI Mock Chat Dialog */}
-            <div className="lg:col-span-6 bg-[#0a0b12] border border-[#24273c] rounded-2xl p-4 sm:p-5 flex flex-col gap-3 font-mono text-xs">
+            <div className="lg:col-span-6 bg-[#0a0b12] border border-[#2b3550] rounded-2xl p-4 sm:p-5 flex flex-col gap-3 font-mono text-xs">
               <div className="flex items-center justify-between pb-2 border-b border-[#1c1f2f]">
                 <div className="flex items-center gap-2">
                   <div className="w-2.5 h-2.5 rounded-full bg-purple-400 animate-pulse" />
@@ -821,12 +821,12 @@ export const LandingPage: React.FC = () => {
 
               <div className="flex flex-col gap-2.5 pt-1">
                 {/* User message */}
-                <div className="self-end bg-blue-600/30 border border-blue-500/40 text-blue-200 p-2.5 rounded-xl rounded-tr-none max-w-[85%]">
+                <div className="self-end bg-blue-600/30 border border-sky-400/35 text-blue-200 p-2.5 rounded-xl rounded-tr-none max-w-[85%]">
                   帮我给这段 4K 旅拍视频设计一个震撼的开场转场，并加上复古胶片调色与清脆低音增强。
                 </div>
 
                 {/* AI response */}
-                <div className="self-start bg-[#141624] border border-[#2c3048] text-neutral-200 p-3 rounded-xl rounded-tl-none max-w-[90%] flex flex-col gap-2">
+                <div className="self-start bg-[#171c2a] border border-[#33405e] text-neutral-200 p-3 rounded-xl rounded-tl-none max-w-[90%] flex flex-col gap-2">
                   <div className="flex items-center gap-1.5 text-purple-300 font-semibold text-[11px]">
                     <Sparkles className="w-3 h-3" />
                     <span>已为你自动规划并执行 3 项专业调教：</span>
@@ -847,7 +847,7 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* 8. Modern Web Architecture (架构与安全性) */}
-      <section id="tech" className="py-20 bg-[#08090e] border-t border-[#191b26] relative z-10">
+      <section id="tech" className="py-20 bg-[#090c14] border-t border-[#1d2432] relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-14">
             <div className="inline-flex items-center gap-1.5 text-emerald-400 font-mono text-xs uppercase tracking-wider font-semibold bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 mb-3">
@@ -863,7 +863,7 @@ export const LandingPage: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-[#0f1118] border border-[#1e2230] p-6 rounded-2xl flex flex-col">
+            <div className="bg-[#111621] border border-[#252e40] p-6 rounded-2xl flex flex-col">
               <div className="text-emerald-400 mb-4">
                 <Shield className="w-8 h-8" />
               </div>
@@ -873,8 +873,8 @@ export const LandingPage: React.FC = () => {
               </p>
             </div>
 
-            <div className="bg-[#0f1118] border border-[#1e2230] p-6 rounded-2xl flex flex-col">
-              <div className="text-blue-400 mb-4">
+            <div className="bg-[#111621] border border-[#252e40] p-6 rounded-2xl flex flex-col">
+              <div className="text-sky-400 mb-4">
                 <Zap className="w-8 h-8" />
               </div>
               <h3 className="text-base font-bold text-white mb-2">WebCodecs 硬件解编码加速</h3>
@@ -883,7 +883,7 @@ export const LandingPage: React.FC = () => {
               </p>
             </div>
 
-            <div className="bg-[#0f1118] border border-[#1e2230] p-6 rounded-2xl flex flex-col">
+            <div className="bg-[#111621] border border-[#252e40] p-6 rounded-2xl flex flex-col">
               <div className="text-purple-400 mb-4">
                 <Globe className="w-8 h-8" />
               </div>
@@ -909,7 +909,7 @@ export const LandingPage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-[#11131c] border border-[#202332] p-5 rounded-2xl flex flex-col justify-between">
+          <div className="bg-[#131824] border border-[#252d40] p-5 rounded-2xl flex flex-col justify-between">
             <p className="text-xs text-neutral-300 leading-relaxed italic">
               “无需下载几十个 G 的传统剪辑软件，在咖啡馆打开浏览器就能直接剪 4K Vlog。调色色轮和 GPU 粒子特效出片质感太惊艳了！”
             </p>
@@ -924,7 +924,7 @@ export const LandingPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-[#11131c] border border-[#202332] p-5 rounded-2xl flex flex-col justify-between">
+          <div className="bg-[#131824] border border-[#252d40] p-5 rounded-2xl flex flex-col justify-between">
             <p className="text-xs text-neutral-300 leading-relaxed italic">
               “爆款短视频模板和 Lottie 艺术花字直接帮我们团队将短视频出片效率提升了 3 倍以上。音频 3-Band 均衡器人声特别干净。”
             </p>
@@ -939,7 +939,7 @@ export const LandingPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-[#11131c] border border-[#202332] p-5 rounded-2xl flex flex-col justify-between">
+          <div className="bg-[#131824] border border-[#252d40] p-5 rounded-2xl flex flex-col justify-between">
             <p className="text-xs text-neutral-300 leading-relaxed italic">
               “100% 浏览器本地计算与 IndexedDB 存储，让我们处理企业保密视频内容时完全没有任何合规顾虑，安全且极致丝滑。”
             </p>
@@ -958,7 +958,7 @@ export const LandingPage: React.FC = () => {
 
       {/* 10. Grand Bottom Call-To-Action Banner */}
       <section className="py-20 relative z-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="bg-gradient-to-r from-blue-900/60 via-indigo-900/60 to-purple-900/60 border border-blue-500/40 rounded-3xl p-8 sm:p-14 text-center relative overflow-hidden shadow-[0_0_60px_rgba(59,130,246,0.3)]">
+        <div className="bg-gradient-to-r from-blue-900/60 via-indigo-900/60 to-purple-900/60 border border-sky-400/35 rounded-3xl p-8 sm:p-14 text-center relative overflow-hidden shadow-[0_0_60px_rgba(59,130,246,0.3)]">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-500/20 via-transparent to-transparent pointer-events-none" />
 
           <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight relative z-10">
@@ -974,7 +974,7 @@ export const LandingPage: React.FC = () => {
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4 relative z-10">
             <button
               onClick={handleStartCreating}
-              className="flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-base text-white bg-blue-600 hover:bg-blue-500 shadow-[0_0_30px_rgba(59,130,246,0.7)] transition-all cursor-pointer transform hover:scale-105 active:scale-95"
+              className="flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-base text-white bg-sky-500 hover:bg-sky-400 shadow-[0_0_30px_rgba(59,130,246,0.7)] transition-all cursor-pointer transform hover:scale-105 active:scale-95"
             >
               <Sparkles className="w-4 h-4" />
               <span>立即创作 (Start Creating)</span>
@@ -983,7 +983,7 @@ export const LandingPage: React.FC = () => {
 
             <button
               onClick={openHome}
-              className="flex items-center gap-2 px-6 py-4 rounded-xl font-semibold text-sm text-neutral-200 hover:text-white bg-[#141624] hover:bg-[#1f2236] border border-[#2b3046] transition-all cursor-pointer"
+              className="flex items-center gap-2 px-6 py-4 rounded-xl font-semibold text-sm text-neutral-200 hover:text-white bg-[#171c2a] hover:bg-[#1f2236] border border-[#2b3046] transition-all cursor-pointer"
             >
               <FolderOpen className="w-4 h-4 text-indigo-400" />
               <span>浏览我的工程库</span>
@@ -993,7 +993,7 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* 11. Footer */}
-      <footer className="border-t border-[#1c1e28] bg-[#06070a] py-12 text-neutral-400 text-xs relative z-10">
+      <footer className="border-t border-[#202837] bg-[#070910] py-12 text-neutral-400 text-xs relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
             <AppLogo className="w-7 h-7" />

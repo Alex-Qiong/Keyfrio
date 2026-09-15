@@ -119,7 +119,7 @@ export const Navbar: React.FC = () => {
               <span className="font-bold tracking-tight text-white flex items-center text-sm">
                 Keyfrio
               </span>
-              <span className="text-[8.5px] font-bold bg-gradient-to-r from-blue-500/15 to-purple-500/15 text-blue-400 border border-blue-500/25 px-1 py-0.2 rounded font-mono">
+              <span className="text-[8.5px] font-bold bg-gradient-to-r from-blue-500/15 to-purple-500/15 text-sky-400 border border-sky-400/25 px-1 py-0.2 rounded font-mono">
                 PRO
               </span>
             </div>
@@ -130,7 +130,7 @@ export const Navbar: React.FC = () => {
         <button
           id="navbar-open-projects-btn"
           onClick={openHome}
-          className="flex items-center gap-1.5 bg-[#181a24] hover:bg-[#202332] border border-indigo-500/30 text-indigo-300 px-2.5 py-1 rounded-md transition-colors cursor-pointer"
+          className="flex items-center gap-1.5 bg-[#1b2130] hover:bg-[#252d40] border border-indigo-500/30 text-indigo-300 px-2.5 py-1 rounded-md transition-colors cursor-pointer"
           title="工程项目库 (项目管理中心)"
         >
           <Database className="w-3.5 h-3.5 text-indigo-400" />
@@ -144,7 +144,7 @@ export const Navbar: React.FC = () => {
         <button
           id="navbar-quick-new-proj-btn"
           onClick={() => createNewProject()}
-          className="flex items-center gap-1 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-300 hover:text-white px-2 py-1 rounded-md transition-colors cursor-pointer"
+          className="flex items-center gap-1 bg-sky-500/15 hover:bg-sky-500/25 border border-sky-400/30 text-sky-300 hover:text-white px-2 py-1 rounded-md transition-colors cursor-pointer"
           title="新建空白工程"
         >
           <Plus className="w-3.5 h-3.5" />
@@ -208,7 +208,7 @@ export const Navbar: React.FC = () => {
             {isProjectMenuOpen && (
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setIsProjectMenuOpen(false)} />
-                <div className="absolute top-full left-0 mt-1 w-56 bg-[#16171e] border border-[#262834] rounded-xl shadow-2xl py-1.5 z-50 text-xs animate-in fade-in">
+                <div className="absolute top-full left-0 mt-1 w-56 bg-[#181d29] border border-[#2b3445] rounded-xl shadow-2xl py-1.5 z-50 text-xs animate-in fade-in">
                   <button
                     onClick={() => {
                       openProjectManager();
@@ -219,7 +219,7 @@ export const Navbar: React.FC = () => {
                     <Database className="w-4 h-4 text-indigo-400" />
                     <span>管理本地工程库 ({projectList.length})</span>
                   </button>
-                  <div className="h-px bg-[#262834] my-1" />
+                  <div className="h-px bg-[#2b3445] my-1" />
                   <button
                     onClick={() => {
                       handleExportJSONClick();
@@ -227,7 +227,7 @@ export const Navbar: React.FC = () => {
                     }}
                     className="w-full px-3 py-2 text-left text-neutral-300 hover:text-white hover:bg-blue-600/20 flex items-center gap-2.5 transition-colors cursor-pointer"
                   >
-                    <FileJson className="w-4 h-4 text-blue-400" />
+                    <FileJson className="w-4 h-4 text-sky-400" />
                     <span>导出工程文件 (.json)</span>
                   </button>
                   <button
@@ -240,7 +240,7 @@ export const Navbar: React.FC = () => {
                     <FolderOpen className="w-4 h-4 text-emerald-400" />
                     <span>导入工程文件 (.json)</span>
                   </button>
-                  <div className="h-px bg-[#262834] my-1" />
+                  <div className="h-px bg-[#2b3445] my-1" />
                   <button
                     onClick={() => {
                       loadDemoProject();
@@ -263,8 +263,8 @@ export const Navbar: React.FC = () => {
             onClick={() => setIsAspectMenuOpen((o) => !o)}
             className="flex items-center gap-1.5 bg-[#181921] hover:bg-[#20222c] border border-[#262833] text-[11px] text-neutral-300 px-2.5 py-1 rounded-md transition-colors cursor-pointer"
           >
-            <Ratio className="w-3 h-3 text-blue-400" />
-            <span className="font-semibold text-blue-400">{project.resolution.aspectRatio}</span>
+            <Ratio className="w-3 h-3 text-sky-400" />
+            <span className="font-semibold text-sky-400">{project.resolution.aspectRatio}</span>
             <span className="text-[10px] text-neutral-500 hidden md:inline">({project.resolution.width}×{project.resolution.height})</span>
             <ChevronDown className="w-2.5 h-2.5 text-neutral-400" />
           </button>
@@ -272,9 +272,9 @@ export const Navbar: React.FC = () => {
           {isAspectMenuOpen && (
             <>
               <div className="fixed inset-0 z-40" onClick={() => setIsAspectMenuOpen(false)} />
-              <div className="absolute top-full left-0 mt-1 w-64 bg-[#16171e] border border-[#262834] rounded-xl shadow-2xl py-1.5 z-50 text-xs animate-in fade-in">
-                <div className="px-3 py-1 text-[10px] font-semibold text-neutral-400 border-b border-[#262834] flex items-center gap-1.5">
-                  <Ratio className="w-3 h-3 text-blue-400" />
+              <div className="absolute top-full left-0 mt-1 w-64 bg-[#181d29] border border-[#2b3445] rounded-xl shadow-2xl py-1.5 z-50 text-xs animate-in fade-in">
+                <div className="px-3 py-1 text-[10px] font-semibold text-neutral-400 border-b border-[#2b3445] flex items-center gap-1.5">
+                  <Ratio className="w-3 h-3 text-sky-400" />
                   <span>画面画幅 / 比例预设</span>
                 </div>
                 {(Object.keys(ASPECT_RATIOS) as AspectRatio[]).map((ratio) => {
@@ -288,14 +288,14 @@ export const Navbar: React.FC = () => {
                         setIsAspectMenuOpen(false);
                       }}
                       className={`w-full px-3 py-2 text-left flex items-center justify-between hover:bg-blue-600/20 transition-colors cursor-pointer ${
-                        isSelected ? 'text-blue-400 font-medium bg-blue-500/10' : 'text-neutral-300'
+                        isSelected ? 'text-sky-400 font-medium bg-sky-400/10' : 'text-neutral-300'
                       }`}
                     >
                       <div className="flex flex-col">
                         <span className="font-semibold text-xs">{item.label}</span>
                         <span className="text-[9px] text-neutral-500">{item.width} × {item.height} px</span>
                       </div>
-                      {isSelected && <Check className="w-4 h-4 text-blue-400" />}
+                      {isSelected && <Check className="w-4 h-4 text-sky-400" />}
                     </button>
                   );
                 })}
@@ -358,7 +358,7 @@ export const Navbar: React.FC = () => {
         {/* Multi-Sequence Manager Button */}
         <button
           onClick={() => setIsSeqModalOpen(true)}
-          className="flex items-center gap-1 bg-[#171821] hover:bg-[#1f212d] border border-[#272a38] text-neutral-300 hover:text-white px-2 py-1 rounded-md text-xs transition-colors cursor-pointer"
+          className="flex items-center gap-1 bg-[#1a1f2b] hover:bg-[#1f212d] border border-[#2d3648] text-neutral-300 hover:text-white px-2 py-1 rounded-md text-xs transition-colors cursor-pointer"
           title="Keyfrio 多序列管理器 (Sequences)"
         >
           <Layers className="w-3.5 h-3.5 text-sky-400" />
@@ -371,7 +371,7 @@ export const Navbar: React.FC = () => {
         {/* OPFS Storage Diagnostics Button */}
         <button
           onClick={() => setIsStorageModalOpen(true)}
-          className="flex items-center gap-1 bg-[#171821] hover:bg-[#1f212d] border border-[#272a38] text-neutral-300 hover:text-white px-2 py-1 rounded-md text-xs transition-colors cursor-pointer"
+          className="flex items-center gap-1 bg-[#1a1f2b] hover:bg-[#1f212d] border border-[#2d3648] text-neutral-300 hover:text-white px-2 py-1 rounded-md text-xs transition-colors cursor-pointer"
           title="Keyfrio 本地 OPFS 存储监控"
         >
           <HardDrive className="w-3.5 h-3.5 text-emerald-400" />
@@ -403,7 +403,7 @@ export const Navbar: React.FC = () => {
         {/* Export Button */}
         <button
           onClick={openExportModal}
-          className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-semibold text-xs px-3.5 py-1.5 rounded-lg shadow-md shadow-blue-600/30 transition-all cursor-pointer"
+          className="flex items-center gap-1.5 bg-sky-500 hover:bg-sky-400 active:scale-95 text-white font-semibold text-xs px-3.5 py-1.5 rounded-lg shadow-md shadow-blue-600/30 transition-all cursor-pointer"
           title="导出视频 (WebM / MP4)"
         >
           <Download className="w-3.5 h-3.5" />
