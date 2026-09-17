@@ -9,58 +9,64 @@ import {
   ZoomOut,
   Maximize2,
   Plus,
-  Sparkles,
   Undo2,
   Redo2,
   Film,
   Music2,
-  Type,
-  Zap,
-  Smile,
   Waves,
   Hand,
   RotateCcw,
   SlidersHorizontal,
-  BookmarkPlus,
-  Sparkle,
   Layers,
   Link2,
   Link2Off,
 } from 'lucide-react';
 import { useEditor } from '../../context/EditorContext';
+import { useProjectStore } from '../../stores/projectStore';
+import { usePlaybackStore } from '../../stores/playbackStore';
+import { useSelectionStore } from '../../stores/selectionStore';
+import { useUiStore } from '../../stores/uiStore';
 import { MediaType } from '../../types/editor';
 
+/**
+ * Timeline toolbar – UI flags & selection read from Zustand;
+ * complex mutations (split, delete, undo, link) still via EditorContext.
+ */
 export const TimelineToolbar: React.FC = () => {
   const {
-    project,
-    selectedClipIds,
     splitClip,
     deleteSelectedClips,
     duplicateClip,
     toggleLinkSelectedClips,
-    snapping,
     setSnapping,
-    toolMode,
     setToolMode,
-    rippleMode,
     setRippleMode,
-    trackHeight,
     setTrackHeight,
-    inPoint,
-    outPoint,
     setInPoint,
     setOutPoint,
-    currentTime,
-    zoom,
     setZoom,
     addTrack,
     canUndo,
     canRedo,
     undo,
     redo,
-    totalDuration,
     resetProject,
   } = useEditor();
+
+  const tracks = useProjectStore((s) => s.tracks);
+  const totalDuration = useProjectStore((s) => s.totalDuration);
+
+  const currentTime = usePlaybackStore((s) => s.currentTime);
+  const inPoint = usePlaybackStore((s) => s.inPoint);
+  const outPoint = usePlaybackStore((s) => s.outPoint);
+
+  const selectedClipIds = useSelectionStore((s) => s.selectedClipIds);
+
+  const zoom = useUiStore((s) => s.zoom);
+  const toolMode = useUiStore((s) => s.toolMode);
+  const snapping = useUiStore((s) => s.snappingEnabled);
+  const rippleMode = useUiStore((s) => s.rippleMode);
+  const trackHeight = useUiStore((s) => s.trackHeight);
 
   const [isTrackMenuOpen, setIsTrackMenuOpen] = useState(false);
   const [isHeightMenuOpen, setIsHeightMenuOpen] = useState(false);
@@ -68,10 +74,10 @@ export const TimelineToolbar: React.FC = () => {
   const hasSelection = selectedClipIds.length > 0;
 
   const isAnyClipLinked = useMemo(() => {
-    return project.tracks.some((t) =>
+    return tracks.some((t) =>
       t.clips.some((c) => selectedClipIds.includes(c.id) && c.isLinked)
     );
-  }, [project.tracks, selectedClipIds]);
+  }, [tracks, selectedClipIds]);
 
   const handleZoomFit = () => {
     const targetZoom = Math.max(15, Math.min(100, 800 / (totalDuration || 16)));
@@ -85,9 +91,7 @@ export const TimelineToolbar: React.FC = () => {
 
   return (
     <div className="h-9 bg-[#121319] border-b border-[#20222a] px-2 flex items-center justify-between text-xs text-neutral-300 select-none shrink-0 z-30">
-      {/* 1. Left Primary Editing Tool Modes */}
       <div className="flex items-center gap-1">
-        {/* Pointer / Selection Tool (V) */}
         <button
           onClick={() => setToolMode('select')}
           title="选择指针工具 (V)"
@@ -101,7 +105,6 @@ export const TimelineToolbar: React.FC = () => {
           <span className="text-[11px]">选择 (V)</span>
         </button>
 
-        {/* Razor / Blade Tool (C) */}
         <button
           onClick={() => setToolMode('blade')}
           title="剃刀切割工具 (C) - 移动到任意片段点击即切"
@@ -115,7 +118,6 @@ export const TimelineToolbar: React.FC = () => {
           <span className="text-[11px]">剃刀 (C)</span>
         </button>
 
-        {/* Hand Tool (H) */}
         <button
           onClick={() => setToolMode('hand')}
           title="抓手平移工具 (H)"
@@ -130,7 +132,6 @@ export const TimelineToolbar: React.FC = () => {
 
         <div className="h-4 w-px bg-[#242633] mx-1" />
 
-        {/* Ripple Edit Mode (B) */}
         <button
           onClick={() => setRippleMode(!rippleMode)}
           title={
@@ -148,7 +149,6 @@ export const TimelineToolbar: React.FC = () => {
           <span className="text-[11px]">波纹 (B)</span>
         </button>
 
-        {/* Magnet Snapping Toggle (N) */}
         <button
           onClick={() => setSnapping(!snapping)}
           title={snapping ? '自动磁吸对齐：开启 (N)' : '自动磁吸对齐：关闭 (N)'}
@@ -164,7 +164,6 @@ export const TimelineToolbar: React.FC = () => {
 
         <div className="h-4 w-px bg-[#242633] mx-1" />
 
-        {/* Split at Playhead (S) */}
         <button
           onClick={() => splitClip()}
           title="在播放头位置分割选中的片段 (S)"
@@ -174,7 +173,6 @@ export const TimelineToolbar: React.FC = () => {
           <span className="text-[11px]">分割 (S)</span>
         </button>
 
-        {/* Duplicate Clip (Ctrl+D) */}
         <button
           onClick={() => duplicateClip()}
           disabled={!hasSelection}
@@ -188,7 +186,6 @@ export const TimelineToolbar: React.FC = () => {
           <Copy className="w-3.5 h-3.5" />
         </button>
 
-        {/* Link / Unlink Audio & Video (Ctrl+L) */}
         <button
           onClick={() => toggleLinkSelectedClips()}
           disabled={!hasSelection}
@@ -215,7 +212,6 @@ export const TimelineToolbar: React.FC = () => {
           <span className="text-[11px]">{isAnyClipLinked ? '已绑定' : '绑定 (L)'}</span>
         </button>
 
-        {/* Delete / Ripple Delete */}
         <button
           onClick={() => deleteSelectedClips(rippleMode)}
           disabled={!hasSelection}
@@ -230,9 +226,7 @@ export const TimelineToolbar: React.FC = () => {
         </button>
       </div>
 
-      {/* 2. Middle Tools: In/Out Markers & Track Creation */}
       <div className="flex items-center gap-1.5">
-        {/* In / Out Markers */}
         <div className="flex items-center bg-[#181a24] border border-[#242633] rounded-lg px-1.5 py-0.5 gap-1 text-[10px]">
           <button
             onClick={() => setInPoint(currentTime)}
@@ -266,7 +260,6 @@ export const TimelineToolbar: React.FC = () => {
           )}
         </div>
 
-        {/* Add Track Menu */}
         <div className="relative">
           <button
             onClick={() => setIsTrackMenuOpen(!isTrackMenuOpen)}
@@ -310,9 +303,7 @@ export const TimelineToolbar: React.FC = () => {
         </div>
       </div>
 
-      {/* 3. Right: Undo/Redo & Zoom Scale */}
       <div className="flex items-center gap-1.5">
-        {/* Undo / Redo */}
         <button
           onClick={undo}
           disabled={!canUndo}
@@ -337,7 +328,6 @@ export const TimelineToolbar: React.FC = () => {
 
         <div className="h-4 w-px bg-[#242633] mx-1" />
 
-        {/* Track Height Selector */}
         <div className="relative">
           <button
             onClick={() => setIsHeightMenuOpen(!isHeightMenuOpen)}
@@ -388,7 +378,6 @@ export const TimelineToolbar: React.FC = () => {
           )}
         </div>
 
-        {/* Zoom Out */}
         <button
           onClick={() => setZoom((prev) => Math.max(10, prev - 10))}
           title="缩小时间线 (-)"
@@ -397,7 +386,6 @@ export const TimelineToolbar: React.FC = () => {
           <ZoomOut className="w-3.5 h-3.5" />
         </button>
 
-        {/* Zoom Slider */}
         <input
           type="range"
           min="10"
@@ -408,7 +396,6 @@ export const TimelineToolbar: React.FC = () => {
           title={`缩放比例: ${Math.round((zoom / 45) * 100)}%`}
         />
 
-        {/* Zoom In */}
         <button
           onClick={() => setZoom((prev) => Math.min(150, prev + 10))}
           title="放大时间线 (+)"
@@ -417,7 +404,6 @@ export const TimelineToolbar: React.FC = () => {
           <ZoomIn className="w-3.5 h-3.5" />
         </button>
 
-        {/* Zoom to Fit */}
         <button
           onClick={handleZoomFit}
           title="缩放以适应全工程 (Shift+Z)"
@@ -428,7 +414,6 @@ export const TimelineToolbar: React.FC = () => {
 
         <div className="h-4 w-px bg-[#242633] mx-1" />
 
-        {/* Reset / New Project */}
         <button
           onClick={() => {
             if (window.confirm('确定要重置当前工程回到初始状态吗？未导出的修改将丢失。')) {

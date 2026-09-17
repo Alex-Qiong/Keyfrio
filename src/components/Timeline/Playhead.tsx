@@ -1,12 +1,17 @@
-import React, { useRef, useState } from 'react';
-import { useEditor } from '../../context/EditorContext';
+import React from 'react';
+import { usePlaybackStore } from '../../stores/playbackStore';
+import { useUiStore } from '../../stores/uiStore';
 
 interface PlayheadProps {
   timelineScrollRef: React.RefObject<HTMLDivElement | null>;
 }
 
-export const Playhead: React.FC<PlayheadProps> = ({ timelineScrollRef }) => {
-  const { currentTime, zoom } = useEditor();
+/**
+ * Fully migrated to Zustand – only re-renders when currentTime or zoom changes.
+ */
+export const Playhead: React.FC<PlayheadProps> = () => {
+  const currentTime = usePlaybackStore((s) => s.currentTime);
+  const zoom = useUiStore((s) => s.zoom);
   const leftPosition = currentTime * zoom;
 
   return (

@@ -1,23 +1,15 @@
 import React, { useState } from 'react';
 import {
-  Film,
-  Music,
-  Type,
   Eye,
   EyeOff,
   Lock,
   Unlock,
-  Volume2,
-  VolumeX,
   Trash2,
-  ChevronUp,
-  ChevronDown,
-  Sparkles,
-  Zap,
-  Smile,
   Link2,
 } from 'lucide-react';
 import { useEditor } from '../../context/EditorContext';
+import { useUiStore } from '../../stores/uiStore';
+import { useSelectionStore } from '../../stores/selectionStore';
 import { Track } from '../../types/editor';
 
 interface TrackHeaderProps {
@@ -30,15 +22,17 @@ export const TrackHeader: React.FC<TrackHeaderProps> = ({ track, index, totalTra
   const {
     updateTrack,
     deleteTrack,
-    reorderTrack,
     toggleTrackMute,
     toggleTrackSolo,
     toggleTrackLock,
     toggleTrackHide,
-    trackHeight,
-    activeTrackId,
-    setActiveTrackId,
   } = useEditor();
+
+  const trackHeight = useUiStore((s) => s.trackHeight);
+  const activeTrackId = useSelectionStore((s) => s.activeTrackId);
+  const setActiveTrackId = useSelectionStore((s) => s.setActiveTrackId);
+  // Also write through context so StoreBridge stays consistent for non-migrated consumers
+  const { setActiveTrackId: setActiveTrackIdCtx } = useEditor();
 
   const [isEditingName, setIsEditingName] = useState(false);
   const [nameValue, setNameValue] = useState(track.name);
@@ -53,6 +47,11 @@ export const TrackHeader: React.FC<TrackHeaderProps> = ({ track, index, totalTra
     if (nameValue.trim()) {
       updateTrack(track.id, { name: nameValue.trim() });
     }
+  };
+
+  const handleSelectTrack = () => {
+    setActiveTrackId(track.id);
+    setActiveTrackIdCtx(track.id);
   };
 
   const getHeightClass = () => {
@@ -71,7 +70,6 @@ export const TrackHeader: React.FC<TrackHeaderProps> = ({ track, index, totalTra
   const isHidden = track.isHidden || track.visible === false;
   const isSolo = !!track.isSolo;
 
-  // PR style track badge (e.g. V1, A1)
   const getPrTrackLabel = () => {
     if (track.name && (track.name.startsWith('V') || track.name.startsWith('A'))) {
       return track.name.split(' ')[0];
@@ -81,12 +79,11 @@ export const TrackHeader: React.FC<TrackHeaderProps> = ({ track, index, totalTra
 
   return (
     <div
-      onClick={() => setActiveTrackId(track.id)}
+      onClick={handleSelectTrack}
       className={`${getHeightClass()} bg-[#121319] border-b border-[#20222a] px-1.5 flex items-center justify-between select-none text-xs text-neutral-300 transition-all hover:bg-[#161722] relative group ${
         isTargeted ? 'bg-[#161824]' : ''
       }`}
     >
-      {/* Active Target Indicator Stripe */}
       {isTargeted && (
         <div
           className={`absolute left-0 top-0 bottom-0 w-1 ${
@@ -95,14 +92,12 @@ export const TrackHeader: React.FC<TrackHeaderProps> = ({ track, index, totalTra
         />
       )}
 
-      {/* Left: PR Source Patching / Track Target Box (V1 / A1) */}
       <div className="flex items-center gap-1.5 min-w-0 flex-1 pl-1">
-        {/* PR Target Track Block */}
         <button
           type="button"
           onClick={(e) => {
             e.stopPropagation();
-            setActiveTrackId(track.id);
+            handleSelectTrack();
           }}
           title={isTargeted ? '当前目标轨道 (Target Track)' : '设为目标轨道 (Target Track)'}
           className={`w-6 h-6 rounded flex items-center justify-center font-mono font-bold text-[10px] shrink-0 transition-all shadow-xs ${
@@ -118,7 +113,6 @@ export const TrackHeader: React.FC<TrackHeaderProps> = ({ track, index, totalTra
           {getPrTrackLabel()}
         </button>
 
-        {/* Track Name / Inline Edit */}
         <div className="flex flex-col min-w-0 flex-1">
           {isEditingName ? (
             <input
@@ -148,9 +142,7 @@ export const TrackHeader: React.FC<TrackHeaderProps> = ({ track, index, totalTra
         </div>
       </div>
 
-      {/* Right Controls: PR-Style Controls */}
       <div className="flex items-center gap-1 shrink-0 ml-1">
-        {/* 1. Video-Specific: Toggle Track Output (Eye 👁️) */}
         {isVideo && (
           <button
             type="button"
@@ -169,10 +161,8 @@ export const TrackHeader: React.FC<TrackHeaderProps> = ({ track, index, totalTra
           </button>
         )}
 
-        {/* 2. Audio-Specific: Mute (M) & Solo (S) */}
         {isAudio && (
           <>
-            {/* Mute (M) */}
             <button
               type="button"
               onClick={(e) => {
@@ -189,7 +179,6 @@ export const TrackHeader: React.FC<TrackHeaderProps> = ({ track, index, totalTra
               M
             </button>
 
-            {/* Solo (S) */}
             <button
               type="button"
               onClick={(e) => {
@@ -208,7 +197,6 @@ export const TrackHeader: React.FC<TrackHeaderProps> = ({ track, index, totalTra
           </>
         )}
 
-        {/* 3. Sync Lock (🔗) */}
         <button
           type="button"
           onClick={(e) => {
@@ -225,7 +213,6 @@ export const TrackHeader: React.FC<TrackHeaderProps> = ({ track, index, totalTra
           <Link2 className="w-2.5 h-2.5" />
         </button>
 
-        {/* 4. Track Lock (🔒) */}
         <button
           type="button"
           onClick={(e) => {
@@ -242,7 +229,6 @@ export const TrackHeader: React.FC<TrackHeaderProps> = ({ track, index, totalTra
           {isLocked ? <Lock className="w-2.5 h-2.5" /> : <Unlock className="w-2.5 h-2.5" />}
         </button>
 
-        {/* 5. Delete Track (Only when tracks > 2, or on hover) */}
         {totalTracks > 2 && (
           <button
             type="button"

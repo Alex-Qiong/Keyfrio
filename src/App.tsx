@@ -1,5 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { EditorProvider, useEditor } from './context/EditorContext';
+import { StoreBridge } from './components/StoreBridge';
 
 const Navbar = lazy(() => import('./components/Header/Navbar').then((module) => ({ default: module.Navbar })));
 const SidebarTabs = lazy(() => import('./components/Sidebar/SidebarTabs').then((module) => ({ default: module.SidebarTabs })));
@@ -28,8 +29,11 @@ const ProjectHome = lazy(() => import('./components/Home/ProjectHome').then((mod
 const LandingPage = lazy(() => import('./components/Landing/LandingPage').then((module) => ({ default: module.LandingPage })));
 
 const LoadingFallback: React.FC = () => (
-  <div className="flex h-screen w-screen items-center justify-center bg-[#f5f6f8] text-sm text-slate-500">
-    正在加载 Keyfrio…
+  <div className="flex h-screen w-screen items-center justify-center bg-[#0e0e10] text-sm text-[#a0a0ab]">
+    <div className="flex flex-col items-center gap-3">
+      <div className="h-8 w-8 rounded-full border-2 border-[#2a2a32] border-t-[#00d4c8] animate-spin" />
+      <span>正在加载 Keyfrio…</span>
+    </div>
   </div>
 );
 
@@ -51,6 +55,7 @@ const MainAppContent: React.FC = () => {
       <div className="w-full h-dvh bg-[#070912] overflow-y-auto overflow-x-hidden">
         <LandingPage />
         <CommonOverlays />
+        <StoreBridge />
       </div>
     );
   }
@@ -60,6 +65,7 @@ const MainAppContent: React.FC = () => {
       <div className="w-full h-dvh bg-[#0b0e17] overflow-y-auto overflow-x-hidden">
         <ProjectHome />
         <CommonOverlays />
+        <StoreBridge />
       </div>
     );
   }
@@ -90,16 +96,20 @@ const MainAppContent: React.FC = () => {
   };
 
   return (
-    <div className="keyfrio-editor-light flex flex-col h-dvh w-full bg-[#f5f6f8] text-slate-900 overflow-hidden font-sans select-none animate-in fade-in duration-150">
+    <div className="keyfrio-editor flex flex-col h-dvh w-full bg-[#0e0e10] text-[#f0f0f2] overflow-hidden font-sans select-none">
       <Navbar />
       <MediaRelinkBanner />
 
-      <div className="flex-1 flex overflow-hidden min-h-0 min-w-0 gap-1.5 p-1.5 pb-0 bg-[#f5f6f8]">
+      {/* Main workspace – CapCut style: tight gaps, dark panels */}
+      <div className="flex-1 flex overflow-hidden min-h-0 min-w-0 gap-0 bg-[#0e0e10]">
+        {/* Icon rail */}
         <SidebarTabs />
-        <div className="w-[24vw] min-w-[300px] max-w-[430px] bg-white border border-[#dde1e7] rounded-lg flex flex-col shrink-0 overflow-hidden">
+
+        {/* Media / tools panel */}
+        <div className="w-[22vw] min-w-[280px] max-w-[400px] bg-[#1a1a1f] border-r border-[#2a2a32] flex flex-col shrink-0 overflow-hidden">
           <Suspense
             fallback={
-              <div className="flex flex-1 items-center justify-center text-xs text-neutral-500">
+              <div className="flex flex-1 items-center justify-center text-xs text-[#6b6b78]">
                 正在加载面板…
               </div>
             }
@@ -107,16 +117,26 @@ const MainAppContent: React.FC = () => {
             {renderActiveSidebar()}
           </Suspense>
         </div>
-        <PreviewPlayer />
-        <InspectorPanel />
+
+        {/* Preview + Inspector */}
+        <div className="flex-1 flex min-w-0 overflow-hidden">
+          <div className="flex-1 min-w-0 bg-[#121216] flex flex-col">
+            <PreviewPlayer />
+          </div>
+          <div className="w-[20vw] min-w-[260px] max-w-[360px] bg-[#1a1a1f] border-l border-[#2a2a32] flex flex-col shrink-0 overflow-hidden">
+            <InspectorPanel />
+          </div>
+        </div>
       </div>
 
+      {/* Timeline – full width bottom, CapCut style */}
       <TimelineContainer />
 
       <ExportModal />
       <AiModal />
       <AudioStudioModal />
       <CommonOverlays />
+      <StoreBridge />
     </div>
   );
 };
