@@ -9,10 +9,7 @@ interface TimelineRulerProps {
   totalWidth: number;
 }
 
-/**
- * Reads from Zustand (zoom, currentTime, in/out, tracks, snapping).
- * Writes (seek) still go through EditorContext during migration.
- */
+/** CapCut-style dark ruler */
 export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
   const { seek } = useEditor();
 
@@ -94,12 +91,12 @@ export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
     <div
       ref={rulerRef}
       onMouseDown={handleRulerMouseDown}
-      className="h-7 bg-white border-b border-[#dde1e7] relative select-none cursor-pointer overflow-hidden shrink-0"
+      className="h-7 bg-[#16161a] relative select-none cursor-pointer overflow-hidden shrink-0"
       style={{ width: `${totalWidth}px` }}
     >
       {inPx !== null && outPx !== null && outPx > inPx && (
         <div
-          className="absolute top-0 bottom-0 bg-blue-500/20 border-x border-blue-400 pointer-events-none z-10"
+          className="absolute top-0 bottom-0 bg-[rgba(0,212,200,0.12)] border-x border-[#00d4c8]/60 pointer-events-none z-10"
           style={{
             left: `${inPx}px`,
             width: `${outPx - inPx}px`,
@@ -109,10 +106,10 @@ export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
 
       {inPx !== null && (
         <div
-          className="absolute top-0 bottom-0 w-0.5 bg-blue-400 z-20 pointer-events-none"
+          className="absolute top-0 bottom-0 w-0.5 bg-[#00d4c8] z-20 pointer-events-none"
           style={{ left: `${inPx}px` }}
         >
-          <div className="absolute top-0 left-0 bg-blue-500 text-white font-mono text-[7px] px-0.5 rounded-br font-bold">
+          <div className="absolute top-0 left-0 bg-[#00a89e] text-white font-mono text-[7px] px-0.5 rounded-br font-bold">
             IN
           </div>
         </div>
@@ -120,10 +117,10 @@ export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
 
       {outPx !== null && (
         <div
-          className="absolute top-0 bottom-0 w-0.5 bg-blue-400 z-20 pointer-events-none"
+          className="absolute top-0 bottom-0 w-0.5 bg-[#00d4c8] z-20 pointer-events-none"
           style={{ left: `${outPx}px` }}
         >
-          <div className="absolute top-0 right-0 bg-blue-500 text-white font-mono text-[7px] px-0.5 rounded-bl font-bold">
+          <div className="absolute top-0 right-0 bg-[#00a89e] text-white font-mono text-[7px] px-0.5 rounded-bl font-bold">
             OUT
           </div>
         </div>
@@ -135,8 +132,8 @@ export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
 
         return (
           <div key={i} className="absolute top-0 bottom-0 pointer-events-none" style={{ left: `${left}px` }}>
-            <div className="h-2.5 w-px bg-[#c9d1dc]" />
-            <span className="absolute top-2 left-1 text-[8px] font-mono text-slate-500 whitespace-nowrap select-none">
+            <div className="h-2.5 w-px bg-[#3a3a44]" />
+            <span className="absolute top-2 left-1 text-[8px] font-mono text-[#6b6b78] whitespace-nowrap select-none">
               {formatSMPTE(time)}
             </span>
 
@@ -145,7 +142,7 @@ export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
               return (
                 <div
                   key={subIdx}
-                  className="absolute top-0 h-1 w-px bg-[#dbe1ea]"
+                  className="absolute top-0 h-1 w-px bg-[#2a2a32]"
                   style={{ left: `${subLeft}px` }}
                 />
               );
@@ -162,7 +159,7 @@ export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
         }}
       >
         <div
-          className="w-3.5 h-4 bg-red-500 hover:bg-red-400 cursor-ew-resize pointer-events-auto flex items-center justify-center shadow-lg transition-transform hover:scale-110 active:scale-125"
+          className="w-3.5 h-4 bg-[#ff4d6a] hover:bg-[#ff6b81] cursor-ew-resize pointer-events-auto flex items-center justify-center shadow-lg transition-transform hover:scale-110 active:scale-125"
           style={{
             clipPath: 'polygon(0% 0%, 100% 0%, 100% 65%, 50% 100%, 0% 65%)',
           }}
