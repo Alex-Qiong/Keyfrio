@@ -26,6 +26,9 @@ export type { HistoryState, HistorySnapshot } from './historyStore';
 export { useAssetsStore } from './assetsStore';
 export type { AssetsState } from './assetsStore';
 
+import { useSelectionStore } from './selectionStore';
+import { useProjectStore } from './projectStore';
+
 /** Convenience: get currently selected clip object (read-only) */
 export function useSelectedClip() {
   const selectedClipId = useSelectionStore((s) => s.selectedClipId);
@@ -37,7 +40,3 @@ export function useSelectedClip() {
   }
   return null;
 }
-
-// Re-export for convenience inside components that already import from stores
-import { useSelectionStore } from './selectionStore';
-import { useProjectStore } from './projectStore';

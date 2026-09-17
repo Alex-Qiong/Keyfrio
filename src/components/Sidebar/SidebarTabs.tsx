@@ -10,6 +10,7 @@ import {
   Bot,
   Clapperboard,
 } from 'lucide-react';
+import { useUiStore } from '../../stores/uiStore';
 import { useEditor } from '../../context/EditorContext';
 
 export interface TabItem {
@@ -31,8 +32,14 @@ export const TABS: TabItem[] = [
   { id: 'ai', name: 'AI', icon: Bot, badge: 'AI' },
 ];
 
+/**
+ * Reads active tab from Zustand (fine-grained).
+ * Writes still go through EditorContext so the rest of the app stays in sync
+ * until full mutation migration is complete.
+ */
 export const SidebarTabs: React.FC = () => {
-  const { activeSidebarTab, setActiveSidebarTab } = useEditor();
+  const activeSidebarTab = useUiStore((s) => s.activeSidebarTab);
+  const { setActiveSidebarTab } = useEditor();
 
   return (
     <aside
@@ -66,14 +73,12 @@ export const SidebarTabs: React.FC = () => {
                   strokeWidth={isActive ? 2.2 : 1.8}
                 />
                 {tab.badge && (
-                    <span className="absolute -top-2 -right-3 rounded bg-slate-100 px-1 text-[7px] font-semibold tracking-wide text-slate-500 border border-slate-200">
+                  <span className="absolute -top-2 -right-3 rounded bg-slate-100 px-1 text-[7px] font-semibold tracking-wide text-slate-500 border border-slate-200">
                     {tab.badge}
                   </span>
                 )}
               </div>
-              <span className="sr-only">
-                {tab.name}
-              </span>
+              <span className="sr-only">{tab.name}</span>
               {isActive && (
                 <span
                   aria-hidden="true"

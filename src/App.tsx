@@ -1,5 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { EditorProvider, useEditor } from './context/EditorContext';
+import { StoreBridge } from './components/StoreBridge';
 
 const Navbar = lazy(() => import('./components/Header/Navbar').then((module) => ({ default: module.Navbar })));
 const SidebarTabs = lazy(() => import('./components/Sidebar/SidebarTabs').then((module) => ({ default: module.SidebarTabs })));
@@ -51,6 +52,7 @@ const MainAppContent: React.FC = () => {
       <div className="w-full h-dvh bg-[#070912] overflow-y-auto overflow-x-hidden">
         <LandingPage />
         <CommonOverlays />
+        <StoreBridge />
       </div>
     );
   }
@@ -60,6 +62,7 @@ const MainAppContent: React.FC = () => {
       <div className="w-full h-dvh bg-[#0b0e17] overflow-y-auto overflow-x-hidden">
         <ProjectHome />
         <CommonOverlays />
+        <StoreBridge />
       </div>
     );
   }
@@ -117,6 +120,7 @@ const MainAppContent: React.FC = () => {
       <AiModal />
       <AudioStudioModal />
       <CommonOverlays />
+      <StoreBridge />
     </div>
   );
 };
