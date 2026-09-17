@@ -1,25 +1,30 @@
 import React, { useRef } from 'react';
 import { useEditor } from '../../context/EditorContext';
+import { useProjectStore } from '../../stores/projectStore';
+import { usePlaybackStore } from '../../stores/playbackStore';
+import { useUiStore } from '../../stores/uiStore';
 import { formatSMPTE, snapTime } from '../../utils/time';
 
 interface TimelineRulerProps {
   totalWidth: number;
 }
 
+/**
+ * Reads from Zustand (zoom, currentTime, in/out, tracks, snapping).
+ * Writes (seek) still go through EditorContext during migration.
+ */
 export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
-  const {
-    zoom,
-    seek,
-    currentTime,
-    inPoint,
-    outPoint,
-    snapping,
-    project,
-  } = useEditor();
+  const { seek } = useEditor();
+
+  const zoom = useUiStore((s) => s.zoom);
+  const snapping = useUiStore((s) => s.snappingEnabled);
+  const currentTime = usePlaybackStore((s) => s.currentTime);
+  const inPoint = usePlaybackStore((s) => s.inPoint);
+  const outPoint = usePlaybackStore((s) => s.outPoint);
+  const tracks = useProjectStore((s) => s.tracks);
 
   const rulerRef = useRef<HTMLDivElement | null>(null);
 
-  // Interval calculation based on zoom level (pixels per second)
   let majorSec = 5;
   let subSec = 1;
 
@@ -42,7 +47,7 @@ export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
 
   const getSnapPoints = (): number[] => {
     const points: number[] = [0];
-    project.tracks.forEach((t) => {
+    tracks.forEach((t) => {
       t.clips.forEach((c) => {
         points.push(c.start);
         points.push(c.start + c.duration);
@@ -81,7 +86,6 @@ export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
     window.addEventListener('mouseup', onMouseUp);
   };
 
-  // In / Out range styling
   const inPx = inPoint !== null ? inPoint * zoom : null;
   const outPx = outPoint !== null ? outPoint * zoom : null;
   const playheadX = currentTime * zoom;
@@ -93,7 +97,6 @@ export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
       className="h-7 bg-white border-b border-[#dde1e7] relative select-none cursor-pointer overflow-hidden shrink-0"
       style={{ width: `${totalWidth}px` }}
     >
-      {/* In / Out Work Area Region */}
       {inPx !== null && outPx !== null && outPx > inPx && (
         <div
           className="absolute top-0 bottom-0 bg-blue-500/20 border-x border-blue-400 pointer-events-none z-10"
@@ -104,7 +107,6 @@ export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
         />
       )}
 
-      {/* In Point Flag */}
       {inPx !== null && (
         <div
           className="absolute top-0 bottom-0 w-0.5 bg-blue-400 z-20 pointer-events-none"
@@ -116,7 +118,6 @@ export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
         </div>
       )}
 
-      {/* Out Point Flag */}
       {outPx !== null && (
         <div
           className="absolute top-0 bottom-0 w-0.5 bg-blue-400 z-20 pointer-events-none"
@@ -128,21 +129,17 @@ export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
         </div>
       )}
 
-      {/* Major & Minor Ruler Ticks and Timestamps */}
       {Array.from({ length: majorTicksCount }).map((_, i) => {
         const time = i * majorSec;
         const left = time * zoom;
 
         return (
           <div key={i} className="absolute top-0 bottom-0 pointer-events-none" style={{ left: `${left}px` }}>
-            {/* Major tick mark */}
             <div className="h-2.5 w-px bg-[#c9d1dc]" />
-            {/* Time label */}
             <span className="absolute top-2 left-1 text-[8px] font-mono text-slate-500 whitespace-nowrap select-none">
               {formatSMPTE(time)}
             </span>
 
-            {/* Sub ticks */}
             {Array.from({ length: Math.floor(majorSec / subSec) - 1 }).map((_, subIdx) => {
               const subLeft = (subIdx + 1) * subSec * zoom;
               return (
@@ -157,7 +154,6 @@ export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
         );
       })}
 
-      {/* Playhead Scrubber Cap on Ruler */}
       <div
         className="absolute top-0 bottom-0 pointer-events-none z-30 flex items-center justify-center"
         style={{

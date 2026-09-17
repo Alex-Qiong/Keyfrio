@@ -1,75 +1,60 @@
-# Keyfrio Architecture (v0.2 – Zustand Migration)
+# Keyfrio Architecture (v0.3 – Zustand Migration)
 
 ## Why this change?
 
-The original `EditorContext.tsx` (~115 KB) was a monolithic Context that mixed:
+The original `EditorContext.tsx` (~115 KB) was a monolithic Context that mixed domain, playback, UI, history, assets and side-effects. Any state update re-rendered the entire tree.
 
-- Domain state (project / tracks / clips)
-- Playback state
-- Selection
-- UI / modal state
-- History (undo/redo)
-- Assets & persistence
-- AI action execution
-- File-system / relink side-effects
-
-Any state update re-rendered the entire tree. This is unacceptable for a professional NLE.
-
-## New design principles
+## Design principles
 
 1. **Domain-sliced Zustand stores** – fine-grained subscriptions
-2. **Pure domain functions** live in `src/domain/` (easy to unit-test)
-3. **Side-effects** stay in services / React hooks, never inside pure store logic
-4. **Immer** for ergonomic immutable updates on complex nested structures
-5. **Backward-compatible** – existing `useEditor()` continues to work while components are gradually migrated
+2. **Pure domain functions** in `src/domain/`
+3. **Side-effects** in services / hooks, not stores
+4. **Immer** for nested immutable updates
+5. **Backward-compatible** migration via `StoreBridge`
 
 ## Store map
 
 | Store | Responsibility |
 |-------|----------------|
 | `useProjectStore` | Project, tracks, clips, resolution, fps |
-| `usePlaybackStore` | currentTime, isPlaying, speed, loop, in/out points |
+| `usePlaybackStore` | currentTime, isPlaying, speed, loop, in/out |
 | `useSelectionStore` | selectedClipIds, activeTrackId |
-| `useUiStore` | view routing, sidebar, timeline UI flags, all modals |
-| `useHistoryStore` | undo / redo stack (max 50 snapshots) |
-| `useAssetsStore` | user media library, project list, offline counts |
+| `useUiStore` | view, sidebar, zoom, tools, modals |
+| `useHistoryStore` | undo / redo (max 50) |
+| `useAssetsStore` | media library, project list, offline counts |
 
-## Migration path
+## Migration progress
 
-### Phase 1 ✅ – Foundation
-- Add Zustand + Immer
-- Create the six stores + domain helpers
-- Document architecture
-- Keep `EditorContext` fully functional
+### Phase 1 ✅ Foundation
+- Zustand + Immer, six stores, domain helpers, ARCHITECTURE.md
 
-### Phase 2 ✅ (this commit) – Bridge + first components
-- `StoreBridge` mirrors EditorContext → Zustand (one-way during transition)
-- `SidebarTabs` reads from `useUiStore` (writes still via context)
-- `Playhead` fully on Zustand (`usePlaybackStore` + `useUiStore`)
-- `useHistoryActions` helper for future store-owned undo
-- App mounts `<StoreBridge />` in all views
+### Phase 2 ✅ Bridge + first components
+- `StoreBridge` (context → stores)
+- `SidebarTabs`, `Playhead`
+- `useHistoryActions`
 
-### Phase 3 – Gradual component migration
-- Timeline toolbar / ruler / clips → stores
-- PreviewPlayer / Inspector tabs → stores
-- Prefer `useShallow` when selecting multiple fields
+### Phase 3 ✅ Timeline core (this commit)
+| Component | Reads from stores | Writes |
+|-----------|-------------------|--------|
+| `Playhead` | playback + ui | — |
+| `SidebarTabs` | ui | context |
+| `TimelineRuler` | project + playback + ui | context (seek) |
+| `TimelineContainer` | project + playback + ui | context (addTrack) |
+| `TrackHeader` | ui + selection | context |
+| `TimelineToolbar` | project + playback + selection + ui | context |
 
-### Phase 4 – Retire EditorContext
-- Move all mutations into store actions + services
-- Delete `StoreBridge` and `EditorContext`
-- History owned exclusively by `useHistoryStore`
+### Phase 4 – Next
+- `PreviewPlayer` playback loop
+- Inspector tabs
+- ClipItem / TrackRow
+- Move mutations into store actions → delete Context + Bridge
 
-## Performance tips for contributors
+## Performance tips
 
 ```ts
-// ❌ Bad – whole store subscription
-const state = useProjectStore();
-
-// ✅ Good – only what you need
 const tracks = useProjectStore((s) => s.tracks);
-const updateClip = useProjectStore((s) => s.updateClip);
+const zoom = useUiStore((s) => s.zoom);
 
-// ✅ Multiple fields with shallow compare
 import { useShallow } from 'zustand/react/shallow';
 const { zoom, toolMode } = useUiStore(useShallow((s) => ({
   zoom: s.zoom,
@@ -81,39 +66,16 @@ const { zoom, toolMode } = useUiStore(useShallow((s) => ({
 
 ```
 src/
-  domain/                 # pure functions, no React
-    projectFactory.ts
-    clipOps.ts
-  stores/                 # Zustand slices
-    projectStore.ts
-    playbackStore.ts
-    selectionStore.ts
-    uiStore.ts
-    historyStore.ts
-    assetsStore.ts
-    index.ts
-  hooks/
-    useHistoryActions.ts  # undo helpers for store-era mutations
-  components/
-    StoreBridge.tsx       # temporary context → store sync
-  context/                # legacy – to be removed in Phase 4
-    EditorContext.tsx
+  domain/
+  stores/
+  hooks/useHistoryActions.ts
+  components/StoreBridge.tsx
+  context/EditorContext.tsx   # legacy
 ```
 
-## How StoreBridge works
+## Install after merge
 
+```bash
+bun install   # or npm install
+bun run dev
 ```
-EditorContext (source of truth for mutations)
-       │
-       ▼  useEffect mirrors
-Zustand stores (fine-grained reads for migrated components)
-```
-
-Migrated components **read** from stores and still **write** through `useEditor()` until the corresponding mutation is moved into a store action.
-
-## Next steps after merge
-
-1. `bun install` / `npm install`
-2. Verify Playhead & SidebarTabs still work
-3. Migrate TimelineToolbar / TimelineRuler / ClipItem
-4. Migrate PreviewPlayer playback loop to `usePlaybackStore`

@@ -1,5 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useEditor } from '../../context/EditorContext';
+import { useProjectStore } from '../../stores/projectStore';
+import { usePlaybackStore } from '../../stores/playbackStore';
+import { useUiStore } from '../../stores/uiStore';
 import { TimelineToolbar } from './TimelineToolbar';
 import { TimelineRuler } from './TimelineRuler';
 import { TrackHeader } from './TrackHeader';
@@ -8,30 +11,33 @@ import { Playhead } from './Playhead';
 import { formatSMPTE } from '../../utils/time';
 import { Plus } from 'lucide-react';
 
+/**
+ * Timeline shell – reads high-frequency state from Zustand,
+ * mutations (addTrack) still via EditorContext.
+ */
 export const TimelineContainer: React.FC = () => {
-  const {
-    project,
-    zoom,
-    totalDuration,
-    currentTime,
-    isPlaying,
-    activeSnapGuide,
-    inPoint,
-    outPoint,
-    toolMode,
-    addTrack,
-  } = useEditor();
+  const { addTrack } = useEditor();
+
+  const tracks = useProjectStore((s) => s.tracks);
+  const totalDuration = useProjectStore((s) => s.totalDuration);
+
+  const currentTime = usePlaybackStore((s) => s.currentTime);
+  const isPlaying = usePlaybackStore((s) => s.isPlaying);
+  const inPoint = usePlaybackStore((s) => s.inPoint);
+  const outPoint = usePlaybackStore((s) => s.outPoint);
+
+  const zoom = useUiStore((s) => s.zoom);
+  const toolMode = useUiStore((s) => s.toolMode);
+  const activeSnapGuide = useUiStore((s) => s.activeSnapGuide);
 
   const rulerScrollRef = useRef<HTMLDivElement | null>(null);
   const tracksScrollRef = useRef<HTMLDivElement | null>(null);
   const headerScrollRef = useRef<HTMLDivElement | null>(null);
   const [isHandPanning, setIsHandPanning] = useState(false);
 
-  // Compute total canvas scroll width
   const minSeconds = Math.max(30, totalDuration + 15);
   const totalWidth = Math.max(1200, minSeconds * zoom);
 
-  // Auto-scroll timeline to follow playhead when playing
   useEffect(() => {
     if (!isPlaying || !tracksScrollRef.current) return;
     const playheadPx = currentTime * zoom;
@@ -45,7 +51,6 @@ export const TimelineContainer: React.FC = () => {
     }
   }, [currentTime, isPlaying, zoom]);
 
-  // Synchronize horizontal scroll to Ruler and vertical scroll to Track Headers
   const handleTracksScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const { scrollLeft, scrollTop } = e.currentTarget;
     if (rulerScrollRef.current) {
@@ -56,14 +61,12 @@ export const TimelineContainer: React.FC = () => {
     }
   };
 
-  // Synchronize mouse wheel on track header to scroll track lanes
   const handleHeaderWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     if (tracksScrollRef.current) {
       tracksScrollRef.current.scrollTop += e.deltaY;
     }
   };
 
-  // Hand tool panning handler
   const handleTimelineMouseDown = (e: React.MouseEvent) => {
     if (toolMode !== 'hand') return;
     setIsHandPanning(true);
@@ -88,18 +91,14 @@ export const TimelineContainer: React.FC = () => {
     window.addEventListener('mouseup', onMouseUp);
   };
 
-  // In / Out region highlights
   const inPx = inPoint !== null ? inPoint * zoom : null;
   const outPx = outPoint !== null ? outPoint * zoom : null;
 
   return (
     <div className="h-[46vh] min-h-[330px] bg-white border-t border-[#dde1e7] flex flex-col select-none shrink-0 z-20 mt-1.5">
-      {/* Top Toolbar */}
       <TimelineToolbar />
 
-      {/* 1. Dedicated Ruler Bar (Height: 24px) */}
       <div className="h-7 bg-white border-b border-[#dde1e7] flex shrink-0 z-20">
-        {/* Left Corner Box: Timecode + Quick Track Add (Fixed 192px) */}
         <div className="w-24 bg-white border-r border-[#dde1e7] px-2 flex items-center justify-between text-[9px] font-semibold text-slate-500 shrink-0">
           <span className="font-mono text-sky-500 font-bold tracking-wider">
             {formatSMPTE(currentTime)}
@@ -126,31 +125,27 @@ export const TimelineContainer: React.FC = () => {
           </div>
         </div>
 
-        {/* Right: Ruler (Horizontal Scroll synced with Track Lanes) */}
         <div ref={rulerScrollRef} className="flex-1 overflow-hidden relative">
           <TimelineRuler totalWidth={totalWidth} />
         </div>
       </div>
 
-      {/* 2. Tracks Workspace (Flex-1, Scrollable) */}
       <div className="flex-1 flex overflow-hidden relative">
-        {/* Left Track Headers (Fixed Width 192px, Vertical Scroll synced) */}
         <div
           ref={headerScrollRef}
           onWheel={handleHeaderWheel}
           className="w-24 bg-white border-r border-[#dde1e7] flex flex-col shrink-0 z-20 overflow-hidden"
         >
-          {project.tracks.map((track, idx) => (
+          {tracks.map((track, idx) => (
             <TrackHeader
               key={track.id}
               track={track}
               index={idx}
-              totalTracks={project.tracks.length}
+              totalTracks={tracks.length}
             />
           ))}
         </div>
 
-        {/* Right Scrollable Track Lanes (Both Horizontal & Vertical Scroll) */}
         <div
           ref={tracksScrollRef}
           onScroll={handleTracksScroll}
@@ -164,7 +159,6 @@ export const TimelineContainer: React.FC = () => {
           }`}
         >
           <div style={{ width: `${totalWidth}px` }} className="relative flex flex-col min-h-full">
-            {/* In / Out Work Area Overlay on tracks */}
             {inPx !== null && outPx !== null && outPx > inPx && (
               <div
                 className="absolute top-0 bottom-0 bg-blue-500/5 border-x border-blue-500/30 pointer-events-none z-10"
@@ -175,7 +169,6 @@ export const TimelineContainer: React.FC = () => {
               />
             )}
 
-            {/* Active Snap Guide Line */}
             {activeSnapGuide && (
               <div
                 className="absolute top-0 bottom-0 w-px bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,1)] z-40 pointer-events-none"
@@ -187,11 +180,9 @@ export const TimelineContainer: React.FC = () => {
               </div>
             )}
 
-            {/* Red Playhead (traversing all track rows) */}
             <Playhead timelineScrollRef={tracksScrollRef} />
 
-            {/* Render all track rows */}
-            {project.tracks.map((track) => (
+            {tracks.map((track) => (
               <TrackRow key={track.id} track={track} totalWidth={totalWidth} />
             ))}
           </div>
