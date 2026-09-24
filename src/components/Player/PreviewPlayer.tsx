@@ -17,32 +17,42 @@ import {
   Zap,
   Activity,
 } from 'lucide-react';
-import { useEditor } from '../../context/EditorContext';
+import { useEditorActions } from '../../context/EditorContext';
+import {
+  useProjectStore,
+  usePlaybackStore,
+  useSelectionStore,
+  useUiStore,
+  useSelectedClip,
+} from '../../stores';
 import { renderFrame, getMediaBaseDimensions } from '../../utils/canvasRenderer';
 import { formatSMPTE, parseTimeToSeconds } from '../../utils/time';
 import { ScopesPanel } from './ScopesPanel';
 
 export const PreviewPlayer: React.FC = () => {
+  // Reads: fine-grained Zustand subscriptions (no re-render on unrelated state changes)
+  const project = useProjectStore((s) => s.project);
+  const totalDuration = useProjectStore((s) => s.totalDuration);
+  const currentTime = usePlaybackStore((s) => s.currentTime);
+  const isPlaying = usePlaybackStore((s) => s.isPlaying);
+  const playbackSpeed = usePlaybackStore((s) => s.playbackSpeed);
+  const loop = usePlaybackStore((s) => s.loop);
+  const selectedClipId = useSelectionStore((s) => s.selectedClipId);
+  const selectedClip = useSelectedClip();
+  const showGrid = useUiStore((s) => s.showGrid);
+  const showSafeMargin = useUiStore((s) => s.showSafeMargin);
+
+  // Writes: stable action dispatchers (no state subscription)
   const {
-    project,
-    currentTime,
-    isPlaying,
-    totalDuration,
     togglePlay,
     seek,
     stepFrame,
-    selectedClipId,
-    selectedClip,
     updateClip,
-    showGrid,
     setShowGrid,
-    showSafeMargin,
     setShowSafeMargin,
-    playbackSpeed,
     setPlaybackSpeed,
-    loop,
     setLoop,
-  } = useEditor();
+  } = useEditorActions();
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -132,35 +142,49 @@ export const PreviewPlayer: React.FC = () => {
     }
   }, [currentTime, isEditingTimecode]);
 
-  // Render canvas frame on state change, seek, or during playback animation loop
+  // 2D context is stable for the canvas lifetime; resolve once instead of per frame.
+  const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
+
+  // Latest render inputs for the playback loop. Updated every render so the
+  // RAF loop (created once per play session) always draws the newest state
+  // without being torn down and recreated on each currentTime tick.
+  const frameStateRef = useRef({ project, currentTime, selectedClipId, showGrid, showSafeMargin });
+  frameStateRef.current = { project, currentTime, selectedClipId, showGrid, showSafeMargin };
+
+  const drawFrame = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    if (!ctxRef.current) {
+      ctxRef.current = canvas.getContext('2d');
+    }
+    const ctx = ctxRef.current;
+    if (!ctx) return;
+    const { project, currentTime, selectedClipId, showGrid, showSafeMargin } = frameStateRef.current;
+    renderFrame(ctx, project, currentTime, project.resolution, {
+      selectedClipId,
+      showGrid,
+      showSafeMargin,
+      isExporting: false,
+    });
+  }, []);
+
+  // Single-frame draw while idle (paused / scrubbed / project or overlay changed).
   useEffect(() => {
-    let animId: number;
+    if (isPlaying) return;
+    drawFrame();
+  }, [isPlaying, project, currentTime, selectedClipId, showGrid, showSafeMargin, drawFrame]);
 
-    const draw = () => {
-      const canvas = canvasRef.current;
-      if (canvas) {
-        const ctx = canvas.getContext('2d');
-        if (ctx) {
-          renderFrame(ctx, project, currentTime, project.resolution, {
-            selectedClipId,
-            showGrid,
-            showSafeMargin,
-            isExporting: false,
-          });
-        }
-      }
-
-      if (isPlaying) {
-        animId = requestAnimationFrame(draw);
-      }
+  // Continuous RAF loop, alive only while playing.
+  useEffect(() => {
+    if (!isPlaying) return;
+    let animId = 0;
+    const loop = () => {
+      drawFrame();
+      animId = requestAnimationFrame(loop);
     };
-
-    draw();
-
-    return () => {
-      if (animId) cancelAnimationFrame(animId);
-    };
-  }, [project, currentTime, isPlaying, selectedClipId, showGrid, showSafeMargin]);
+    animId = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(animId);
+  }, [isPlaying, drawFrame]);
 
   // Hit test handles and bounding box
   const hitTest = useCallback(

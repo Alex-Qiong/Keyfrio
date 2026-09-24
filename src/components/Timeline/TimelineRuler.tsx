@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { useEditor } from '../../context/EditorContext';
+import { useEditorActions } from '../../context/EditorContext';
 import { useProjectStore } from '../../stores/projectStore';
 import { usePlaybackStore } from '../../stores/playbackStore';
 import { useUiStore } from '../../stores/uiStore';
@@ -11,7 +11,7 @@ interface TimelineRulerProps {
 
 /** CapCut-style dark ruler */
 export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
-  const { seek } = useEditor();
+  const { seek } = useEditorActions();
 
   const zoom = useUiStore((s) => s.zoom);
   const snapping = useUiStore((s) => s.snappingEnabled);

@@ -3208,6 +3208,83 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     [executeAiAction]
   );
 
+  // Stable action dispatchers, memoised apart from state so that
+  // action-only consumers don't re-render on every state change.
+  const editorActions = useMemo<EditorActions>(
+    () => ({
+      togglePlay,
+      seek,
+      stepFrame,
+      updateClip,
+      setShowGrid,
+      setShowSafeMargin,
+      setPlaybackSpeed,
+      setLoop,
+      setActiveSidebarTab,
+      addTrack,
+      updateTrack,
+      deleteTrack,
+      toggleTrackMute,
+      toggleTrackSolo,
+      toggleTrackLock,
+      toggleTrackHide,
+      selectClip,
+      toggleClipSelection,
+      setActiveTrackId,
+      moveClip,
+      splitClipAtTime,
+      addMediaAtPosition,
+      closeGapAt,
+      pasteClips,
+      trimClip,
+      deleteClip,
+      rippleDeleteClip,
+      duplicateClip,
+      splitClip,
+      setActiveSnapGuide,
+      openRelinkModal,
+      unlinkClips,
+      toggleLinkSelectedClips,
+      separateAudioFromVideo,
+    }),
+    [
+      togglePlay,
+      seek,
+      stepFrame,
+      updateClip,
+      setShowGrid,
+      setShowSafeMargin,
+      setPlaybackSpeed,
+      setLoop,
+      setActiveSidebarTab,
+      addTrack,
+      updateTrack,
+      deleteTrack,
+      toggleTrackMute,
+      toggleTrackSolo,
+      toggleTrackLock,
+      toggleTrackHide,
+      selectClip,
+      toggleClipSelection,
+      setActiveTrackId,
+      moveClip,
+      splitClipAtTime,
+      addMediaAtPosition,
+      closeGapAt,
+      pasteClips,
+      trimClip,
+      deleteClip,
+      rippleDeleteClip,
+      duplicateClip,
+      splitClip,
+      setActiveSnapGuide,
+      openRelinkModal,
+      unlinkClips,
+      toggleLinkSelectedClips,
+      separateAudioFromVideo,
+    ]
+  );
+
   return (
     <EditorContext.Provider
       value={{
@@ -3376,7 +3453,9 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         openNativeFilePicker,
       }}
     >
-      {children}
+      <EditorActionsContext.Provider value={editorActions}>
+        {children}
+      </EditorActionsContext.Provider>
     </EditorContext.Provider>
   );
 };
@@ -3385,6 +3464,63 @@ export const useEditor = () => {
   const context = useContext(EditorContext);
   if (!context) {
     throw new Error('useEditor must be used within an EditorProvider');
+  }
+  return context;
+};
+
+/**
+ * Stable action dispatchers, memoised independently from state.
+ *
+ * Components that read state via Zustand selectors and only need actions
+ * can use `useEditorActions()` instead of `useEditor()` to avoid
+ * re-rendering on every state change (e.g. 60fps currentTime ticks during
+ * playback). The functions are the same useCallbacks exposed by
+ * `useEditor()` — this context only changes when an action identity changes.
+ */
+export type EditorActions = Pick<
+  EditorContextType,
+  | 'togglePlay'
+  | 'seek'
+  | 'stepFrame'
+  | 'updateClip'
+  | 'setShowGrid'
+  | 'setShowSafeMargin'
+  | 'setPlaybackSpeed'
+  | 'setLoop'
+  | 'setActiveSidebarTab'
+  | 'addTrack'
+  | 'updateTrack'
+  | 'deleteTrack'
+  | 'toggleTrackMute'
+  | 'toggleTrackSolo'
+  | 'toggleTrackLock'
+  | 'toggleTrackHide'
+  | 'selectClip'
+  | 'toggleClipSelection'
+  | 'setActiveTrackId'
+  | 'moveClip'
+  | 'splitClipAtTime'
+  | 'addMediaAtPosition'
+  | 'closeGapAt'
+  | 'pasteClips'
+  | 'trimClip'
+  | 'deleteClip'
+  | 'rippleDeleteClip'
+  | 'duplicateClip'
+  | 'splitClip'
+  | 'setActiveSnapGuide'
+  | 'openRelinkModal'
+  | 'unlinkClips'
+  | 'toggleLinkSelectedClips'
+  | 'separateAudioFromVideo'
+>;
+
+const EditorActionsContext = createContext<EditorActions | null>(null);
+
+export const useEditorActions = () => {
+  const context = useContext(EditorActionsContext);
+  if (!context) {
+    throw new Error('useEditorActions must be used within an EditorProvider');
   }
   return context;
 };

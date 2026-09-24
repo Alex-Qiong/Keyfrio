@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import {
   Eye,
   EyeOff,
@@ -7,7 +7,7 @@ import {
   Trash2,
   Link2,
 } from 'lucide-react';
-import { useEditor } from '../../context/EditorContext';
+import { useEditorActions } from '../../context/EditorContext';
 import { useUiStore } from '../../stores/uiStore';
 import { useSelectionStore } from '../../stores/selectionStore';
 import { Track } from '../../types/editor';
@@ -18,7 +18,7 @@ interface TrackHeaderProps {
   totalTracks: number;
 }
 
-export const TrackHeader: React.FC<TrackHeaderProps> = ({ track, index, totalTracks }) => {
+export const TrackHeader: React.FC<TrackHeaderProps> = memo(({ track, index, totalTracks }) => {
   const {
     updateTrack,
     deleteTrack,
@@ -26,13 +26,13 @@ export const TrackHeader: React.FC<TrackHeaderProps> = ({ track, index, totalTra
     toggleTrackSolo,
     toggleTrackLock,
     toggleTrackHide,
-  } = useEditor();
+  } = useEditorActions();
 
   const trackHeight = useUiStore((s) => s.trackHeight);
   const activeTrackId = useSelectionStore((s) => s.activeTrackId);
   const setActiveTrackId = useSelectionStore((s) => s.setActiveTrackId);
   // Also write through context so StoreBridge stays consistent for non-migrated consumers
-  const { setActiveTrackId: setActiveTrackIdCtx } = useEditor();
+  const { setActiveTrackId: setActiveTrackIdCtx } = useEditorActions();
 
   const [isEditingName, setIsEditingName] = useState(false);
   const [nameValue, setNameValue] = useState(track.name);
@@ -245,4 +245,4 @@ export const TrackHeader: React.FC<TrackHeaderProps> = ({ track, index, totalTra
       </div>
     </div>
   );
-};
+});

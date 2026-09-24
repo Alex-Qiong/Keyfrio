@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo } from 'react';
+import React, { useRef, useState, useMemo, memo } from 'react';
 import {
   Film,
   Music,
@@ -18,7 +18,11 @@ import {
   Link2,
   Link2Off,
 } from 'lucide-react';
-import { useEditor } from '../../context/EditorContext';
+import { useEditorActions } from '../../context/EditorContext';
+import { useProjectStore } from '../../stores/projectStore';
+import { usePlaybackStore } from '../../stores/playbackStore';
+import { useSelectionStore } from '../../stores/selectionStore';
+import { useUiStore } from '../../stores/uiStore';
 import { Clip, MediaType } from '../../types/editor';
 import { snapTime, formatSMPTE } from '../../utils/time';
 import { AudioWaveformVisualizer } from './AudioWaveformVisualizer';
@@ -29,10 +33,18 @@ interface ClipItemProps {
   isLocked: boolean;
 }
 
-export const ClipItem: React.FC<ClipItemProps> = ({ clip, trackId, isLocked }) => {
+export const ClipItem: React.FC<ClipItemProps> = memo(({ clip, trackId, isLocked }) => {
+  // Reads: fine-grained Zustand subscriptions
+  const zoom = useUiStore((s) => s.zoom);
+  const snapping = useUiStore((s) => s.snappingEnabled);
+  const toolMode = useUiStore((s) => s.toolMode);
+  const rippleMode = useUiStore((s) => s.rippleMode);
+  const tracks = useProjectStore((s) => s.tracks);
+  const currentTime = usePlaybackStore((s) => s.currentTime);
+  const selectedClipIds = useSelectionStore((s) => s.selectedClipIds);
+
+  // Writes: stable action dispatchers
   const {
-    zoom,
-    selectedClipIds,
     selectClip,
     toggleClipSelection,
     updateClip,
@@ -42,17 +54,12 @@ export const ClipItem: React.FC<ClipItemProps> = ({ clip, trackId, isLocked }) =
     rippleDeleteClip,
     duplicateClip,
     splitClip,
-    snapping,
-    project,
-    currentTime,
-    toolMode,
-    rippleMode,
     setActiveSnapGuide,
     openRelinkModal,
     unlinkClips,
     toggleLinkSelectedClips,
     separateAudioFromVideo,
-  } = useEditor();
+  } = useEditorActions();
 
   const isSelected = selectedClipIds.includes(clip.id);
   const clipRef = useRef<HTMLDivElement | null>(null);
@@ -72,7 +79,7 @@ export const ClipItem: React.FC<ClipItemProps> = ({ clip, trackId, isLocked }) =
   // Gather all other clip boundary timestamps for magnet snapping
   const getSnapPoints = (): number[] => {
     const points: number[] = [0, currentTime];
-    project.tracks.forEach((t) => {
+    tracks.forEach((t) => {
       t.clips.forEach((c) => {
         if (c.id !== clip.id) {
           points.push(c.start);
@@ -605,4 +612,4 @@ export const ClipItem: React.FC<ClipItemProps> = ({ clip, trackId, isLocked }) =
       )}
     </>
   );
-};
+});

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { useEditor } from '../../context/EditorContext';
+import React, { useState, memo } from 'react';
+import { useEditorActions } from '../../context/EditorContext';
+import { useUiStore } from '../../stores/uiStore';
 import { Track } from '../../types/editor';
 import { ClipItem } from './ClipItem';
 
@@ -8,18 +9,19 @@ interface TrackRowProps {
   totalWidth: number;
 }
 
-export const TrackRow: React.FC<TrackRowProps> = ({ track, totalWidth }) => {
-  const { 
-    selectClip, 
-    seek, 
-    zoom, 
-    toolMode, 
-    splitClipAtTime, 
-    trackHeight,
+export const TrackRow: React.FC<TrackRowProps> = memo(({ track, totalWidth }) => {
+  const {
+    selectClip,
+    seek,
+    splitClipAtTime,
     addMediaAtPosition,
     closeGapAt,
     pasteClips,
-  } = useEditor();
+  } = useEditorActions();
+
+  const zoom = useUiStore((s) => s.zoom);
+  const toolMode = useUiStore((s) => s.toolMode);
+  const trackHeight = useUiStore((s) => s.trackHeight);
 
   const [isDragOver, setIsDragOver] = useState(false);
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; time: number } | null>(null);
@@ -170,4 +172,4 @@ export const TrackRow: React.FC<TrackRowProps> = ({ track, totalWidth }) => {
       )}
     </>
   );
-};
+});

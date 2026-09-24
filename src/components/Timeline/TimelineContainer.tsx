@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { useEditor } from '../../context/EditorContext';
+import { useEditorActions } from '../../context/EditorContext';
 import { useProjectStore } from '../../stores/projectStore';
 import { usePlaybackStore } from '../../stores/playbackStore';
 import { useUiStore } from '../../stores/uiStore';
@@ -13,7 +13,7 @@ import { Plus } from 'lucide-react';
 
 /** CapCut-style full-width dark timeline */
 export const TimelineContainer: React.FC = () => {
-  const { addTrack } = useEditor();
+  const { addTrack } = useEditorActions();
 
   const tracks = useProjectStore((s) => s.tracks);
   const totalDuration = useProjectStore((s) => s.totalDuration);

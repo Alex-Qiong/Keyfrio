@@ -11,7 +11,7 @@ import {
   Clapperboard,
 } from 'lucide-react';
 import { useUiStore } from '../../stores/uiStore';
-import { useEditor } from '../../context/EditorContext';
+import { useEditorActions } from '../../context/EditorContext';
 
 export interface TabItem {
   id: string;
@@ -35,7 +35,7 @@ export const TABS: TabItem[] = [
 /** CapCut-style vertical icon rail with labels */
 export const SidebarTabs: React.FC = () => {
   const activeSidebarTab = useUiStore((s) => s.activeSidebarTab);
-  const { setActiveSidebarTab } = useEditor();
+  const { setActiveSidebarTab } = useEditorActions();
 
   return (
     <aside
