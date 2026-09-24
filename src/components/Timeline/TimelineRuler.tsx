@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useMemo, memo } from 'react';
 import { useEditorActions } from '../../context/EditorContext';
 import { useProjectStore } from '../../stores/projectStore';
 import { usePlaybackStore } from '../../stores/playbackStore';
@@ -9,13 +9,36 @@ interface TimelineRulerProps {
   totalWidth: number;
 }
 
+/** Ruler playhead cursor — isolated so it alone re-renders at 60fps during playback */
+const RulerCursor: React.FC<{ zoom: number }> = memo(({ zoom }) => {
+  const currentTime = usePlaybackStore((s) => s.currentTime);
+  const playheadX = currentTime * zoom;
+  return (
+    <div
+      className="absolute top-0 bottom-0 pointer-events-none z-30 flex items-center justify-center"
+      style={{
+        left: `${playheadX}px`,
+        transform: 'translateX(-50%)',
+      }}
+    >
+      <div
+        className="w-3.5 h-4 bg-[#ff4d6a] hover:bg-[#ff6b81] cursor-ew-resize pointer-events-auto flex items-center justify-center shadow-lg transition-transform hover:scale-110 active:scale-125"
+        style={{
+          clipPath: 'polygon(0% 0%, 100% 0%, 100% 65%, 50% 100%, 0% 65%)',
+        }}
+      >
+        <div className="w-1 h-1.5 bg-white rounded-full opacity-90" />
+      </div>
+    </div>
+  );
+});
+
 /** CapCut-style dark ruler */
-export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
+export const TimelineRuler: React.FC<TimelineRulerProps> = memo(({ totalWidth }) => {
   const { seek } = useEditorActions();
 
   const zoom = useUiStore((s) => s.zoom);
   const snapping = useUiStore((s) => s.snappingEnabled);
-  const currentTime = usePlaybackStore((s) => s.currentTime);
   const inPoint = usePlaybackStore((s) => s.inPoint);
   const outPoint = usePlaybackStore((s) => s.outPoint);
   const tracks = useProjectStore((s) => s.tracks);
@@ -42,7 +65,9 @@ export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
   const duration = totalWidth / zoom + 10;
   const majorTicksCount = Math.ceil(duration / majorSec);
 
-  const getSnapPoints = (): number[] => {
+  // Snap points are a pure function of tracks; memoise so ruler scrubbing
+  // (dozens of mousemove events per second) doesn't re-traverse all clips.
+  const snapPoints = useMemo(() => {
     const points: number[] = [0];
     tracks.forEach((t) => {
       t.clips.forEach((c) => {
@@ -51,7 +76,7 @@ export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
       });
     });
     return points;
-  };
+  }, [tracks]);
 
   const handleSeekFromEvent = (e: MouseEvent | React.MouseEvent) => {
     if (!rulerRef.current) return;
@@ -60,7 +85,6 @@ export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
     let targetTime = Math.max(0, clickX / zoom);
 
     if (snapping) {
-      const snapPoints = getSnapPoints();
       targetTime = snapTime(targetTime, snapPoints, 8 / zoom);
     }
 
@@ -85,7 +109,6 @@ export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
 
   const inPx = inPoint !== null ? inPoint * zoom : null;
   const outPx = outPoint !== null ? outPoint * zoom : null;
-  const playheadX = currentTime * zoom;
 
   return (
     <div
@@ -151,22 +174,7 @@ export const TimelineRuler: React.FC<TimelineRulerProps> = ({ totalWidth }) => {
         );
       })}
 
-      <div
-        className="absolute top-0 bottom-0 pointer-events-none z-30 flex items-center justify-center"
-        style={{
-          left: `${playheadX}px`,
-          transform: 'translateX(-50%)',
-        }}
-      >
-        <div
-          className="w-3.5 h-4 bg-[#ff4d6a] hover:bg-[#ff6b81] cursor-ew-resize pointer-events-auto flex items-center justify-center shadow-lg transition-transform hover:scale-110 active:scale-125"
-          style={{
-            clipPath: 'polygon(0% 0%, 100% 0%, 100% 65%, 50% 100%, 0% 65%)',
-          }}
-        >
-          <div className="w-1 h-1.5 bg-white rounded-full opacity-90" />
-        </div>
-      </div>
+      <RulerCursor zoom={zoom} />
     </div>
   );
-};
+});
