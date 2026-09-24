@@ -99,29 +99,29 @@ export const MediaPanel: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#131419] text-neutral-200 text-xs select-none">
+    <div className="flex flex-col h-full text-xs select-none">
       {/* Header */}
-      <div className="p-2.5 border-b border-[#20222a] flex items-center justify-between">
-        <span className="font-bold text-xs text-white flex items-center gap-1.5">
-          <Film className="w-3.5 h-3.5 text-blue-400" />
-          素材库 (Media Library)
+      <div className="kf-panel-header">
+        <span className="flex items-center gap-2">
+          <Film className="w-3.5 h-3.5 text-cyan-300" />
+          素材库
         </span>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5">
           <button
             onClick={openRelinkModal}
-            className={`p-1 rounded text-[10px] border transition-colors flex items-center gap-1 ${
+            className={`kf-icon-btn p-1.5 !rounded-lg border ${
               needsPermissionCount > 0 || offlineAssetsCount > 0
-                ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 hover:bg-amber-500/30'
-                : 'bg-[#1a1b22] text-neutral-400 border-[#242633] hover:text-white'
+                ? '!text-amber-300 !border-amber-500/40 !bg-amber-500/10'
+                : '!border-white/[0.06]'
             }`}
             title="素材重连与授权管理器"
           >
-            <HardDrive className="w-3 h-3" />
+            <HardDrive className="w-3.5 h-3.5" />
             {(needsPermissionCount > 0 || offlineAssetsCount > 0) && (
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
             )}
           </button>
-          <div className="flex gap-0.5 bg-[#1a1b22] p-0.5 rounded border border-[#242633]">
+          <div className="flex gap-0.5 bg-black/30 p-0.5 rounded-lg border border-white/[0.06]">
             {(
               [
                 { id: 'all', label: '全部' },
@@ -133,8 +133,10 @@ export const MediaPanel: React.FC = () => {
               <button
                 key={item.id}
                 onClick={() => setFilterType(item.id)}
-                className={`px-1.5 py-0.5 rounded text-[10px] uppercase font-medium transition-colors ${
-                  filterType === item.id ? 'bg-blue-600 text-white' : 'text-neutral-400 hover:text-white'
+                className={`px-2 py-1 rounded-md text-[10px] font-medium transition-all cursor-pointer ${
+                  filterType === item.id
+                    ? 'bg-[var(--kf-accent-soft)] text-[var(--kf-accent)] shadow-[inset_0_0_0_1px_var(--kf-accent-line)]'
+                    : 'text-neutral-500 hover:text-neutral-200'
                 }`}
               >
                 {item.label}
@@ -144,10 +146,10 @@ export const MediaPanel: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-2.5 flex flex-col gap-3">
+      <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-3">
         {/* Offline / Need Permission Alert Block */}
         {(needsPermissionCount > 0 || offlineAssetsCount > 0) && (
-          <div className="p-2.5 rounded-lg bg-amber-950/40 border border-amber-500/30 flex flex-col gap-2">
+          <div className="p-3 rounded-xl bg-amber-500/[0.06] border border-amber-500/25 flex flex-col gap-2">
             <div className="flex items-center gap-2 text-amber-300">
               <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
               <span className="font-semibold text-[11px]">
@@ -156,14 +158,14 @@ export const MediaPanel: React.FC = () => {
                   : `${offlineAssetsCount} 个素材处于离线状态`}
               </span>
             </div>
-            <p className="text-[10px] text-neutral-400 leading-normal">
+            <p className="text-[10px] text-neutral-500 leading-relaxed">
               浏览器安全策略要求在重新打开工程时对本地文件进行重新授权或扫描文件夹。
             </p>
             <div className="flex items-center gap-1.5">
               {needsPermissionCount > 0 && (
                 <button
                   onClick={() => requestAllFilePermissions()}
-                  className="px-2 py-1 rounded bg-amber-500 hover:bg-amber-400 text-black font-semibold text-[10px] flex items-center gap-1 shadow-xs"
+                  className="kf-btn !text-[10px] px-2.5 py-1.5 bg-amber-400 hover:bg-amber-300 text-black font-semibold"
                 >
                   <Unlock className="w-3 h-3" />
                   <span>授权访问</span>
@@ -171,9 +173,9 @@ export const MediaPanel: React.FC = () => {
               )}
               <button
                 onClick={openRelinkModal}
-                className="px-2 py-1 rounded bg-neutral-800 hover:bg-neutral-700 text-neutral-200 border border-neutral-700 text-[10px] flex items-center gap-1"
+                className="kf-btn kf-btn-ghost !text-[10px] px-2.5 py-1.5"
               >
-                <FolderOpen className="w-3 h-3 text-blue-400" />
+                <FolderOpen className="w-3 h-3 text-cyan-300" />
                 <span>批量重连</span>
               </button>
             </div>
@@ -188,10 +190,10 @@ export const MediaPanel: React.FC = () => {
           }}
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
-          className={`border border-dashed rounded-lg p-3.5 flex flex-col items-center justify-center text-center cursor-pointer transition-all relative ${
+          className={`border border-dashed rounded-xl p-4 flex flex-col items-center justify-center text-center cursor-pointer transition-all relative ${
             isDragging
-              ? 'border-blue-500 bg-blue-500/10 scale-98'
-              : 'border-[#262834] hover:border-blue-500/50 bg-[#161720] hover:bg-[#1a1b24]'
+              ? 'border-cyan-400 bg-cyan-400/10 scale-[0.98]'
+              : 'border-white/10 hover:border-cyan-400/40 bg-white/[0.02] hover:bg-cyan-400/[0.04]'
           }`}
         >
           <input
@@ -201,17 +203,17 @@ export const MediaPanel: React.FC = () => {
             className="hidden"
             onChange={(e) => handleFileUpload(e.target.files)}
           />
-          <div className="w-8 h-8 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center mb-1.5">
+          <div className="w-9 h-9 rounded-xl bg-cyan-400/10 border border-cyan-400/25 text-cyan-300 flex items-center justify-center mb-2">
             {isProcessing ? (
-              <Loader2 className="w-4 h-4 animate-spin text-blue-400" />
+              <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
               <Upload className="w-4 h-4" />
             )}
           </div>
-          <span className="font-semibold text-xs text-neutral-200">
+          <span className="font-semibold text-xs text-neutral-100">
             {isProcessing ? processingMsg : '点击上传或拖拽本地素材'}
           </span>
-          <span className="text-[9px] text-neutral-500 mt-0.5">
+          <span className="text-[9px] text-neutral-600 mt-1">
             支持 MP4, WebM, MOV, MP3, WAV, PNG, JPG, SVG, Lottie JSON
           </span>
 
@@ -221,7 +223,7 @@ export const MediaPanel: React.FC = () => {
               <button
                 type="button"
                 onClick={handleNativePicker}
-                className="px-2 py-1 rounded bg-[#20222e] hover:bg-[#282b3a] border border-[#2e3142] text-[10px] text-blue-400 hover:text-blue-300 font-medium flex items-center gap-1.5 transition-colors shadow-xs"
+                className="px-2 py-1 rounded bg-[#20222e] hover:bg-[#282b3a] border border-[#2e3142] text-[10px] text-cyan-300 hover:text-cyan-200 font-medium flex items-center gap-1.5 transition-colors shadow-xs"
               >
                 <HardDrive className="w-3 h-3" />
                 <span>原生文件系统句柄导入 (支持持久重连)</span>
@@ -234,15 +236,15 @@ export const MediaPanel: React.FC = () => {
         <div className="grid grid-cols-3 gap-1.5">
           <button
             onClick={() => openRecordModal('screen')}
-            className="bg-[#171822] hover:bg-[#1e202c] border border-[#242633] p-1.5 rounded-md flex flex-col items-center gap-0.5 text-neutral-300 hover:text-white transition-colors"
+            className="bg-[var(--kf-surface-3)] hover:bg-[#1e202c] border border-white/[0.06] p-1.5 rounded-md flex flex-col items-center gap-0.5 text-neutral-300 hover:text-white transition-colors"
             title="录制电脑屏幕画面"
           >
-            <Monitor className="w-3.5 h-3.5 text-blue-400" />
+            <Monitor className="w-3.5 h-3.5 text-cyan-300" />
             <span className="text-[10px]">录制屏幕</span>
           </button>
           <button
             onClick={() => openRecordModal('camera')}
-            className="bg-[#171822] hover:bg-[#1e202c] border border-[#242633] p-1.5 rounded-md flex flex-col items-center gap-0.5 text-neutral-300 hover:text-white transition-colors"
+            className="bg-[var(--kf-surface-3)] hover:bg-[#1e202c] border border-white/[0.06] p-1.5 rounded-md flex flex-col items-center gap-0.5 text-neutral-300 hover:text-white transition-colors"
             title="录制高清摄像头实拍"
           >
             <Video className="w-3.5 h-3.5 text-rose-400" />
@@ -250,7 +252,7 @@ export const MediaPanel: React.FC = () => {
           </button>
           <button
             onClick={() => openRecordModal('audio')}
-            className="bg-[#171822] hover:bg-[#1e202c] border border-[#242633] p-1.5 rounded-md flex flex-col items-center gap-0.5 text-neutral-300 hover:text-white transition-colors"
+            className="bg-[var(--kf-surface-3)] hover:bg-[#1e202c] border border-white/[0.06] p-1.5 rounded-md flex flex-col items-center gap-0.5 text-neutral-300 hover:text-white transition-colors"
             title="录制麦克风旁白"
           >
             <Mic className="w-3.5 h-3.5 text-amber-400" />
@@ -268,13 +270,13 @@ export const MediaPanel: React.FC = () => {
                 placeholder="搜索导入的素材..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[#161720] border border-[#242633] rounded pl-6 pr-2 py-1 text-[10px] text-neutral-200 placeholder-neutral-500 focus:outline-hidden focus:border-blue-500"
+                className="w-full bg-[#161720] border border-white/[0.06] rounded pl-6 pr-2 py-1 text-[10px] text-neutral-200 placeholder-neutral-500 focus:outline-hidden focus:border-cyan-400"
               />
             </div>
             {filteredAssets.length > 0 && (
               <button
                 onClick={handleAddAllToTimeline}
-                className="px-2 py-1 bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 rounded text-[10px] font-medium flex items-center gap-1 shrink-0"
+                className="px-2 py-1 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border border-cyan-400/30 rounded text-[10px] font-medium flex items-center gap-1 shrink-0"
                 title="批量将当前素材导入时间线"
               >
                 <Layers className="w-3 h-3" />
@@ -332,11 +334,13 @@ export const MediaPanel: React.FC = () => {
           </div>
         ) : (
           /* Empty State */
-          <div className="py-8 px-4 flex flex-col items-center justify-center text-center text-neutral-500 border border-dashed border-[#20222a] rounded-lg bg-[#14151c]/50">
-            <FolderOpen className="w-8 h-8 text-neutral-600 mb-2" />
-            <span className="text-xs font-medium text-neutral-300">素材库为空</span>
-            <p className="text-[10px] text-neutral-500 mt-1 max-w-[200px] leading-relaxed">
-              请点击上方区域导入您的本地视频、音频或图片文件，或使用录屏/摄像头开始创作。
+          <div className="kf-empty !py-10">
+            <div className="w-12 h-12 rounded-2xl bg-cyan-400/[0.07] border border-cyan-400/20 flex items-center justify-center mb-3">
+              <FolderOpen className="w-5 h-5 text-cyan-300" />
+            </div>
+            <span className="text-xs font-semibold text-neutral-200">素材库为空</span>
+            <p className="text-[10px] text-neutral-500 mt-1.5 max-w-[210px] leading-relaxed">
+              点击上方区域导入本地视频、音频或图片，或使用录屏 / 摄像头开始创作。
             </p>
           </div>
         )}

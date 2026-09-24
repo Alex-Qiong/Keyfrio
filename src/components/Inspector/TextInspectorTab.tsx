@@ -108,10 +108,10 @@ export const TextInspectorTab: React.FC<TextInspectorTabProps> = ({ clip, onUpda
   return (
     <div className="flex flex-col gap-3 text-xs">
       {/* 1. Content Textarea */}
-      <div className="bg-[#171822] border border-[#242633] p-3 rounded-xl flex flex-col gap-2">
+      <div className="bg-[var(--kf-surface-3)] border border-white/[0.06] p-3 rounded-xl flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
-            <Type className="w-3.5 h-3.5 text-blue-400" />
+            <Type className="w-3.5 h-3.5 text-cyan-300" />
             <span className="font-semibold text-neutral-200">字幕文本内容</span>
           </div>
           <span className="text-[10px] text-neutral-500 font-mono">
@@ -124,12 +124,12 @@ export const TextInspectorTab: React.FC<TextInspectorTabProps> = ({ clip, onUpda
           onChange={(e) => updateText({ text: e.target.value })}
           rows={3}
           placeholder="请输入字幕或标题文本..."
-          className="w-full bg-[#101116] border border-[#242633] focus:border-blue-500 rounded-lg p-2.5 text-white outline-none resize-none text-xs leading-relaxed"
+          className="w-full bg-[var(--kf-surface-1)] border border-white/[0.06] focus:border-cyan-400 rounded-lg p-2.5 text-white outline-none resize-none text-xs leading-relaxed"
         />
       </div>
 
       {/* 2. Quick Style Presets */}
-      <div className="bg-[#171822] border border-[#242633] p-3 rounded-xl flex flex-col gap-2">
+      <div className="bg-[var(--kf-surface-3)] border border-white/[0.06] p-3 rounded-xl flex flex-col gap-2">
         <div className="flex items-center gap-1.5">
           <Sparkles className="w-3.5 h-3.5 text-amber-400" />
           <span className="font-semibold text-neutral-200">艺术字与预设样式 (Presets)</span>
@@ -151,7 +151,7 @@ export const TextInspectorTab: React.FC<TextInspectorTabProps> = ({ clip, onUpda
                   shadowBlur: preset.shadowBlur || 0,
                 })
               }
-              className="p-1.5 bg-[#101116] hover:bg-neutral-800 border border-neutral-800 hover:border-neutral-700 text-neutral-300 rounded-lg text-[11px] text-left transition-colors truncate"
+              className="p-1.5 bg-[var(--kf-surface-1)] hover:bg-neutral-800 border border-neutral-800 hover:border-neutral-700 text-neutral-300 rounded-lg text-[11px] text-left transition-colors truncate"
             >
               {preset.name}
             </button>
@@ -160,7 +160,7 @@ export const TextInspectorTab: React.FC<TextInspectorTabProps> = ({ clip, onUpda
       </div>
 
       {/* 3. Typography (Font, Size, Align, Weight) */}
-      <div className="bg-[#171822] border border-[#242633] p-3 rounded-xl flex flex-col gap-2.5">
+      <div className="bg-[var(--kf-surface-3)] border border-white/[0.06] p-3 rounded-xl flex flex-col gap-2.5">
         <span className="font-semibold text-neutral-200">字体排版 (Typography)</span>
 
         {/* Font Family */}
@@ -169,7 +169,7 @@ export const TextInspectorTab: React.FC<TextInspectorTabProps> = ({ clip, onUpda
           <select
             value={textCfg.fontFamily}
             onChange={(e) => updateText({ fontFamily: e.target.value })}
-            className="w-full bg-[#101116] border border-[#242633] text-white p-1.5 rounded-lg outline-none text-xs cursor-pointer"
+            className="w-full bg-[var(--kf-surface-1)] border border-white/[0.06] text-white p-1.5 rounded-lg outline-none text-xs cursor-pointer"
           >
             {FONT_PRESETS.map((f) => (
               <option key={f.label} value={f.value}>
@@ -188,7 +188,7 @@ export const TextInspectorTab: React.FC<TextInspectorTabProps> = ({ clip, onUpda
             max="160"
             value={textCfg.fontSize}
             onChange={(e) => updateText({ fontSize: parseInt(e.target.value) })}
-            className="flex-1 accent-blue-500 h-1 bg-neutral-800 rounded-lg cursor-pointer"
+            className="flex-1 accent-cyan-400 h-1 bg-neutral-800 rounded-lg cursor-pointer"
           />
           <div className="flex items-center gap-1">
             <button
@@ -212,13 +212,13 @@ export const TextInspectorTab: React.FC<TextInspectorTabProps> = ({ clip, onUpda
         {/* Align & Weight / Style Buttons */}
         <div className="flex items-center justify-between pt-1">
           {/* Alignment */}
-          <div className="flex bg-[#101116] p-0.5 rounded-lg border border-[#242633]">
+          <div className="flex bg-[var(--kf-surface-1)] p-0.5 rounded-lg border border-white/[0.06]">
             {(['left', 'center', 'right'] as const).map((align) => (
               <button
                 key={align}
                 onClick={() => updateText({ align })}
                 className={`p-1.5 rounded ${
-                  textCfg.align === align ? 'bg-blue-600 text-white' : 'text-neutral-400 hover:text-white'
+                  textCfg.align === align ? 'bg-cyan-500 text-white' : 'text-neutral-400 hover:text-white'
                 }`}
                 title={align === 'left' ? '左对齐' : align === 'center' ? '居中对齐' : '右对齐'}
               >
@@ -228,11 +228,11 @@ export const TextInspectorTab: React.FC<TextInspectorTabProps> = ({ clip, onUpda
           </div>
 
           {/* Bold & Italic */}
-          <div className="flex bg-[#101116] p-0.5 rounded-lg border border-[#242633] gap-0.5">
+          <div className="flex bg-[var(--kf-surface-1)] p-0.5 rounded-lg border border-white/[0.06] gap-0.5">
             <button
               onClick={() => updateText({ fontWeight: textCfg.fontWeight === 'bold' ? 'normal' : 'bold' })}
               className={`p-1.5 rounded ${
-                textCfg.fontWeight === 'bold' ? 'bg-blue-600 text-white' : 'text-neutral-400 hover:text-white'
+                textCfg.fontWeight === 'bold' ? 'bg-cyan-500 text-white' : 'text-neutral-400 hover:text-white'
               }`}
               title="加粗"
             >
@@ -241,7 +241,7 @@ export const TextInspectorTab: React.FC<TextInspectorTabProps> = ({ clip, onUpda
             <button
               onClick={() => updateText({ fontStyle: textCfg.fontStyle === 'italic' ? 'normal' : 'italic' })}
               className={`p-1.5 rounded ${
-                textCfg.fontStyle === 'italic' ? 'bg-blue-600 text-white' : 'text-neutral-400 hover:text-white'
+                textCfg.fontStyle === 'italic' ? 'bg-cyan-500 text-white' : 'text-neutral-400 hover:text-white'
               }`}
               title="斜体"
             >
@@ -252,7 +252,7 @@ export const TextInspectorTab: React.FC<TextInspectorTabProps> = ({ clip, onUpda
       </div>
 
       {/* 4. Color, Stroke & Background */}
-      <div className="bg-[#171822] border border-[#242633] p-3 rounded-xl flex flex-col gap-2.5">
+      <div className="bg-[var(--kf-surface-3)] border border-white/[0.06] p-3 rounded-xl flex flex-col gap-2.5">
         <span className="font-semibold text-neutral-200">颜色与装饰 (Color & Stroke)</span>
 
         {/* Text Fill Color */}
@@ -284,7 +284,7 @@ export const TextInspectorTab: React.FC<TextInspectorTabProps> = ({ clip, onUpda
         </div>
 
         {/* Stroke Width & Color */}
-        <div className="border-t border-[#20222a] pt-2 flex flex-col gap-1.5">
+        <div className="border-t border-white/[0.06] pt-2 flex flex-col gap-1.5">
           <div className="flex items-center justify-between">
             <span className="text-[11px] text-neutral-400">描边粗细 ({textCfg.strokeWidth}px):</span>
             <div className="flex items-center gap-1.5">
@@ -306,12 +306,12 @@ export const TextInspectorTab: React.FC<TextInspectorTabProps> = ({ clip, onUpda
             max="12"
             value={textCfg.strokeWidth}
             onChange={(e) => updateText({ strokeWidth: parseInt(e.target.value) })}
-            className="w-full accent-blue-500 h-1 bg-neutral-800 rounded-lg cursor-pointer"
+            className="w-full accent-cyan-400 h-1 bg-neutral-800 rounded-lg cursor-pointer"
           />
         </div>
 
         {/* Background Box */}
-        <div className="border-t border-[#20222a] pt-2 flex flex-col gap-1.5">
+        <div className="border-t border-white/[0.06] pt-2 flex flex-col gap-1.5">
           <div className="flex items-center justify-between">
             <span className="text-[11px] text-neutral-400">背景底条 (Banner Box):</span>
             <div className="flex items-center gap-1.5">
@@ -323,7 +323,7 @@ export const TextInspectorTab: React.FC<TextInspectorTabProps> = ({ clip, onUpda
                 }
                 className={`text-[10px] px-1.5 py-0.5 rounded transition-colors ${
                   textCfg.bgColor && textCfg.bgColor !== 'transparent'
-                    ? 'bg-blue-600 text-white font-medium'
+                    ? 'bg-cyan-500 text-white font-medium'
                     : 'bg-neutral-800 text-neutral-400'
                 }`}
               >
@@ -335,7 +335,7 @@ export const TextInspectorTab: React.FC<TextInspectorTabProps> = ({ clip, onUpda
       </div>
 
       {/* 5. Animation (Text Motion) */}
-      <div className="bg-[#171822] border border-[#242633] p-3 rounded-xl flex flex-col gap-2">
+      <div className="bg-[var(--kf-surface-3)] border border-white/[0.06] p-3 rounded-xl flex flex-col gap-2">
         <div className="flex items-center gap-1.5">
           <Sparkles className="w-3.5 h-3.5 text-sky-400" />
           <span className="font-semibold text-neutral-200">文字出场动效 (Motion Animation)</span>
@@ -344,7 +344,7 @@ export const TextInspectorTab: React.FC<TextInspectorTabProps> = ({ clip, onUpda
         <select
           value={textCfg.animation}
           onChange={(e) => updateText({ animation: e.target.value as TextAnimation })}
-          className="w-full bg-[#101116] border border-[#242633] text-white p-1.5 rounded-lg outline-none text-xs cursor-pointer"
+          className="w-full bg-[var(--kf-surface-1)] border border-white/[0.06] text-white p-1.5 rounded-lg outline-none text-xs cursor-pointer"
         >
           <option value="none">无动效 (Static)</option>
           <option value="typewriter">⌨️ 打字机逐字显现 (Typewriter)</option>

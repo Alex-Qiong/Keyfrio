@@ -96,20 +96,20 @@ const MainAppContent: React.FC = () => {
   };
 
   return (
-    <div className="keyfrio-editor flex flex-col h-dvh w-full bg-[#0e0e10] text-[#f0f0f2] overflow-hidden font-sans select-none">
+    <div className="keyfrio-editor flex flex-col h-dvh w-full text-[var(--kf-text)] overflow-hidden font-sans select-none">
       <Navbar />
       <MediaRelinkBanner />
 
-      {/* Main workspace – CapCut style: tight gaps, dark panels */}
-      <div className="flex-1 flex overflow-hidden min-h-0 min-w-0 gap-0 bg-[#0e0e10]">
+      {/* Main workspace — obsidian: hairline gaps, layered panels */}
+      <div className="flex-1 flex overflow-hidden min-h-0 min-w-0 gap-px bg-white/[0.04]">
         {/* Icon rail */}
         <SidebarTabs />
 
         {/* Media / tools panel */}
-        <div className="w-[22vw] min-w-[280px] max-w-[400px] bg-[#1a1a1f] border-r border-[#2a2a32] flex flex-col shrink-0 overflow-hidden">
+        <div className="w-[22vw] min-w-[280px] max-w-[400px] bg-[var(--kf-surface-1)] flex flex-col shrink-0 overflow-hidden">
           <Suspense
             fallback={
-              <div className="flex flex-1 items-center justify-center text-xs text-[#6b6b78]">
+              <div className="flex flex-1 items-center justify-center text-xs text-[var(--kf-text-muted)]">
                 正在加载面板…
               </div>
             }
@@ -120,16 +120,16 @@ const MainAppContent: React.FC = () => {
 
         {/* Preview + Inspector */}
         <div className="flex-1 flex min-w-0 overflow-hidden">
-          <div className="flex-1 min-w-0 bg-[#121216] flex flex-col">
+          <div className="flex-1 min-w-0 bg-[var(--kf-bg-soft)] flex flex-col">
             <PreviewPlayer />
           </div>
-          <div className="w-[20vw] min-w-[260px] max-w-[360px] bg-[#1a1a1f] border-l border-[#2a2a32] flex flex-col shrink-0 overflow-hidden">
+          <div className="w-[20vw] min-w-[260px] max-w-[360px] bg-[var(--kf-surface-1)] flex flex-col shrink-0 overflow-hidden">
             <InspectorPanel />
           </div>
         </div>
       </div>
 
-      {/* Timeline – full width bottom, CapCut style */}
+      {/* Timeline — full width bottom */}
       <TimelineContainer />
 
       <ExportModal />

@@ -301,26 +301,26 @@ export const ClipItem: React.FC<ClipItemProps> = memo(({ clip, trackId, isLocked
     return Array.from({ length: count }).map((_, i) => 0.25 + Math.sin(i * 0.7) * 0.45 + ((i % 3) * 0.1));
   }, [clip.type, clip.audioWaveform, width]);
 
-  // Clip color styling by type
+  // Clip color styling by type — obsidian glassy gradients
   const getClipBg = () => {
     if (clip.color) {
-      return `border-[${clip.color}] bg-[#1c2235]`;
+      return `border-[${clip.color}] bg-[#141824]`;
     }
     switch (clip.type) {
       case 'video':
-        return 'bg-gradient-to-r from-blue-950/90 via-blue-900/80 to-indigo-950/90 border-blue-500/50';
+        return 'bg-gradient-to-b from-[#1d2b52]/95 via-[#16213d]/95 to-[#101a30]/95 border-[#3b82f6]/45';
       case 'audio':
-        return 'bg-gradient-to-r from-emerald-950/90 via-teal-950/90 to-emerald-950/90 border-emerald-500/50';
+        return 'bg-gradient-to-b from-[#123c2e]/95 via-[#0f3226]/95 to-[#0b271e]/95 border-[#34d399]/40';
       case 'text':
-        return 'bg-gradient-to-r from-amber-950/90 via-amber-900/90 to-orange-950/90 border-amber-500/50';
+        return 'bg-gradient-to-b from-[#4a3410]/95 via-[#3a2a0d]/95 to-[#2b1f0a]/95 border-[#fbbf24]/40';
       case 'sticker':
-        return 'bg-gradient-to-r from-pink-950/90 via-rose-900/90 to-pink-900/90 border-pink-500/50';
+        return 'bg-gradient-to-b from-[#4d1d33]/95 via-[#3d1628]/95 to-[#2e1120]/95 border-[#fb7185]/40';
       case 'lottie':
-        return 'bg-gradient-to-r from-purple-950/95 via-violet-900/90 to-purple-950/95 border-purple-400/60 shadow-purple-950/40';
+        return 'bg-gradient-to-b from-[#35245e]/95 via-[#2a1d4d]/95 to-[#201640]/95 border-[#a78bfa]/45';
       case 'effect':
-        return 'bg-gradient-to-r from-cyan-950/95 via-sky-950/90 to-cyan-950/95 border-cyan-400/60 shadow-cyan-950/40';
+        return 'bg-gradient-to-b from-[#0f3d4d]/95 via-[#0c3240]/95 to-[#092733]/95 border-[#22d3ee]/45';
       default:
-        return 'bg-[#1b1d28] border-[#2d3144]';
+        return 'bg-[#141824] border-white/10';
     }
   };
 
@@ -332,10 +332,10 @@ export const ClipItem: React.FC<ClipItemProps> = memo(({ clip, trackId, isLocked
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         onContextMenu={handleContextMenu}
-        className={`absolute top-1 bottom-1 rounded-md border flex items-center select-none overflow-hidden transition-shadow ${getClipBg()} ${
+        className={`kf-clip absolute top-1 bottom-1 border flex items-center select-none ${getClipBg()} ${
           isSelected
-            ? 'ring-2 ring-blue-400 ring-offset-1 ring-offset-black z-20 shadow-xl'
-            : 'hover:brightness-115 z-10'
+            ? 'selected'
+            : ''
         } ${isDragging ? 'opacity-90 shadow-2xl scale-[1.01] z-30 cursor-grabbing' : 'cursor-grab'} ${
           toolMode === 'blade' ? 'cursor-crosshair' : ''
         }`}
@@ -395,7 +395,7 @@ export const ClipItem: React.FC<ClipItemProps> = memo(({ clip, trackId, isLocked
           {/* Top Row: Icon + Clip Name + Duration */}
           <div className="flex items-center justify-between gap-1 w-full">
             <div className="flex items-center gap-1.5 min-w-0">
-              {clip.type === 'video' && <Film className="w-3 h-3 text-blue-300 shrink-0" />}
+              {clip.type === 'video' && <Film className="w-3 h-3 text-cyan-200 shrink-0" />}
               {clip.type === 'audio' && <Music className="w-3 h-3 text-emerald-300 shrink-0" />}
               {clip.type === 'text' && <Type className="w-3 h-3 text-amber-300 shrink-0" />}
               {clip.type === 'sticker' && <Smile className="w-3 h-3 text-pink-300 shrink-0" />}
@@ -482,7 +482,7 @@ export const ClipItem: React.FC<ClipItemProps> = memo(({ clip, trackId, isLocked
       {/* Floating Drag / Trim Tooltip */}
       {dragTooltip && (
         <div
-          className="fixed bg-blue-600/95 text-white font-mono text-[10px] px-2 py-1 rounded shadow-2xl z-50 pointer-events-none -translate-y-8"
+          className="fixed bg-cyan-500/95 text-white font-mono text-[10px] px-2 py-1 rounded shadow-2xl z-50 pointer-events-none -translate-y-8"
           style={{ left: `${left + width / 2}px` }}
         >
           {dragTooltip}
@@ -494,7 +494,7 @@ export const ClipItem: React.FC<ClipItemProps> = memo(({ clip, trackId, isLocked
         <>
           <div className="fixed inset-0 z-50" onClick={() => setContextMenu(null)} />
           <div
-            className="fixed bg-[#171822] border border-[#262838] rounded-lg shadow-2xl py-1.5 z-50 text-xs w-48 animate-in fade-in"
+            className="fixed bg-[var(--kf-surface-3)] border border-[#262838] rounded-lg shadow-2xl py-1.5 z-50 text-xs w-48 animate-in fade-in"
             style={{ left: contextMenu.x, top: contextMenu.y }}
           >
             <div className="px-3 py-1 text-[9px] font-semibold text-neutral-400 uppercase truncate">
@@ -554,9 +554,9 @@ export const ClipItem: React.FC<ClipItemProps> = memo(({ clip, trackId, isLocked
                 splitClip(clip.id);
                 setContextMenu(null);
               }}
-              className="w-full px-3 py-1.5 text-left text-neutral-200 hover:text-white hover:bg-blue-600/20 flex items-center gap-2 text-[11px]"
+              className="w-full px-3 py-1.5 text-left text-neutral-200 hover:text-white hover:bg-cyan-500/20 flex items-center gap-2 text-[11px]"
             >
-              <Scissors className="w-3.5 h-3.5 text-blue-400" />
+              <Scissors className="w-3.5 h-3.5 text-cyan-300" />
               <span>在播放头分割 (S)</span>
             </button>
 
@@ -565,7 +565,7 @@ export const ClipItem: React.FC<ClipItemProps> = memo(({ clip, trackId, isLocked
                 duplicateClip(clip.id);
                 setContextMenu(null);
               }}
-              className="w-full px-3 py-1.5 text-left text-neutral-200 hover:text-white hover:bg-blue-600/20 flex items-center gap-2 text-[11px]"
+              className="w-full px-3 py-1.5 text-left text-neutral-200 hover:text-white hover:bg-cyan-500/20 flex items-center gap-2 text-[11px]"
             >
               <Copy className="w-3.5 h-3.5 text-emerald-400" />
               <span>复制片段 (Ctrl+D)</span>

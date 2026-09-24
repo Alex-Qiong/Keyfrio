@@ -92,13 +92,13 @@ export const TimelineContainer: React.FC = () => {
   const outPx = outPoint !== null ? outPoint * zoom : null;
 
   return (
-    <div className="h-[42vh] min-h-[300px] bg-[#141418] border-t border-[#2a2a32] flex flex-col select-none shrink-0 z-20">
+    <div className="h-[42vh] min-h-[300px] bg-[var(--kf-bg-soft)] border-t border-white/[0.06] flex flex-col select-none shrink-0 z-20">
       <TimelineToolbar />
 
       {/* Ruler bar */}
-      <div className="h-7 bg-[#16161a] border-b border-[#2a2a32] flex shrink-0 z-20">
-        <div className="w-24 bg-[#16161a] border-r border-[#2a2a32] px-2 flex items-center justify-between text-[9px] font-semibold text-[#6b6b78] shrink-0">
-          <span className="font-mono text-[#00d4c8] font-bold tracking-wider">
+      <div className="h-7 bg-[var(--kf-surface-1)] border-b border-white/[0.06] flex shrink-0 z-20">
+        <div className="w-24 bg-[var(--kf-surface-1)] border-r border-white/[0.06] px-2 flex items-center justify-between text-[9px] font-semibold text-[var(--kf-text-muted)] shrink-0">
+          <span className="font-mono text-[var(--kf-accent)] font-bold tracking-wider">
             {formatSMPTE(currentTime)}
           </span>
           <div className="flex items-center gap-1">
@@ -106,7 +106,7 @@ export const TimelineContainer: React.FC = () => {
               type="button"
               onClick={() => addTrack('video')}
               title="快速新增视频轨道 (V)"
-              className="px-1 py-0.5 rounded bg-[#1a2a3a] hover:bg-[#1e3a4a] border border-[#2a4a5a] text-[#5ec8e8] flex items-center gap-0.5 text-[8px] font-mono cursor-pointer transition-colors"
+              className="kf-icon-btn px-1 py-0.5 !rounded-md text-[8px] font-mono !text-sky-300"
             >
               <Plus className="w-2 h-2" />
               <span>V</span>
@@ -115,7 +115,7 @@ export const TimelineContainer: React.FC = () => {
               type="button"
               onClick={() => addTrack('audio')}
               title="快速新增音频轨道 (A)"
-              className="px-1 py-0.5 rounded bg-[#1a2e24] hover:bg-[#1e3a2e] border border-[#2a4a3a] text-[#5ed89a] flex items-center gap-0.5 text-[8px] font-mono cursor-pointer transition-colors"
+              className="kf-icon-btn px-1 py-0.5 !rounded-md text-[8px] font-mono !text-emerald-300"
             >
               <Plus className="w-2 h-2" />
               <span>A</span>
@@ -133,7 +133,7 @@ export const TimelineContainer: React.FC = () => {
         <div
           ref={headerScrollRef}
           onWheel={handleHeaderWheel}
-          className="w-24 bg-[#16161a] border-r border-[#2a2a32] flex flex-col shrink-0 z-20 overflow-hidden"
+          className="w-24 bg-[var(--kf-surface-1)] border-r border-white/[0.06] flex flex-col shrink-0 z-20 overflow-hidden"
         >
           {tracks.map((track, idx) => (
             <TrackHeader
@@ -149,7 +149,7 @@ export const TimelineContainer: React.FC = () => {
           ref={tracksScrollRef}
           onScroll={handleTracksScroll}
           onMouseDown={handleTimelineMouseDown}
-          className={`flex-1 flex flex-col overflow-x-auto overflow-y-auto relative bg-[#0e0e10] ${
+          className={`flex-1 flex flex-col overflow-x-auto overflow-y-auto relative bg-[var(--kf-bg)] ${
             toolMode === 'hand'
               ? isHandPanning
                 ? 'cursor-grabbing'

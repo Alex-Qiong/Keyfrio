@@ -85,13 +85,13 @@ export const MediaRelinkBanner: React.FC = () => {
           onClick={handleQuickFolder}
           className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-200 border border-neutral-700 font-medium text-xs transition-colors cursor-pointer active:scale-95"
         >
-          <FolderOpen className="w-3.5 h-3.5 text-blue-400" />
+          <FolderOpen className="w-3.5 h-3.5 text-cyan-300" />
           <span>选择素材文件夹重连</span>
         </button>
 
         <button
           onClick={openRelinkModal}
-          className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-600/80 hover:bg-blue-500 text-white font-medium text-xs transition-colors cursor-pointer active:scale-95"
+          className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-cyan-500/80 hover:bg-cyan-400 text-white font-medium text-xs transition-colors cursor-pointer active:scale-95"
         >
           <HardDrive className="w-3.5 h-3.5" />
           <span>管理工作台</span>

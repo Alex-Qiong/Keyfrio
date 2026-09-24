@@ -103,12 +103,12 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       >
         {/* Thumbnail Container */}
         <div
-          className={`relative aspect-video w-full rounded-lg overflow-hidden bg-[#121319] border transition-all shadow-xs group-hover:shadow-md ${
+          className={`relative aspect-video w-full rounded-lg overflow-hidden bg-[var(--kf-surface-2)] border transition-all shadow-xs group-hover:shadow-md ${
             needsPermission
               ? 'border-amber-500/60 group-hover:border-amber-400'
               : isOffline
               ? 'border-rose-500/60 group-hover:border-rose-400'
-              : 'border-[#232532] group-hover:border-blue-500/80'
+              : 'border-[#232532] group-hover:border-cyan-400/80'
           }`}
         >
           {/* Media Thumbnail Image / Visual */}
@@ -216,7 +216,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
               className={`w-5.5 h-5.5 rounded-full flex items-center justify-center transition-all backdrop-blur-xs shadow-sm ${
                 isAdded
                   ? 'bg-emerald-600 text-white scale-110'
-                  : 'bg-black/65 hover:bg-blue-600 text-white border border-white/10 hover:border-blue-400'
+                  : 'bg-black/65 hover:bg-cyan-500 text-white border border-white/10 hover:border-cyan-300'
               }`}
             >
               {isAdded ? (
@@ -258,13 +258,13 @@ export const MediaCard: React.FC<MediaCardProps> = ({
           onClick={() => setShowPreviewModal(false)}
         >
           <div
-            className="bg-[#171822] border border-[#2d3042] rounded-xl max-w-lg w-full overflow-hidden shadow-2xl flex flex-col"
+            className="bg-[var(--kf-surface-3)] border border-[#2d3042] rounded-xl max-w-lg w-full overflow-hidden shadow-2xl flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-3 border-b border-[#252838] flex items-center justify-between">
               <div className="flex items-center gap-2 min-w-0">
                 <span className="font-bold text-xs text-white truncate">{name}</span>
-                <span className="text-[9px] bg-blue-500/20 text-blue-400 border border-blue-500/30 px-1.5 py-0.2 rounded font-mono uppercase">
+                <span className="text-[9px] bg-cyan-400/20 text-cyan-300 border border-cyan-400/30 px-1.5 py-0.2 rounded font-mono uppercase">
                   {type}
                 </span>
               </div>
@@ -324,7 +324,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
                     onAdd();
                     setShowPreviewModal(false);
                   }}
-                  className="px-3 py-1 rounded text-xs bg-blue-600 hover:bg-blue-500 text-white font-medium flex items-center gap-1.5 shadow-sm"
+                  className="px-3 py-1 rounded text-xs bg-cyan-500 hover:bg-cyan-400 text-white font-medium flex items-center gap-1.5 shadow-sm"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>添加到时间线</span>

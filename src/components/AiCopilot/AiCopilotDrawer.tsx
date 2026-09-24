@@ -202,17 +202,17 @@ export const AiCopilotDrawer: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-y-0 right-0 w-96 max-w-full bg-[#131419] border-l border-[#20222a] shadow-2xl flex flex-col z-50 animate-in slide-in-from-right duration-200 select-none">
+    <div className="fixed inset-y-0 right-0 w-96 max-w-full bg-[var(--kf-surface-2)] border-l border-white/[0.06] shadow-2xl flex flex-col z-50 animate-in slide-in-from-right duration-200 select-none">
       {/* Header */}
-      <div className="h-12 px-3.5 border-b border-[#20222a] flex items-center justify-between bg-[#101116] shrink-0">
+      <div className="h-12 px-3.5 border-b border-white/[0.06] flex items-center justify-between bg-[var(--kf-surface-1)] shrink-0">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-purple-600 via-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-purple-600/30">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-purple-600 via-cyan-500 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-purple-600/30">
             <Sparkles className="w-4 h-4" />
           </div>
           <div>
             <div className="flex items-center gap-1.5">
               <span className="font-bold text-xs text-white">AI 智能剪辑助理</span>
-              <span className="text-[9px] font-bold px-1.5 py-0.2 bg-gradient-to-r from-purple-500/20 to-blue-500/20 text-purple-300 border border-purple-500/30 rounded-full">
+              <span className="text-[9px] font-bold px-1.5 py-0.2 bg-gradient-to-r from-purple-500/20 to-cyan-400/20 text-purple-300 border border-purple-500/30 rounded-full">
                 Copilot 3.7
               </span>
             </div>
@@ -230,16 +230,16 @@ export const AiCopilotDrawer: React.FC = () => {
       </div>
 
       {/* Project Status Bar */}
-      <div className="px-3 py-1.5 bg-[#171822] border-b border-[#20222a] flex items-center justify-between text-[10px] text-neutral-300 shrink-0">
+      <div className="px-3 py-1.5 bg-[var(--kf-surface-3)] border-b border-white/[0.06] flex items-center justify-between text-[10px] text-neutral-300 shrink-0">
         <div className="flex items-center gap-2">
           <span className="flex items-center gap-1 text-neutral-400">
-            <Film className="w-3 h-3 text-blue-400" />
+            <Film className="w-3 h-3 text-cyan-300" />
             {project.tracks.length} 轨道
           </span>
           <span className="w-1 h-1 bg-neutral-600 rounded-full" />
           <span className="text-neutral-400">{totalDuration}s 总时长</span>
           <span className="w-1 h-1 bg-neutral-600 rounded-full" />
-          <span className="text-blue-400 font-mono">{currentTime.toFixed(1)}s 播放头</span>
+          <span className="text-cyan-300 font-mono">{currentTime.toFixed(1)}s 播放头</span>
         </div>
         <span className="px-1.5 py-0.2 bg-[#20222a] text-neutral-300 rounded font-mono text-[9px]">
           {project.resolution.aspectRatio}
@@ -263,8 +263,8 @@ export const AiCopilotDrawer: React.FC = () => {
               <div
                 className={`p-2.5 rounded-xl ${
                   msg.sender === 'user'
-                    ? 'bg-blue-600 text-white rounded-br-xs shadow-sm'
-                    : 'bg-[#171822] border border-[#232532] text-neutral-200 rounded-bl-xs'
+                    ? 'bg-cyan-500 text-white rounded-br-xs shadow-sm'
+                    : 'bg-[var(--kf-surface-3)] border border-[#232532] text-neutral-200 rounded-bl-xs'
                 }`}
               >
                 <p className="whitespace-pre-wrap leading-relaxed">{msg.text}</p>
@@ -291,7 +291,7 @@ export const AiCopilotDrawer: React.FC = () => {
                         </div>
                         <button
                           onClick={() => handleExecuteSingleAction(act, msg.id, actIdx)}
-                          className="px-2 py-1 rounded bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white border border-blue-500/30 text-[10px] font-medium flex items-center gap-1 transition-all shrink-0"
+                          className="px-2 py-1 rounded bg-cyan-500/20 hover:bg-cyan-500 text-cyan-200 hover:text-white border border-cyan-400/30 text-[10px] font-medium flex items-center gap-1 transition-all shrink-0"
                         >
                           <Play className="w-2.5 h-2.5" />
                           执行
@@ -310,7 +310,7 @@ export const AiCopilotDrawer: React.FC = () => {
                   <button
                     key={cIdx}
                     onClick={() => handleSendMessage(chip)}
-                    className="text-[10px] px-2 py-1 rounded-full bg-[#181a24] hover:bg-blue-600/20 text-neutral-300 hover:text-blue-300 border border-[#232532] hover:border-blue-500/40 transition-all text-left truncate max-w-full"
+                    className="text-[10px] px-2 py-1 rounded-full bg-[#181a24] hover:bg-cyan-500/20 text-neutral-300 hover:text-cyan-200 border border-[#232532] hover:border-cyan-400/40 transition-all text-left truncate max-w-full"
                   >
                     {chip}
                   </button>
@@ -331,7 +331,7 @@ export const AiCopilotDrawer: React.FC = () => {
       </div>
 
       {/* Quick Tool Pills Bar */}
-      <div className="px-2.5 py-1.5 bg-[#101116] border-t border-[#20222a] flex items-center gap-1.5 overflow-x-auto shrink-0 scrollbar-none">
+      <div className="px-2.5 py-1.5 bg-[var(--kf-surface-1)] border-t border-white/[0.06] flex items-center gap-1.5 overflow-x-auto shrink-0 scrollbar-none">
         <button
           onClick={() => handleSendMessage('一键智能粗剪，搭配背景音乐并加上字幕花字')}
           className="text-[10px] px-2 py-1 bg-[#181922] hover:bg-[#20222e] text-neutral-300 hover:text-white rounded-md border border-[#252735] flex items-center gap-1 shrink-0 transition-colors"
@@ -366,13 +366,13 @@ export const AiCopilotDrawer: React.FC = () => {
       </div>
 
       {/* Input Bar */}
-      <div className="p-2.5 bg-[#131419] border-t border-[#20222a] shrink-0">
+      <div className="p-2.5 bg-[var(--kf-surface-2)] border-t border-white/[0.06] shrink-0">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSendMessage();
           }}
-          className="flex items-center gap-1.5 bg-[#171822] border border-[#232532] focus-within:border-blue-500 rounded-lg px-2.5 py-1.5 transition-colors"
+          className="flex items-center gap-1.5 bg-[var(--kf-surface-3)] border border-[#232532] focus-within:border-cyan-400 rounded-lg px-2.5 py-1.5 transition-colors"
         >
           <input
             ref={inputRef}
@@ -389,7 +389,7 @@ export const AiCopilotDrawer: React.FC = () => {
             disabled={!inputMessage.trim() || loading}
             className={`p-1.5 rounded-md transition-all ${
               inputMessage.trim() && !loading
-                ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-sm'
+                ? 'bg-cyan-500 hover:bg-cyan-400 text-white shadow-sm'
                 : 'text-neutral-600 cursor-not-allowed'
             }`}
             title="发送指令"

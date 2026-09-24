@@ -299,7 +299,7 @@ export const MediaRelinkModal: React.FC = () => {
         {/* Modal Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#212336] bg-[#171824]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
+            <div className="w-10 h-10 rounded-xl bg-cyan-400/10 border border-cyan-400/30 flex items-center justify-center text-cyan-300">
               <HardDrive className="w-5 h-5" />
             </div>
             <div>
@@ -349,7 +349,7 @@ export const MediaRelinkModal: React.FC = () => {
               disabled={isProcessing}
               className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#26283b] hover:bg-[#32354e] border border-[#3b3e5c] text-white text-xs font-semibold disabled:opacity-50 transition-all cursor-pointer active:scale-95 shadow-md"
             >
-              <FolderOpen className="w-4 h-4 text-blue-400" />
+              <FolderOpen className="w-4 h-4 text-cyan-300" />
               <span>选择素材所在文件夹 (自动批量匹配)</span>
             </button>
 
@@ -384,13 +384,13 @@ export const MediaRelinkModal: React.FC = () => {
                 ? 'bg-emerald-950/40 border-emerald-800/50 text-emerald-300'
                 : statusMessage.type === 'error'
                 ? 'bg-red-950/40 border-red-800/50 text-red-300'
-                : 'bg-blue-950/40 border-blue-800/50 text-blue-300'
+                : 'bg-cyan-950/40 border-cyan-800/50 text-cyan-200'
             }`}
           >
             <div className="flex items-center gap-2">
               {statusMessage.type === 'success' && <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />}
               {statusMessage.type === 'error' && <AlertTriangle className="w-4 h-4 text-red-400 shrink-0" />}
-              {statusMessage.type === 'info' && <RefreshCw className="w-4 h-4 text-blue-400 shrink-0 animate-spin" />}
+              {statusMessage.type === 'info' && <RefreshCw className="w-4 h-4 text-cyan-300 shrink-0 animate-spin" />}
               <span>{statusMessage.text}</span>
             </div>
             <button
@@ -412,7 +412,7 @@ export const MediaRelinkModal: React.FC = () => {
               placeholder="搜索素材名称..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#1b1c2b] border border-[#2c2f46] rounded-xl pl-9 pr-3 py-1.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-blue-500 transition-colors"
+              className="w-full bg-[#1b1c2b] border border-[#2c2f46] rounded-xl pl-9 pr-3 py-1.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-cyan-400 transition-colors"
             />
           </div>
 
@@ -422,7 +422,7 @@ export const MediaRelinkModal: React.FC = () => {
               onClick={() => setFilterStatus('all')}
               className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
                 filterStatus === 'all'
-                  ? 'bg-blue-600 text-white shadow-sm'
+                  ? 'bg-cyan-500 text-white shadow-sm'
                   : 'text-neutral-400 hover:text-neutral-200'
               }`}
             >
@@ -495,7 +495,7 @@ export const MediaRelinkModal: React.FC = () => {
                       {item.thumbnail ? (
                         <img src={item.thumbnail} alt={item.name} className="w-full h-full object-cover" />
                       ) : item.type === 'video' ? (
-                        <Film className="w-5 h-5 text-blue-400" />
+                        <Film className="w-5 h-5 text-cyan-300" />
                       ) : item.type === 'audio' ? (
                         <Music className="w-5 h-5 text-emerald-400" />
                       ) : (
@@ -533,7 +533,7 @@ export const MediaRelinkModal: React.FC = () => {
                         <span>
                           时间线引用:{' '}
                           {item.clipCount > 0 ? (
-                            <span className="text-blue-300 font-medium">
+                            <span className="text-cyan-200 font-medium">
                               {item.clipCount} 个片段 ({item.trackNames.join(', ')})
                             </span>
                           ) : (
@@ -572,7 +572,7 @@ export const MediaRelinkModal: React.FC = () => {
                       onClick={() => handleStartSingleRelink(item.name)}
                       className="px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-white text-xs font-medium border border-neutral-700 transition-colors flex items-center gap-1.5 cursor-pointer active:scale-95"
                     >
-                      <Link2 className="w-3.5 h-3.5 text-blue-400" />
+                      <Link2 className="w-3.5 h-3.5 text-cyan-300" />
                       <span>定位此文件</span>
                     </button>
                   </div>
@@ -593,7 +593,7 @@ export const MediaRelinkModal: React.FC = () => {
 
           <button
             onClick={closeRelinkModal}
-            className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-lg shadow-blue-500/20 transition-all cursor-pointer active:scale-95"
+            className="px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-white text-xs font-semibold shadow-lg shadow-cyan-400/20 transition-all cursor-pointer active:scale-95"
           >
             完成
           </button>

@@ -341,6 +341,25 @@ export const PreviewPlayer: React.FC = () => {
     }
   };
 
+  // F: toggle fullscreen preview
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      if (
+        target &&
+        (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)
+      ) {
+        return;
+      }
+      if (e.key === 'f' || e.key === 'F') {
+        e.preventDefault();
+        toggleFullscreen();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
   const handleTimecodeSubmit = () => {
     setIsEditingTimecode(false);
     const parsed = parseTimeToSeconds(timecodeInput, project.fps);
@@ -350,13 +369,15 @@ export const PreviewPlayer: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="flex-1 flex flex-col bg-white border border-[#dde1e7] rounded-lg overflow-hidden select-none relative"
+      className="flex-1 flex flex-col overflow-hidden select-none relative"
     >
       {/* Player Canvas Area */}
-      <div className="flex-1 flex items-center justify-center p-3 relative overflow-hidden bg-[#f8fafc]">
+      <div className="flex-1 flex items-center justify-center p-4 relative overflow-hidden">
+        {/* Ambient glow behind stage */}
+        <div className="absolute w-[70%] h-[60%] rounded-full bg-cyan-500/[0.05] blur-3xl pointer-events-none" />
         {/* Aspect Ratio Box Wrapper */}
         <div
-          className="relative max-w-full max-h-full flex items-center justify-center rounded-sm overflow-hidden border border-[#d9dee7] bg-black"
+          className="kf-preview-stage relative max-w-full max-h-full flex items-center justify-center"
           style={{
             aspectRatio: `${project.resolution.width} / ${project.resolution.height}`,
           }}
@@ -383,11 +404,11 @@ export const PreviewPlayer: React.FC = () => {
           />
 
           {/* Quick HUD badge when hovering */}
-          <div className="absolute top-2 left-2 flex items-center gap-1 pointer-events-none opacity-60 hover:opacity-100 transition-opacity">
-            <span className="bg-white/90 backdrop-blur-xs px-1.5 py-0.5 rounded text-[9px] font-mono text-slate-600 border border-slate-200">
+          <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5 pointer-events-none opacity-70 hover:opacity-100 transition-opacity">
+            <span className="kf-badge !text-[9px] font-mono !bg-black/60 backdrop-blur-md">
               {project.resolution.aspectRatio} · {project.resolution.width}×{project.resolution.height}
             </span>
-            <span className="bg-white/90 backdrop-blur-xs px-1.5 py-0.5 rounded text-[9px] font-mono text-slate-500 border border-slate-200">
+            <span className="kf-badge !text-[9px] font-mono !bg-black/60 backdrop-blur-md">
               {project.fps} FPS
             </span>
           </div>
@@ -402,9 +423,9 @@ export const PreviewPlayer: React.FC = () => {
       </div>
 
       {/* Player Bottom Control Bar */}
-      <div className="h-10 bg-white border-t border-[#dde1e7] px-3 flex items-center justify-between text-xs text-slate-600 shrink-0 select-none">
+      <div className="h-12 bg-[var(--kf-surface-1)]/90 backdrop-blur-md border-t border-white/[0.06] px-3.5 flex items-center justify-between text-xs shrink-0 select-none">
         {/* Left: Timecode / Position */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2">
           {isEditingTimecode ? (
             <input
               type="text"
@@ -413,7 +434,7 @@ export const PreviewPlayer: React.FC = () => {
               onChange={(e) => setTimecodeInput(e.target.value)}
               onBlur={handleTimecodeSubmit}
               onKeyDown={(e) => e.key === 'Enter' && handleTimecodeSubmit()}
-              className="bg-[#171822] border border-blue-500 text-blue-400 font-mono text-[11px] px-1.5 py-0.5 rounded outline-none w-20"
+              className="kf-input font-mono text-[11px] px-2 py-1 w-24 text-cyan-300"
             />
           ) : (
             <button
@@ -421,69 +442,69 @@ export const PreviewPlayer: React.FC = () => {
                 setTimecodeInput(formatSMPTE(currentTime));
                 setIsEditingTimecode(true);
               }}
-              className="font-mono text-[11px] font-semibold text-blue-400 hover:text-blue-300 bg-[#171822] px-1.5 py-0.5 rounded border border-[#242633] transition-colors"
+              className="font-mono text-[12px] font-bold text-cyan-300 hover:text-cyan-200 bg-cyan-400/[0.07] px-2 py-1 rounded-lg border border-cyan-400/20 transition-colors cursor-pointer"
               title="点击手动跳转时间码 (HH:MM:SS:FF)"
             >
               {formatSMPTE(currentTime)}
             </button>
           )}
 
-          <span className="text-neutral-500 font-mono text-[10px]">/ {formatSMPTE(totalDuration)}</span>
+          <span className="text-neutral-600 font-mono text-[10px]">/ {formatSMPTE(totalDuration)}</span>
 
           <div
-            className="flex items-center gap-1 px-1.5 py-0.5 bg-cyan-950/60 border border-cyan-500/30 rounded text-[9px] text-cyan-300 font-mono"
+            className="kf-badge-accent kf-badge !text-[9px] font-mono"
             title="PixiJS GPU 硬件加速引擎：就绪"
           >
-            <Zap className="w-2.5 h-2.5 text-cyan-400 animate-pulse" />
-            <span className="font-semibold">PixiJS GPU</span>
+            <Zap className="w-2.5 h-2.5 animate-pulse" />
+            <span className="font-bold">GPU</span>
           </div>
         </div>
 
         {/* Center: Play / Pause / Step */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5">
           {/* Jump to start */}
           <button
             onClick={() => seek(0)}
             title="回到片头 (Home)"
-            className="p-1 text-neutral-400 hover:text-white hover:bg-[#1c1d27] rounded transition-colors"
+            className="kf-icon-btn p-2"
           >
-            <SkipBack className="w-3.5 h-3.5" />
+            <SkipBack className="w-4 h-4" />
           </button>
 
           {/* Step back 1 frame */}
           <button
             onClick={() => stepFrame(-1)}
-            title="上一帧 (Left Arrow)"
-            className="p-1 text-neutral-400 hover:text-white hover:bg-[#1c1d27] rounded transition-colors"
+            title="上一帧 (←)"
+            className="kf-icon-btn p-2"
           >
-            <ChevronLeft className="w-3.5 h-3.5" />
+            <ChevronLeft className="w-4 h-4" />
           </button>
 
           {/* Primary Play/Pause Button */}
           <button
             onClick={togglePlay}
             title="播放 / 暂停 (Space)"
-            className="w-7 h-7 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center shadow-sm active:scale-95 transition-all mx-0.5 cursor-pointer"
+            className="kf-play-btn mx-1"
           >
-            {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 ml-0.5" />}
+            {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 ml-0.5 fill-current" />}
           </button>
 
           {/* Step forward 1 frame */}
           <button
             onClick={() => stepFrame(1)}
-            title="下一帧 (Right Arrow)"
-            className="p-1 text-neutral-400 hover:text-white hover:bg-[#1c1d27] rounded transition-colors"
+            title="下一帧 (→)"
+            className="kf-icon-btn p-2"
           >
-            <ChevronRight className="w-3.5 h-3.5" />
+            <ChevronRight className="w-4 h-4" />
           </button>
 
           {/* Jump to end */}
           <button
             onClick={() => seek(totalDuration)}
             title="跳到片尾 (End)"
-            className="p-1 text-neutral-400 hover:text-white hover:bg-[#1c1d27] rounded transition-colors"
+            className="kf-icon-btn p-2"
           >
-            <SkipForward className="w-3.5 h-3.5" />
+            <SkipForward className="w-4 h-4" />
           </button>
         </div>
 
@@ -493,7 +514,7 @@ export const PreviewPlayer: React.FC = () => {
           <select
             value={playbackSpeed}
             onChange={(e) => setPlaybackSpeed(parseFloat(e.target.value))}
-            className="bg-[#171822] border border-[#242633] text-neutral-300 text-[10px] rounded px-1.5 py-0.5 outline-none cursor-pointer"
+            className="kf-input text-neutral-300 text-[10px] font-mono rounded-lg px-1.5 py-1 outline-none cursor-pointer"
             title="播放倍速"
           >
             <option value="0.5">0.5x</option>
@@ -506,9 +527,7 @@ export const PreviewPlayer: React.FC = () => {
           <button
             onClick={() => setLoop(!loop)}
             title={loop ? '循环播放：已开启' : '循环播放：已关闭'}
-            className={`p-1 rounded transition-colors ${
-              loop ? 'text-blue-400 bg-blue-500/15' : 'text-neutral-400 hover:text-white hover:bg-[#1c1d27]'
-            }`}
+            className={`kf-icon-btn p-2 ${loop ? 'active' : ''}`}
           >
             <Repeat className="w-3.5 h-3.5" />
           </button>
@@ -516,10 +535,8 @@ export const PreviewPlayer: React.FC = () => {
           {/* Scopes Overlay Toggle */}
           <button
             onClick={() => setShowScopes(!showScopes)}
-            title="FreeCut 实时视频示波器 (波形/RGB分量/矢量图/直方图)"
-            className={`p-1 rounded transition-colors ${
-              showScopes ? 'text-emerald-400 bg-emerald-500/15' : 'text-neutral-400 hover:text-white hover:bg-[#1c1d27]'
-            }`}
+            title="实时视频示波器 (波形/RGB分量/矢量图/直方图)"
+            className={`kf-icon-btn p-2 ${showScopes ? 'active' : ''}`}
           >
             <Activity className="w-3.5 h-3.5" />
           </button>
@@ -528,9 +545,7 @@ export const PreviewPlayer: React.FC = () => {
           <button
             onClick={() => setShowGrid(!showGrid)}
             title="九宫格构图参考线"
-            className={`p-1 rounded transition-colors ${
-              showGrid ? 'text-blue-400 bg-blue-500/15' : 'text-neutral-400 hover:text-white hover:bg-[#1c1d27]'
-            }`}
+            className={`kf-icon-btn p-2 ${showGrid ? 'active' : ''}`}
           >
             <Grid className="w-3.5 h-3.5" />
           </button>
@@ -539,9 +554,7 @@ export const PreviewPlayer: React.FC = () => {
           <button
             onClick={() => setShowSafeMargin(!showSafeMargin)}
             title="安全区参考框 (90% / 80%)"
-            className={`p-1 rounded transition-colors ${
-              showSafeMargin ? 'text-pink-400 bg-pink-500/15' : 'text-neutral-400 hover:text-white hover:bg-[#1c1d27]'
-            }`}
+            className={`kf-icon-btn p-2 ${showSafeMargin ? 'active' : ''}`}
           >
             <Shield className="w-3.5 h-3.5" />
           </button>
@@ -550,7 +563,7 @@ export const PreviewPlayer: React.FC = () => {
           <button
             onClick={handleSnapshot}
             title="截图当前画幅 (PNG)"
-            className="p-1 text-neutral-400 hover:text-white hover:bg-[#1c1d27] rounded transition-colors"
+            className="kf-icon-btn p-2"
           >
             <Camera className="w-3.5 h-3.5" />
           </button>
@@ -559,7 +572,7 @@ export const PreviewPlayer: React.FC = () => {
           <button
             onClick={toggleFullscreen}
             title="全屏预览 (F)"
-            className="p-1 text-neutral-400 hover:text-white hover:bg-[#1c1d27] rounded transition-colors"
+            className="kf-icon-btn p-2"
           >
             {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
           </button>

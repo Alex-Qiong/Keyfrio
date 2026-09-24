@@ -1170,6 +1170,13 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             return endBound;
           }
         }
+        // Rewind (negative speed, e.g. J shuttle): clamp at start bound
+        if (nextTime <= startBound) {
+          if (loop && deltaSec < 0) {
+            return endBound;
+          }
+          return startBound;
+        }
         return nextTime;
       });
 
@@ -2946,12 +2953,68 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       else if (e.key === 'n' || e.key === 'N') {
         setSnappingEnabled((prev) => !prev);
       }
+      // J / K / L: Shuttle — rewind / pause / fast-forward
+      else if (e.key === 'j' || e.key === 'J') {
+        e.preventDefault();
+        setPlaybackSpeed(-1);
+        if (!isPlaying) togglePlay();
+      } else if (e.key === 'k' || e.key === 'K') {
+        e.preventDefault();
+        if (isPlaying) togglePlay();
+        setPlaybackSpeed(1);
+      } else if (e.key === 'l' || e.key === 'L') {
+        if (e.ctrlKey || e.metaKey) return; // Ctrl+L handled above
+        e.preventDefault();
+        setPlaybackSpeed(2);
+        if (!isPlaying) togglePlay();
+      }
+      // Home / End: Jump to start / end
+      else if (e.key === 'Home') {
+        e.preventDefault();
+        seek(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        seek(totalDuration);
+      }
+      // Ctrl+E / Cmd+E: Open export modal
+      else if ((e.ctrlKey || e.metaKey) && (e.key === 'e' || e.key === 'E')) {
+        e.preventDefault();
+        openExportModal();
+      }
+      // ?: Open shortcuts cheatsheet
+      else if (e.key === '?' || (e.shiftKey && e.key === '/')) {
+        e.preventDefault();
+        openShortcutsModal();
+      }
+      // Ctrl + Plus/Minus: Zoom timeline
+      else if ((e.ctrlKey || e.metaKey) && (e.key === '+' || e.key === '=')) {
+        e.preventDefault();
+        setZoom((z) => Math.min(400, z * 1.25));
+      } else if ((e.ctrlKey || e.metaKey) && (e.key === '-' || e.key === '_')) {
+        e.preventDefault();
+        setZoom((z) => Math.max(5, z / 1.25));
+      }
+      // Shift+Z: Zoom to fit timeline
+      else if (e.shiftKey && (e.key === 'z' || e.key === 'Z')) {
+        e.preventDefault();
+        if (totalDuration > 0) {
+          const fitZoom = Math.max(5, Math.min(400, 1200 / totalDuration));
+          setZoom(fitZoom);
+        }
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [
     togglePlay,
+    isPlaying,
+    setPlaybackSpeed,
+    seek,
+    totalDuration,
+    openExportModal,
+    openShortcutsModal,
+    setZoom,
     splitClip,
     deleteSelectedClips,
     duplicateClip,
