@@ -190,7 +190,7 @@ export const ProjectHome: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#06070b] text-neutral-100 flex flex-col font-sans select-none relative">
+    <div className="min-h-screen w-full bg-[var(--kf-bg)] text-neutral-100 flex flex-col font-sans select-none relative">
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="kf-aurora w-[600px] h-[300px] -top-32 left-1/3 bg-cyan-500/10" />
         <div className="kf-aurora w-[400px] h-[400px] top-[30%] -right-32 bg-violet-600/10" style={{ animationDelay: '-6s' }} />
@@ -231,7 +231,7 @@ export const ProjectHome: React.FC = () => {
           <h1 className="text-[26px] sm:text-3xl font-black tracking-tight">
             晚上好，<span className="kf-gradient-text">创作者</span>
           </h1>
-          <p className="mt-1.5 text-[13px] text-neutral-500">从一个灵感开始，或者接着上次的进度继续打磨。</p>
+          <p className="mt-1.5 text-[13px] text-neutral-400">从一个灵感开始，或者接着上次的进度继续打磨。</p>
         </motion.div>
 
         {/* ── quick actions ── */}
@@ -279,7 +279,7 @@ export const ProjectHome: React.FC = () => {
                   <Plus className="w-5 h-5" strokeWidth={2.5} />
                 </span>
                 <h3 className="text-[15px] font-bold text-white">新建工程</h3>
-                <p className="mt-1.5 text-[11px] text-neutral-500 leading-relaxed">自由指定画幅、分辨率与帧率</p>
+                <p className="mt-1.5 text-[11px] text-neutral-400 leading-relaxed">自由指定画幅、分辨率与帧率</p>
               </div>
               <span className="flex items-center gap-1.5 text-xs font-semibold text-cyan-300">
                 自定义配置 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
@@ -302,7 +302,7 @@ export const ProjectHome: React.FC = () => {
                   <div className="relative h-[110px] overflow-hidden shrink-0">
                     <img src={activeCover} alt={tmpl.title} referrerPolicy="no-referrer"
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-108 transition-transform duration-700" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0d1017] via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--kf-surface-1)] via-transparent to-transparent" />
                     <span className="absolute top-2.5 left-2.5 text-[10px] font-bold px-2 py-0.5 rounded-md border backdrop-blur-md"
                       style={{ color: tmpl.accent, borderColor: `${tmpl.accent}55`, background: 'rgba(0,0,0,0.55)' }}>
                       {tmpl.tag}

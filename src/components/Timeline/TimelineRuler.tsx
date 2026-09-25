@@ -156,7 +156,7 @@ export const TimelineRuler: React.FC<TimelineRulerProps> = memo(({ totalWidth })
         return (
           <div key={i} className="absolute top-0 bottom-0 pointer-events-none" style={{ left: `${left}px` }}>
             <div className="h-2.5 w-px bg-white/[0.14]" />
-            <span className="absolute top-2 left-1 text-[8px] font-mono text-neutral-600 whitespace-nowrap select-none">
+            <span className="absolute top-2 left-1 text-[8px] font-mono text-neutral-500 whitespace-nowrap select-none">
               {formatSMPTE(time)}
             </span>
 

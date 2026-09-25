@@ -29,9 +29,9 @@ const ProjectHome = lazy(() => import('./components/Home/ProjectHome').then((mod
 const LandingPage = lazy(() => import('./components/Landing/LandingPage').then((module) => ({ default: module.LandingPage })));
 
 const LoadingFallback: React.FC = () => (
-  <div className="flex h-screen w-screen items-center justify-center bg-[#0e0e10] text-sm text-[#a0a0ab]">
+  <div className="flex h-screen w-screen items-center justify-center bg-[var(--kf-bg)] text-sm text-neutral-400">
     <div className="flex flex-col items-center gap-3">
-      <div className="h-8 w-8 rounded-full border-2 border-[#2a2a32] border-t-[#00d4c8] animate-spin" />
+      <div className="h-8 w-8 rounded-full border-2 border-white/10 border-t-cyan-400 animate-spin" />
       <span>正在加载 Keyfrio…</span>
     </div>
   </div>
@@ -52,7 +52,7 @@ const MainAppContent: React.FC = () => {
 
   if (currentView === 'landing') {
     return (
-      <div className="w-full h-dvh bg-[#070912] overflow-y-auto overflow-x-hidden">
+      <div className="w-full h-dvh bg-[var(--kf-bg)] overflow-y-auto overflow-x-hidden">
         <LandingPage />
         <CommonOverlays />
         <StoreBridge />
@@ -62,7 +62,7 @@ const MainAppContent: React.FC = () => {
 
   if (currentView === 'home') {
     return (
-      <div className="w-full h-dvh bg-[#0b0e17] overflow-y-auto overflow-x-hidden">
+      <div className="w-full h-dvh bg-[var(--kf-bg)] overflow-y-auto overflow-x-hidden">
         <ProjectHome />
         <CommonOverlays />
         <StoreBridge />

@@ -84,10 +84,10 @@ export const ProjectInspectorTab: React.FC<ProjectInspectorTabProps> = ({ projec
       <div className="bg-[var(--kf-surface-3)] border border-white/[0.06] p-3 rounded-xl flex flex-col gap-2.5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
-            <Monitor className="w-3.5 h-3.5 text-indigo-400" />
+            <Monitor className="w-3.5 h-3.5 text-violet-400" />
             <span className="font-semibold text-neutral-200">画布画幅比例 (Aspect Ratio)</span>
           </div>
-          <span className="font-mono text-[11px] text-indigo-300 font-medium">
+          <span className="font-mono text-[11px] text-violet-300 font-medium">
             {project.resolution.width} × {project.resolution.height}
           </span>
         </div>
@@ -101,7 +101,7 @@ export const ProjectInspectorTab: React.FC<ProjectInspectorTabProps> = ({ projec
                 onClick={() => handleAspectRatioSelect(aspect)}
                 className={`py-1.5 px-2 rounded-lg border text-center transition-all cursor-pointer ${
                   isSelected
-                    ? 'bg-indigo-500/20 border-indigo-500 text-indigo-200 font-semibold shadow-xs'
+                    ? 'bg-violet-500/20 border-violet-500 text-violet-200 font-semibold shadow-xs'
                     : 'bg-[var(--kf-surface-1)] border-white/[0.06] text-neutral-300 hover:border-neutral-700'
                 }`}
               >

@@ -327,7 +327,7 @@ export const AiPanel: React.FC = () => {
               className={`py-1.5 px-1 rounded-md text-[10px] font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                 isActive
                   ? 'bg-cyan-500 text-white font-semibold shadow-xs'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#181920]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[var(--kf-surface-4)]'
               }`}
             >
               <Icon className={`w-3 h-3 ${isActive ? 'text-white' : tab.color}`} />
@@ -603,7 +603,7 @@ export const AiPanel: React.FC = () => {
             <button
               onClick={handleGenerateImage}
               disabled={loading || !imagePrompt.trim()}
-              className="w-full py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-semibold flex items-center justify-center gap-1.5 shadow-sm transition-all text-xs"
+              className="w-full py-2 rounded-md bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 text-white font-semibold flex items-center justify-center gap-1.5 shadow-sm transition-all text-xs"
             >
               {loading ? (
                 <>
@@ -627,7 +627,7 @@ export const AiPanel: React.FC = () => {
                 />
                 <button
                   onClick={handleApplyImageToTimeline}
-                  className="w-full py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded font-medium text-xs flex items-center justify-center gap-1 transition-all"
+                  className="w-full py-1 bg-cyan-600 hover:bg-cyan-500 text-white rounded font-medium text-xs flex items-center justify-center gap-1 transition-all"
                 >
                   <ListPlus className="w-3.5 h-3.5" />
                   <span>插入视频主轨道</span>

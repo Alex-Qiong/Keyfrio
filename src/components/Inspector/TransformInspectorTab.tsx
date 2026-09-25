@@ -136,10 +136,10 @@ export const TransformInspectorTab: React.FC<TransformInspectorTabProps> = ({ cl
       <div className="bg-[var(--kf-surface-3)] border border-white/[0.06] p-3 rounded-xl flex flex-col gap-2.5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
-            <Maximize2 className="w-3.5 h-3.5 text-indigo-400" />
+            <Maximize2 className="w-3.5 h-3.5 text-violet-400" />
             <span className="font-semibold text-neutral-200">缩放比例 (Scale)</span>
           </div>
-          <span className="font-mono text-[11px] text-indigo-300 font-medium">
+          <span className="font-mono text-[11px] text-violet-300 font-medium">
             {Math.round((transform.scale || 1) * 100)}%
           </span>
         </div>
@@ -151,7 +151,7 @@ export const TransformInspectorTab: React.FC<TransformInspectorTabProps> = ({ cl
           step="0.05"
           value={transform.scale || 1}
           onChange={(e) => updateTransform({ scale: parseFloat(e.target.value) })}
-          className="w-full accent-indigo-500 h-1 bg-neutral-800 rounded-lg cursor-pointer"
+          className="w-full accent-violet-500 h-1 bg-neutral-800 rounded-lg cursor-pointer"
         />
 
         {/* Quick Scale Presets */}
@@ -162,7 +162,7 @@ export const TransformInspectorTab: React.FC<TransformInspectorTabProps> = ({ cl
               onClick={() => updateTransform({ scale: s })}
               className={`py-1 rounded text-[10px] font-mono transition-colors ${
                 Math.abs((transform.scale || 1) - s) < 0.04
-                  ? 'bg-indigo-600 text-white font-semibold'
+                  ? 'bg-violet-600 text-white font-semibold'
                   : 'bg-neutral-900 text-neutral-400 hover:bg-neutral-800 hover:text-neutral-200'
               }`}
             >

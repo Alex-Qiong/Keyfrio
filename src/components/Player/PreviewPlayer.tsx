@@ -449,7 +449,7 @@ export const PreviewPlayer: React.FC = () => {
             </button>
           )}
 
-          <span className="text-neutral-600 font-mono text-[10px]">/ {formatSMPTE(totalDuration)}</span>
+          <span className="text-neutral-500 font-mono text-[10px]">/ {formatSMPTE(totalDuration)}</span>
 
           <div
             className="kf-badge-accent kf-badge !text-[9px] font-mono"

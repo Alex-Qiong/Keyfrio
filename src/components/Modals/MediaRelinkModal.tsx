@@ -267,7 +267,7 @@ export const MediaRelinkModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 kf-anim-fade-in">
       {/* Hidden File Inputs for Fallbacks */}
       <input
         type="file"
@@ -295,9 +295,9 @@ export const MediaRelinkModal: React.FC = () => {
         className="hidden"
       />
 
-      <div className="bg-[#12131c] border border-[#26283b] rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div className="bg-[var(--kf-surface-2)] border border-white/[0.08] rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#212336] bg-[#171824]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06] bg-[var(--kf-surface-1)]">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-cyan-400/10 border border-cyan-400/30 flex items-center justify-center text-cyan-300">
               <HardDrive className="w-5 h-5" />
@@ -331,7 +331,7 @@ export const MediaRelinkModal: React.FC = () => {
         </div>
 
         {/* Global Action Toolbar */}
-        <div className="p-6 border-b border-[#212336] bg-[#141521] flex flex-wrap items-center justify-between gap-4">
+        <div className="p-6 border-b border-white/[0.06] bg-[var(--kf-surface-2)] flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3 flex-wrap">
             {/* One-click permission authorization */}
             <button
@@ -347,7 +347,7 @@ export const MediaRelinkModal: React.FC = () => {
             <button
               onClick={handleFolderRelink}
               disabled={isProcessing}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#26283b] hover:bg-[#32354e] border border-[#3b3e5c] text-white text-xs font-semibold disabled:opacity-50 transition-all cursor-pointer active:scale-95 shadow-md"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[var(--kf-surface-4)] hover:bg-[var(--kf-surface-5)] border border-white/[0.08] text-white text-xs font-semibold disabled:opacity-50 transition-all cursor-pointer active:scale-95 shadow-md"
             >
               <FolderOpen className="w-4 h-4 text-cyan-300" />
               <span>选择素材所在文件夹 (自动批量匹配)</span>
@@ -403,7 +403,7 @@ export const MediaRelinkModal: React.FC = () => {
         )}
 
         {/* Search and Filter Tabs */}
-        <div className="px-6 py-3 border-b border-[#212336] bg-[#12131d] flex items-center justify-between gap-4 flex-wrap">
+        <div className="px-6 py-3 border-b border-white/[0.06] bg-[var(--kf-surface-1)] flex items-center justify-between gap-4 flex-wrap">
           {/* Search Box */}
           <div className="relative flex-1 min-w-[200px] max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
@@ -412,12 +412,12 @@ export const MediaRelinkModal: React.FC = () => {
               placeholder="搜索素材名称..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#1b1c2b] border border-[#2c2f46] rounded-xl pl-9 pr-3 py-1.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-cyan-400 transition-colors"
+              className="w-full bg-[var(--kf-surface-3)] border border-white/[0.08] rounded-xl pl-9 pr-3 py-1.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-cyan-400 transition-colors"
             />
           </div>
 
           {/* Filter Pills */}
-          <div className="flex items-center gap-1 bg-[#181926] p-1 rounded-xl border border-[#27293d]">
+          <div className="flex items-center gap-1 bg-[var(--kf-surface-3)] p-1 rounded-xl border border-white/[0.06]">
             <button
               onClick={() => setFilterStatus('all')}
               className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
@@ -485,13 +485,13 @@ export const MediaRelinkModal: React.FC = () => {
                       ? 'bg-red-950/15 border-red-900/30 hover:border-red-700/50'
                       : status === 'needsPermission'
                       ? 'bg-amber-950/15 border-amber-900/30 hover:border-amber-700/50'
-                      : 'bg-[#181a28] border-[#25283c] hover:border-[#353954]'
+                      : 'bg-[var(--kf-surface-3)] border-white/[0.06] hover:border-white/[0.14]'
                   }`}
                 >
                   {/* Left: Thumbnail + Media Info */}
                   <div className="flex items-center gap-3.5 min-w-0 flex-1">
                     {/* Thumbnail preview */}
-                    <div className="w-14 h-11 rounded-lg bg-[#0e0f18] border border-[#2a2c42] overflow-hidden flex items-center justify-center shrink-0 relative">
+                    <div className="w-14 h-11 rounded-lg bg-[var(--kf-bg-soft)] border border-white/[0.08] overflow-hidden flex items-center justify-center shrink-0 relative">
                       {item.thumbnail ? (
                         <img src={item.thumbnail} alt={item.name} className="w-full h-full object-cover" />
                       ) : item.type === 'video' ? (
@@ -583,7 +583,7 @@ export const MediaRelinkModal: React.FC = () => {
         </div>
 
         {/* Modal Footer */}
-        <div className="px-6 py-4 border-t border-[#212336] bg-[#141521] flex items-center justify-between">
+        <div className="px-6 py-4 border-t border-white/[0.06] bg-[var(--kf-surface-2)] flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs text-neutral-400">
             <HelpCircle className="w-4 h-4 text-neutral-500" />
             <span>

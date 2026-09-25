@@ -57,7 +57,7 @@ export const TextPanel: React.FC = () => {
                   },
                 })
               }
-              className="p-2 bg-[var(--kf-surface-3)] hover:bg-[#1f202d] border border-white/[0.06] hover:border-amber-500 rounded-md flex flex-col items-center justify-center gap-0.5 transition-all"
+              className="p-2 bg-[var(--kf-surface-3)] hover:bg-[var(--kf-surface-4)] border border-white/[0.06] hover:border-amber-500 rounded-md flex flex-col items-center justify-center gap-0.5 transition-all"
             >
               <span className="text-sm font-bold text-white">大标题</span>
               <span className="text-[9px] text-neutral-500">Main Title</span>
@@ -84,7 +84,7 @@ export const TextPanel: React.FC = () => {
                   },
                 })
               }
-              className="p-2 bg-[var(--kf-surface-3)] hover:bg-[#1f202d] border border-white/[0.06] hover:border-amber-500 rounded-md flex flex-col items-center justify-center gap-0.5 transition-all"
+              className="p-2 bg-[var(--kf-surface-3)] hover:bg-[var(--kf-surface-4)] border border-white/[0.06] hover:border-amber-500 rounded-md flex flex-col items-center justify-center gap-0.5 transition-all"
             >
               <span className="text-xs font-semibold text-neutral-200 bg-black/60 px-1.5 py-0.2 rounded">字幕条</span>
               <span className="text-[9px] text-neutral-500">Subtitle Box</span>
@@ -107,7 +107,7 @@ export const TextPanel: React.FC = () => {
                     text: tpl.config,
                   })
                 }
-                className="p-2 bg-[var(--kf-surface-3)] hover:bg-[#1f202d] border border-white/[0.06] hover:border-amber-400 rounded-md flex items-center justify-between cursor-pointer transition-all group"
+                className="p-2 bg-[var(--kf-surface-3)] hover:bg-[var(--kf-surface-4)] border border-white/[0.06] hover:border-amber-400 rounded-md flex items-center justify-between cursor-pointer transition-all group"
               >
                 <div className="flex flex-col gap-0.5 min-w-0">
                   <span className="text-[9px] text-neutral-500 font-semibold uppercase">{tpl.category}</span>

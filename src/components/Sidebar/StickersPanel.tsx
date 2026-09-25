@@ -28,7 +28,7 @@ export const StickersPanel: React.FC = () => {
                   stickerEmoji: stk.emoji,
                 })
               }
-              className="bg-[var(--kf-surface-3)] hover:bg-[#1f202d] border border-white/[0.06] hover:border-pink-500 rounded-md p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group aspect-square"
+              className="bg-[var(--kf-surface-3)] hover:bg-[var(--kf-surface-4)] border border-white/[0.06] hover:border-pink-500 rounded-md p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group aspect-square"
               title={`添加 ${stk.name}`}
             >
               <span className="text-xl group-hover:scale-120 transition-transform">{stk.emoji}</span>

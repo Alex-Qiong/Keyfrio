@@ -52,7 +52,7 @@ export const MediaRelinkBanner: React.FC = () => {
   };
 
   return (
-    <div className="bg-gradient-to-r from-amber-950/90 via-[#1f1910] to-[#16120d] border-b border-amber-500/30 px-4 py-2 flex items-center justify-between gap-3 text-xs text-amber-200 z-30 shadow-md animate-in slide-in-from-top duration-200">
+    <div className="bg-gradient-to-r from-amber-950/90 via-[#1f1910] to-[#16120d] border-b border-amber-500/30 px-4 py-2 flex items-center justify-between gap-3 text-xs text-amber-200 z-30 shadow-md kf-anim-slide-in-top">
       <div className="flex items-center gap-2.5 min-w-0">
         <div className="w-6 h-6 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0">
           <AlertTriangle className="w-3.5 h-3.5" />

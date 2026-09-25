@@ -546,7 +546,7 @@ export const AudioStudioModal: React.FC = () => {
   return (
     <div
       id="audiomass-studio-modal"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 kf-anim-fade-in"
     >
       <div className="relative w-full max-w-5xl h-[88vh] bg-neutral-900 border border-neutral-700/80 rounded-2xl flex flex-col shadow-2xl overflow-hidden">
         {/* Modal Header */}

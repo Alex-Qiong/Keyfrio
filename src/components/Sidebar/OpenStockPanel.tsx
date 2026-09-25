@@ -392,7 +392,7 @@ export const OpenStockPanel: React.FC = () => {
           <button
             onClick={() => handleSearch()}
             title="刷新搜索"
-            className="text-neutral-400 hover:text-white p-1 rounded hover:bg-[#202230]"
+            className="text-neutral-400 hover:text-white p-1 rounded hover:bg-[var(--kf-surface-4)]"
           >
             <RefreshCw className={`w-3 h-3 ${isLoading ? 'animate-spin text-cyan-300' : ''}`} />
           </button>

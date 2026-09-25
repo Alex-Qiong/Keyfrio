@@ -149,7 +149,7 @@ export const TimelineToolbar: React.FC = () => {
                     <span className="flex items-center gap-2.5">
                       <Icon className="w-4 h-4" style={{ color }} /> {label}
                     </span>
-                    <span className="text-[10px] text-neutral-600">{desc}</span>
+                    <span className="text-[10px] text-neutral-500">{desc}</span>
                   </button>
                 ))}
               </div>

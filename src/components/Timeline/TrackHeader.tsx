@@ -138,7 +138,7 @@ export const TrackHeader: React.FC<TrackHeaderProps> = memo(({ track, index, tot
               <span>{track.name}</span>
             </div>
           )}
-          <span className="text-[8px] text-neutral-600 uppercase tracking-widest font-mono">
+          <span className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono">
             {isAudio ? 'Audio' : 'Video'}
           </span>
         </div>

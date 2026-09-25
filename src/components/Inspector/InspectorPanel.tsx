@@ -114,7 +114,7 @@ export const InspectorPanel: React.FC = () => {
       case 'image':
         return { label: '图片', color: 'bg-amber-500/20 text-amber-300 border-amber-500/30', icon: ImageIcon };
       case 'text':
-        return { label: '文字字幕', color: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30', icon: Type };
+        return { label: '文字字幕', color: 'bg-violet-500/20 text-violet-300 border-violet-500/30', icon: Type };
       case 'lottie':
         return { label: 'Lottie 矢量', color: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30', icon: Sparkles };
       case 'effect':

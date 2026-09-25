@@ -145,7 +145,7 @@ export const TrackRow: React.FC<TrackRowProps> = memo(({ track, totalWidth }) =>
         <>
           <div className="fixed inset-0 z-50" onClick={() => setContextMenu(null)} />
           <div
-            className="fixed z-50 bg-[var(--kf-surface-3)] border border-zinc-700 rounded-lg shadow-2xl py-1 text-xs text-zinc-200 min-w-[140px] animate-in fade-in"
+            className="fixed z-50 bg-[var(--kf-surface-3)] border border-white/[0.08] rounded-lg shadow-2xl py-1 text-xs text-zinc-200 min-w-[140px] kf-anim-pop-in"
             style={{ left: `${contextMenu.x}px`, top: `${contextMenu.y}px` }}
           >
             <button
@@ -153,7 +153,7 @@ export const TrackRow: React.FC<TrackRowProps> = memo(({ track, totalWidth }) =>
                 closeGapAt(track.id, contextMenu.time);
                 setContextMenu(null);
               }}
-              className="w-full px-3 py-1.5 text-left hover:bg-indigo-600/30 hover:text-white flex items-center gap-2"
+              className="w-full px-3 py-1.5 text-left hover:bg-cyan-600/30 hover:text-white flex items-center gap-2"
             >
               <span>闭合此处间隙 (Ripple Gap)</span>
             </button>
@@ -163,7 +163,7 @@ export const TrackRow: React.FC<TrackRowProps> = memo(({ track, totalWidth }) =>
                 pasteClips();
                 setContextMenu(null);
               }}
-              className="w-full px-3 py-1.5 text-left hover:bg-indigo-600/30 hover:text-white flex items-center gap-2"
+              className="w-full px-3 py-1.5 text-left hover:bg-cyan-600/30 hover:text-white flex items-center gap-2"
             >
               <span>在此处粘贴剪贴板片段</span>
             </button>

@@ -223,7 +223,7 @@ export const MediaPanel: React.FC = () => {
               <button
                 type="button"
                 onClick={handleNativePicker}
-                className="px-2 py-1 rounded bg-[#20222e] hover:bg-[#282b3a] border border-[#2e3142] text-[10px] text-cyan-300 hover:text-cyan-200 font-medium flex items-center gap-1.5 transition-colors shadow-xs"
+                className="px-2 py-1 rounded bg-[var(--kf-surface-3)] hover:bg-[var(--kf-surface-4)] border border-white/[0.06] text-[10px] text-cyan-300 hover:text-cyan-200 font-medium flex items-center gap-1.5 transition-colors shadow-xs"
               >
                 <HardDrive className="w-3 h-3" />
                 <span>原生文件系统句柄导入 (支持持久重连)</span>

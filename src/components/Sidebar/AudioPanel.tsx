@@ -107,7 +107,7 @@ export const AudioPanel: React.FC = () => {
 
       <div className="flex-1 overflow-y-auto p-2.5 flex flex-col gap-2.5">
         {/* Upload Audio Button */}
-        <label className="border border-dashed border-[#262834] hover:border-emerald-500/50 bg-[#161720] hover:bg-[#1a1b24] rounded-lg p-3 flex flex-col items-center justify-center text-center cursor-pointer transition-all">
+        <label className="border border-dashed border-white/[0.08] hover:border-emerald-500/50 bg-[var(--kf-surface-2)] hover:bg-[var(--kf-surface-3)] rounded-lg p-3 flex flex-col items-center justify-center text-center cursor-pointer transition-all">
           <input
             type="file"
             multiple

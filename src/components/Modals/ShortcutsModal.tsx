@@ -76,7 +76,7 @@ export const ShortcutsModal: React.FC = () => {
               <span className="text-[10px] font-semibold text-cyan-300 uppercase tracking-wider">
                 {group.category}
               </span>
-              <div className="bg-[var(--kf-surface-3)] border border-white/[0.06] rounded-lg overflow-hidden divide-y divide-[#20222a]">
+              <div className="bg-[var(--kf-surface-3)] border border-white/[0.06] rounded-lg overflow-hidden divide-y divide-white/[0.06]">
                 {group.items.map((item, itemIdx) => (
                   <div key={itemIdx} className="px-2.5 py-1.5 flex items-center justify-between">
                     <span className="text-neutral-300 text-xs">{item.desc}</span>

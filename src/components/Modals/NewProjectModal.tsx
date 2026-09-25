@@ -189,7 +189,7 @@ export const NewProjectModal: React.FC<NewProjectModalProps> = ({ isOpen, onClos
   return (
     <div
       id="new-project-modal-backdrop"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200 select-none"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 kf-anim-fade-in select-none"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -218,7 +218,7 @@ export const NewProjectModal: React.FC<NewProjectModalProps> = ({ isOpen, onClos
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-neutral-400 hover:text-white hover:bg-[#202333] transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl text-neutral-400 hover:text-white hover:bg-[var(--kf-surface-4)] transition-colors cursor-pointer"
             title="关闭"
           >
             <X className="w-5 h-5" />
@@ -274,7 +274,7 @@ export const NewProjectModal: React.FC<NewProjectModalProps> = ({ isOpen, onClos
                     className={`relative p-3.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between group ${
                       isSelected
                         ? 'bg-cyan-500/15 border-cyan-400/90 ring-1 ring-cyan-400/60 shadow-[0_0_20px_rgba(59,130,246,0.18)]'
-                        : 'bg-[#141520] hover:bg-[#191b29] border-[#222638] text-neutral-300'
+                        : 'bg-[var(--kf-surface-2)] hover:bg-[var(--kf-surface-3)] border-white/[0.06] text-neutral-300'
                     }`}
                   >
                     {/* Top Row: Icon + Tag */}
@@ -328,7 +328,7 @@ export const NewProjectModal: React.FC<NewProjectModalProps> = ({ isOpen, onClos
 
             {/* Custom Dimensions Form */}
             {activePreset.isCustom && (
-              <div className="p-3.5 bg-[#141622] border border-cyan-400/40 rounded-xl flex items-center gap-3 animate-in fade-in duration-150 mt-1">
+              <div className="p-3.5 bg-[#141622] border border-cyan-400/40 rounded-xl flex items-center gap-3 kf-anim-fade-in mt-1">
                 <div className="flex-1 flex flex-col gap-1">
                   <label className="text-[11px] text-neutral-400 font-medium">宽度 (Width px)</label>
                   <input
@@ -402,7 +402,7 @@ export const NewProjectModal: React.FC<NewProjectModalProps> = ({ isOpen, onClos
           <button
             type="button"
             onClick={onClose}
-            className="px-5 py-2.5 rounded-xl text-xs font-medium text-neutral-300 hover:text-white bg-[#1a1c28] hover:bg-[#232637] border border-[#2b2e40] transition-colors cursor-pointer"
+            className="px-5 py-2.5 rounded-xl text-xs font-medium text-neutral-300 hover:text-white bg-[var(--kf-surface-3)] hover:bg-[var(--kf-surface-4)] border border-white/[0.06] transition-colors cursor-pointer"
           >
             取消
           </button>
@@ -411,7 +411,7 @@ export const NewProjectModal: React.FC<NewProjectModalProps> = ({ isOpen, onClos
             type="button"
             onClick={handleCreate}
             disabled={isSubmitting}
-            className="px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 hover:from-cyan-400 hover:via-indigo-500 hover:to-purple-500 shadow-lg shadow-indigo-600/30 transition-all transform active:scale-98 cursor-pointer disabled:opacity-50 flex items-center gap-2"
+            className="px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-cyan-500 via-violet-600 to-purple-600 hover:from-cyan-400 hover:via-violet-500 hover:to-purple-500 shadow-lg shadow-violet-600/30 transition-all transform active:scale-98 cursor-pointer disabled:opacity-50 flex items-center gap-2"
           >
             <span>+ 新建工程并开启剪辑</span>
           </button>

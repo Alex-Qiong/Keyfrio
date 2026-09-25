@@ -101,7 +101,7 @@ const HeroMockup: React.FC<{ onOpen: () => void }> = ({ onOpen }) => {
         initial={{ opacity: 0, y: 60, rotateX: 12 }}
         animate={{ opacity: 1, y: 0, rotateX: 0 }}
         transition={{ duration: 1, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="relative rounded-2xl border border-white/10 bg-[#0b0e15]/90 shadow-[0_40px_120px_rgba(0,0,0,0.7)] overflow-hidden backdrop-blur-xl"
+        className="relative rounded-2xl border border-white/10 bg-[var(--kf-surface-1)]/90 shadow-[0_40px_120px_rgba(0,0,0,0.7)] overflow-hidden backdrop-blur-xl"
       >
         {/* window bar */}
         <div className="flex items-center gap-2 px-4 h-10 border-b border-white/5 bg-white/[0.02]">
@@ -199,7 +199,7 @@ export const LandingPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#06070b] text-neutral-100 font-sans relative overflow-x-hidden kf-noise">
+    <div className="min-h-screen bg-[var(--kf-bg)] text-neutral-100 font-sans relative overflow-x-hidden kf-noise">
       {/* ambient background */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="kf-aurora w-[700px] h-[420px] -top-40 left-1/2 -translate-x-1/2 bg-cyan-500/15" />
@@ -306,7 +306,7 @@ export const LandingPage: React.FC = () => {
           className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-px max-w-3xl mx-auto rounded-2xl overflow-hidden border border-white/[0.07] bg-white/[0.07]"
         >
           {STATS.map((s) => (
-            <div key={s.label} className="bg-[#0a0c12]/95 px-4 py-5">
+            <div key={s.label} className="bg-[var(--kf-bg-soft)]/95 px-4 py-5">
               <div className="text-2xl sm:text-3xl font-black kf-gradient-text">{s.value}</div>
               <div className="mt-1 text-[11px] text-neutral-500">{s.label}</div>
             </div>
@@ -322,7 +322,7 @@ export const LandingPage: React.FC = () => {
           {[0, 1].map((dup) => (
             <div key={dup} className="flex shrink-0 items-center">
               {MARQUEE_ITEMS.map((item) => (
-                <span key={`${dup}-${item}`} className="mx-6 flex items-center gap-6 text-[13px] font-medium text-neutral-500">
+                <span key={`${dup}-${item}`} className="mx-6 flex items-center gap-6 text-[13px] font-medium text-neutral-400">
                   {item}
                   <Star className="w-3 h-3 text-cyan-500/50" />
                 </span>

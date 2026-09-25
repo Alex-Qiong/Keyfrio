@@ -202,11 +202,11 @@ export const AiCopilotDrawer: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-y-0 right-0 w-96 max-w-full bg-[var(--kf-surface-2)] border-l border-white/[0.06] shadow-2xl flex flex-col z-50 animate-in slide-in-from-right duration-200 select-none">
+    <div className="fixed inset-y-0 right-0 w-96 max-w-full bg-[var(--kf-surface-2)] border-l border-white/[0.06] shadow-2xl flex flex-col z-50 kf-anim-slide-in-right select-none">
       {/* Header */}
       <div className="h-12 px-3.5 border-b border-white/[0.06] flex items-center justify-between bg-[var(--kf-surface-1)] shrink-0">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-purple-600 via-cyan-500 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-purple-600/30">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-purple-600 via-cyan-500 to-violet-500 flex items-center justify-center text-white shadow-md shadow-purple-600/30">
             <Sparkles className="w-4 h-4" />
           </div>
           <div>
@@ -222,7 +222,7 @@ export const AiCopilotDrawer: React.FC = () => {
 
         <button
           onClick={closeAiCopilotDrawer}
-          className="p-1 rounded-md text-neutral-400 hover:text-white hover:bg-[#1c1d25] transition-colors"
+          className="p-1 rounded-md text-neutral-400 hover:text-white hover:bg-[var(--kf-surface-4)] transition-colors"
           title="关闭 AI 助理"
         >
           <X className="w-4 h-4" />
@@ -241,7 +241,7 @@ export const AiCopilotDrawer: React.FC = () => {
           <span className="w-1 h-1 bg-neutral-600 rounded-full" />
           <span className="text-cyan-300 font-mono">{currentTime.toFixed(1)}s 播放头</span>
         </div>
-        <span className="px-1.5 py-0.2 bg-[#20222a] text-neutral-300 rounded font-mono text-[9px]">
+        <span className="px-1.5 py-0.2 bg-[var(--kf-surface-4)] text-neutral-300 rounded font-mono text-[9px]">
           {project.resolution.aspectRatio}
         </span>
       </div>
@@ -264,14 +264,14 @@ export const AiCopilotDrawer: React.FC = () => {
                 className={`p-2.5 rounded-xl ${
                   msg.sender === 'user'
                     ? 'bg-cyan-500 text-white rounded-br-xs shadow-sm'
-                    : 'bg-[var(--kf-surface-3)] border border-[#232532] text-neutral-200 rounded-bl-xs'
+                    : 'bg-[var(--kf-surface-3)] border border-white/[0.06] text-neutral-200 rounded-bl-xs'
                 }`}
               >
                 <p className="whitespace-pre-wrap leading-relaxed">{msg.text}</p>
 
                 {/* Structured Action Execution Cards */}
                 {msg.actions && msg.actions.length > 0 && (
-                  <div className="mt-2.5 pt-2 border-t border-[#252836] space-y-1.5">
+                  <div className="mt-2.5 pt-2 border-t border-white/[0.06] space-y-1.5">
                     <span className="text-[10px] font-semibold text-neutral-400 flex items-center gap-1">
                       <Zap className="w-3 h-3 text-yellow-400" />
                       已识别剪辑操作指令:
@@ -279,7 +279,7 @@ export const AiCopilotDrawer: React.FC = () => {
                     {msg.actions.map((act, actIdx) => (
                       <div
                         key={actIdx}
-                        className="bg-[#12131a] p-2 rounded-lg border border-[#252735] flex items-center justify-between gap-2"
+                        className="bg-[var(--kf-surface-2)] p-2 rounded-lg border border-white/[0.06] flex items-center justify-between gap-2"
                       >
                         <div className="min-w-0">
                           <span className="font-medium text-[11px] text-white block truncate">
@@ -310,7 +310,7 @@ export const AiCopilotDrawer: React.FC = () => {
                   <button
                     key={cIdx}
                     onClick={() => handleSendMessage(chip)}
-                    className="text-[10px] px-2 py-1 rounded-full bg-[#181a24] hover:bg-cyan-500/20 text-neutral-300 hover:text-cyan-200 border border-[#232532] hover:border-cyan-400/40 transition-all text-left truncate max-w-full"
+                    className="text-[10px] px-2 py-1 rounded-full bg-[var(--kf-surface-3)] hover:bg-cyan-500/20 text-neutral-300 hover:text-cyan-200 border border-white/[0.06] hover:border-cyan-400/40 transition-all text-left truncate max-w-full"
                   >
                     {chip}
                   </button>
@@ -334,7 +334,7 @@ export const AiCopilotDrawer: React.FC = () => {
       <div className="px-2.5 py-1.5 bg-[var(--kf-surface-1)] border-t border-white/[0.06] flex items-center gap-1.5 overflow-x-auto shrink-0 scrollbar-none">
         <button
           onClick={() => handleSendMessage('一键智能粗剪，搭配背景音乐并加上字幕花字')}
-          className="text-[10px] px-2 py-1 bg-[#181922] hover:bg-[#20222e] text-neutral-300 hover:text-white rounded-md border border-[#252735] flex items-center gap-1 shrink-0 transition-colors"
+          className="text-[10px] px-2 py-1 bg-[var(--kf-surface-3)] hover:bg-[var(--kf-surface-4)] text-neutral-300 hover:text-white rounded-md border border-white/[0.06] flex items-center gap-1 shrink-0 transition-colors"
         >
           <Wand2 className="w-3 h-3 text-purple-400" />
           智能粗剪
@@ -342,7 +342,7 @@ export const AiCopilotDrawer: React.FC = () => {
 
         <button
           onClick={() => handleSendMessage('把当前视频调色成电影感青橙胶片风格')}
-          className="text-[10px] px-2 py-1 bg-[#181922] hover:bg-[#20222e] text-neutral-300 hover:text-white rounded-md border border-[#252735] flex items-center gap-1 shrink-0 transition-colors"
+          className="text-[10px] px-2 py-1 bg-[var(--kf-surface-3)] hover:bg-[var(--kf-surface-4)] text-neutral-300 hover:text-white rounded-md border border-white/[0.06] flex items-center gap-1 shrink-0 transition-colors"
         >
           <Sliders className="w-3 h-3 text-emerald-400" />
           电影调色
@@ -350,7 +350,7 @@ export const AiCopilotDrawer: React.FC = () => {
 
         <button
           onClick={() => handleSendMessage('为视频自动生成排版美观的网红字幕')}
-          className="text-[10px] px-2 py-1 bg-[#181922] hover:bg-[#20222e] text-neutral-300 hover:text-white rounded-md border border-[#252735] flex items-center gap-1 shrink-0 transition-colors"
+          className="text-[10px] px-2 py-1 bg-[var(--kf-surface-3)] hover:bg-[var(--kf-surface-4)] text-neutral-300 hover:text-white rounded-md border border-white/[0.06] flex items-center gap-1 shrink-0 transition-colors"
         >
           <Type className="w-3 h-3 text-yellow-400" />
           爆款字幕
@@ -358,7 +358,7 @@ export const AiCopilotDrawer: React.FC = () => {
 
         <button
           onClick={() => handleSendMessage('在当前播放头位置分割片段')}
-          className="text-[10px] px-2 py-1 bg-[#181922] hover:bg-[#20222e] text-neutral-300 hover:text-white rounded-md border border-[#252735] flex items-center gap-1 shrink-0 transition-colors"
+          className="text-[10px] px-2 py-1 bg-[var(--kf-surface-3)] hover:bg-[var(--kf-surface-4)] text-neutral-300 hover:text-white rounded-md border border-white/[0.06] flex items-center gap-1 shrink-0 transition-colors"
         >
           <Scissors className="w-3 h-3 text-red-400" />
           播放头剪切
@@ -372,7 +372,7 @@ export const AiCopilotDrawer: React.FC = () => {
             e.preventDefault();
             handleSendMessage();
           }}
-          className="flex items-center gap-1.5 bg-[var(--kf-surface-3)] border border-[#232532] focus-within:border-cyan-400 rounded-lg px-2.5 py-1.5 transition-colors"
+          className="flex items-center gap-1.5 bg-[var(--kf-surface-3)] border border-white/[0.06] focus-within:border-cyan-400 rounded-lg px-2.5 py-1.5 transition-colors"
         >
           <input
             ref={inputRef}

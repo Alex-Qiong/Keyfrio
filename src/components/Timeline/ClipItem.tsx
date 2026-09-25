@@ -494,7 +494,7 @@ export const ClipItem: React.FC<ClipItemProps> = memo(({ clip, trackId, isLocked
         <>
           <div className="fixed inset-0 z-50" onClick={() => setContextMenu(null)} />
           <div
-            className="fixed bg-[var(--kf-surface-3)] border border-[#262838] rounded-lg shadow-2xl py-1.5 z-50 text-xs w-48 animate-in fade-in"
+            className="fixed bg-[var(--kf-surface-3)] border border-[#262838] rounded-lg shadow-2xl py-1.5 z-50 text-xs w-48 kf-anim-pop-in"
             style={{ left: contextMenu.x, top: contextMenu.y }}
           >
             <div className="px-3 py-1 text-[9px] font-semibold text-neutral-400 uppercase truncate">

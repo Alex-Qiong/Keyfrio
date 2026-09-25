@@ -635,6 +635,14 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
+@keyframes kf-slide-in-right {
+  from { opacity: 0; transform: translateX(32px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes kf-slide-in-top {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 @keyframes kf-shimmer {
   from { transform: translateX(-100%); }
   to { transform: translateX(100%); }
@@ -665,6 +673,15 @@
 }
 .kf-anim-fade-in {
   animation: kf-fade-in var(--kf-dur-med) var(--kf-ease-out) both;
+}
+.kf-anim-pop-in {
+  animation: kf-pop-in 140ms var(--kf-ease-out) both;
+}
+.kf-anim-slide-in-right {
+  animation: kf-slide-in-right 220ms var(--kf-ease-out) both;
+}
+.kf-anim-slide-in-top {
+  animation: kf-slide-in-top 200ms var(--kf-ease-out) both;
 }
 .kf-stagger-1 { animation-delay: 60ms; }
 .kf-stagger-2 { animation-delay: 120ms; }

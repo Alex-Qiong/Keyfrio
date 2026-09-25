@@ -55,7 +55,7 @@ const TRANSITIONS: {
     name: '向右擦除 (Wipe Right)',
     desc: '由左向右平稳擦除过渡',
     icon: MoveRight,
-    color: 'text-indigo-400 bg-indigo-500/10 border-indigo-500/20',
+    color: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/20',
   },
   {
     type: 'zoomIn',
