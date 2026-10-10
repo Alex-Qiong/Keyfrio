@@ -31,10 +31,10 @@ import { ProjectSummary, AspectRatio, Resolution } from '../../types/editor';
 import { AppLogo } from '../common/AppLogo';
 import { NewProjectModal } from '../Modals/NewProjectModal';
 
-import lvxingImg from '../../assets/templates/lvxing.png';
-import duanshipinImg from '../../assets/templates/duanshipin.png';
-import bokeImg from '../../assets/templates/boke.png';
-import yugaopianImg from '../../assets/templates/yugaopian.png';
+import lvxingImg from '../../assets/templates/lvxing.webp';
+import duanshipinImg from '../../assets/templates/duanshipin.webp';
+import bokeImg from '../../assets/templates/boke.webp';
+import yugaopianImg from '../../assets/templates/yugaopian.webp';
 
 interface ScenarioTemplate {
   id: string;
