@@ -3,8 +3,65 @@ import { drawLottieFrame } from './lottieManager';
 import { renderGpuEffectOnCanvas } from './pixiEngine';
 import { getOrCreateVideoElement, getOrCreateImageElement } from './mediaPlayback';
 import { getClipActiveTransformAtTime, getClipActiveFilterAtTime } from './keyframeEngine';
+import { applyColorGradingToImageData } from './colorGradingEngine';
 
 let offscreenCaptureCanvas: HTMLCanvasElement | null = null;
+let offscreenColorGradeCanvas: HTMLCanvasElement | null = null;
+
+/** Draw a media source through color grading without changing the main canvas pixels on failure. */
+function drawMediaWithColorGrading(
+  ctx: CanvasRenderingContext2D,
+  source: CanvasImageSource,
+  targetW: number,
+  targetH: number,
+  grading: Clip['colorGrading'],
+  cssFilter: string
+): void {
+  const canGrade = grading?.enabled && targetW > 0 && targetH > 0;
+  if (!canGrade) {
+    ctx.filter = cssFilter || 'none';
+    ctx.drawImage(source, -targetW / 2, -targetH / 2, targetW, targetH);
+    return;
+  }
+
+  try {
+    if (!offscreenColorGradeCanvas) {
+      offscreenColorGradeCanvas = document.createElement('canvas');
+    }
+    const pixelW = Math.ceil(targetW);
+    const pixelH = Math.ceil(targetH);
+    // Keep the reusable canvas when it is already large enough.
+    if (offscreenColorGradeCanvas.width < pixelW) offscreenColorGradeCanvas.width = pixelW;
+    if (offscreenColorGradeCanvas.height < pixelH) offscreenColorGradeCanvas.height = pixelH;
+
+    const offscreenCtx = offscreenColorGradeCanvas.getContext('2d');
+    if (!offscreenCtx) throw new Error('Unable to create color grading context');
+    offscreenCtx.clearRect(0, 0, pixelW, pixelH);
+    offscreenCtx.filter = cssFilter || 'none';
+    offscreenCtx.drawImage(source, 0, 0, targetW, targetH);
+
+    const imageData = offscreenCtx.getImageData(0, 0, pixelW, pixelH);
+    applyColorGradingToImageData(imageData, grading);
+    offscreenCtx.putImageData(imageData, 0, 0);
+
+    ctx.filter = 'none';
+    ctx.drawImage(
+      offscreenColorGradeCanvas,
+      0,
+      0,
+      pixelW,
+      pixelH,
+      -targetW / 2,
+      -targetH / 2,
+      targetW,
+      targetH
+    );
+  } catch {
+    // Cross-origin sources (or unsupported canvas operations) must retain the old path.
+    ctx.filter = cssFilter || 'none';
+    ctx.drawImage(source, -targetW / 2, -targetH / 2, targetW, targetH);
+  }
+}
 
 export function getCachedMediaElement(clip: Clip): HTMLVideoElement | HTMLImageElement | null {
   if (clip.type === 'video') {
@@ -207,6 +264,9 @@ export function renderFrame(
       if (filter.sepia > 0) filterParts.push(`sepia(${filter.sepia}%)`);
       if (filter.grayscale > 0) filterParts.push(`grayscale(${filter.grayscale}%)`);
       if (filterParts.length > 0) {
+        // Keep the original behavior for all clip types: the graded media
+        // path below re-applies this filter on the offscreen canvas and
+        // composites with filter='none', so there is no double application.
         ctx.filter = filterParts.join(' ');
       }
     }
@@ -224,7 +284,19 @@ export function renderFrame(
         }
 
         if (video.videoWidth > 0 && video.readyState >= 1) {
-          ctx.drawImage(video, -targetW / 2, -targetH / 2, targetW, targetH);
+          if (clip.colorGrading?.enabled) {
+            drawMediaWithColorGrading(ctx, video, targetW, targetH, clip.colorGrading, filter ? [
+              filter.brightness !== 100 ? `brightness(${filter.brightness}%)` : '',
+              filter.contrast !== 100 ? `contrast(${filter.contrast}%)` : '',
+              filter.saturate !== 100 ? `saturate(${filter.saturate}%)` : '',
+              filter.blur > 0 ? `blur(${filter.blur}px)` : '',
+              filter.hueRotate !== 0 ? `hue-rotate(${filter.hueRotate}deg)` : '',
+              filter.sepia > 0 ? `sepia(${filter.sepia}%)` : '',
+              filter.grayscale > 0 ? `grayscale(${filter.grayscale}%)` : '',
+            ].filter(Boolean).join(' ') : '');
+          } else {
+            ctx.drawImage(video, -targetW / 2, -targetH / 2, targetW, targetH);
+          }
           drawn = true;
         }
       }
@@ -235,7 +307,19 @@ export function renderFrame(
         if (thumbUrl) {
           const thumbImg = getOrCreateImageElement({ id: `thumb-${clip.id}`, sourceUrl: thumbUrl });
           if (thumbImg && thumbImg.complete && thumbImg.naturalWidth > 0) {
-            ctx.drawImage(thumbImg, -targetW / 2, -targetH / 2, targetW, targetH);
+            if (clip.colorGrading?.enabled) {
+              drawMediaWithColorGrading(ctx, thumbImg, targetW, targetH, clip.colorGrading, filter ? [
+                filter.brightness !== 100 ? `brightness(${filter.brightness}%)` : '',
+                filter.contrast !== 100 ? `contrast(${filter.contrast}%)` : '',
+                filter.saturate !== 100 ? `saturate(${filter.saturate}%)` : '',
+                filter.blur > 0 ? `blur(${filter.blur}px)` : '',
+                filter.hueRotate !== 0 ? `hue-rotate(${filter.hueRotate}deg)` : '',
+                filter.sepia > 0 ? `sepia(${filter.sepia}%)` : '',
+                filter.grayscale > 0 ? `grayscale(${filter.grayscale}%)` : '',
+              ].filter(Boolean).join(' ') : '');
+            } else {
+              ctx.drawImage(thumbImg, -targetW / 2, -targetH / 2, targetW, targetH);
+            }
             drawn = true;
           }
         }
@@ -258,7 +342,19 @@ export function renderFrame(
       const { width: targetW, height: targetH } = getMediaBaseDimensions(clip, width, height);
 
       if (img && img.complete && img.naturalWidth > 0) {
-        ctx.drawImage(img, -targetW / 2, -targetH / 2, targetW, targetH);
+        if (clip.colorGrading?.enabled) {
+          drawMediaWithColorGrading(ctx, img, targetW, targetH, clip.colorGrading, filter ? [
+            filter.brightness !== 100 ? `brightness(${filter.brightness}%)` : '',
+            filter.contrast !== 100 ? `contrast(${filter.contrast}%)` : '',
+            filter.saturate !== 100 ? `saturate(${filter.saturate}%)` : '',
+            filter.blur > 0 ? `blur(${filter.blur}px)` : '',
+            filter.hueRotate !== 0 ? `hue-rotate(${filter.hueRotate}deg)` : '',
+            filter.sepia > 0 ? `sepia(${filter.sepia}%)` : '',
+            filter.grayscale > 0 ? `grayscale(${filter.grayscale}%)` : '',
+          ].filter(Boolean).join(' ') : '');
+        } else {
+          ctx.drawImage(img, -targetW / 2, -targetH / 2, targetW, targetH);
+        }
         drawn = true;
       }
 
