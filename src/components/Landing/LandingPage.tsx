@@ -43,21 +43,21 @@ interface TemplateCard {
 const TEMPLATES: TemplateCard[] = [
   { id: 'travel-vlog', title: '4K 电影感旅拍 Vlog', tag: '热度推荐', desc: '16:9 画幅 · 24fps 胶片调色 · 多轨音画分离', aspect: '16:9', fps: 24, width: 3840, height: 2160, bgImage: lvxingImg, accent: '#fbbf24' },
   { id: 'tiktok-viral', title: '竖屏短视频爆款模板', tag: '爆款模板', desc: '9:16 竖屏 · 60fps 高帧率 · 节奏卡点', aspect: '9:16', fps: 60, width: 1080, height: 1920, bgImage: duanshipinImg, accent: '#fb7185' },
-  { id: 'podcast-sub', title: '知识博主与访谈字幕', tag: '口播干货', desc: '16:9 画幅 · 30fps · 智能双语字幕轨', aspect: '16:9', fps: 30, width: 1920, height: 1080, bgImage: bokeImg, accent: '#60a5fa' },
+  { id: 'podcast-sub', title: '知识博主与访谈字幕', tag: '口播干货', desc: '16:9 画幅 · 30fps · 预置标题与字幕轨', aspect: '16:9', fps: 30, width: 1920, height: 1080, bgImage: bokeImg, accent: '#60a5fa' },
   { id: 'epic-trailer', title: '21:9 史诗级宽屏预告', tag: '院线质感', desc: '21:9 宽荧幕 · 24fps · 冲击滤镜', aspect: '21:9', fps: 24, width: 2560, height: 1080, bgImage: yugaopianImg, accent: '#34d399' },
 ];
 
 const MARQUEE_ITEMS = [
   '多轨时间线', 'GPU 粒子着色器', 'Lottie 矢量动效', 'ASC-CDL 调色', 'AI 智能字幕',
-  '4K 60FPS 实时渲染', 'WebCodecs 导出', 'OPFS 本地存储', '智能场景识别', '一键成片',
+  '4K 实时预览', 'MP4 真实导出', 'OPFS 本地存储', 'AI 智能粗剪', '一键成片',
 ];
 
 const FEATURES = [
   { icon: Layers, title: '多轨非编时间线', desc: '视频 / 音频 / 文字 / 特效轨道无限叠加，磁吸对齐、波纹编辑、JKL 穿梭，桌面级剪辑手感。', accent: '#22d3ee' },
-  { icon: Zap, title: 'GPU 实时渲染', desc: 'PixiJS + WebGL 管线，4K 60FPS 实时预览，粒子、光效、转场零等待。', accent: '#a78bfa' },
+  { icon: Zap, title: 'GPU 实时渲染', desc: 'PixiJS + WebGL 管线，4K 实时预览，粒子与光效由 GPU 实时渲染。', accent: '#a78bfa' },
   { icon: Palette, title: '电影级调色', desc: 'ASC-CDL 标准调色管线，示波器 / 矢量图 / 直方图专业监看。', accent: '#fb7185' },
   { icon: Wand2, title: 'AI 创意副驾驶', desc: '智能粗剪、自动字幕、文案成片、Gemini 驱动的分镜理解。', accent: '#fbbf24' },
-  { icon: Music4, title: '音频工作站', desc: '波形可视化、响度归一、降噪、AI 配音，多轨混音一站完成。', accent: '#34d399' },
+  { icon: Music4, title: '音频工作站', desc: '波形可视化、响度归一、噪声门、AI 配音，多轨混音一站完成。', accent: '#34d399' },
   { icon: Shield, title: '本地优先 · 隐私安全', desc: 'OPFS + IndexedDB 本地存储，素材不出设备，离线可用。', accent: '#60a5fa' },
 ];
 
@@ -111,7 +111,7 @@ const HeroMockup: React.FC<{ onOpen: () => void }> = ({ onOpen }) => {
           <span className="ml-3 text-[11px] text-neutral-500 font-medium">Keyfrio Pro Studio · 4K Cinema Timeline</span>
           <div className="ml-auto flex gap-1.5">
             <span className="kf-badge-accent kf-badge !text-[9px]">16:9</span>
-            <span className="kf-badge !text-[9px]">4K · 60FPS</span>
+            <span className="kf-badge !text-[9px]">4K · 实时预览</span>
           </div>
         </div>
         <div className="grid grid-cols-[1fr_300px]">
@@ -168,7 +168,7 @@ const HeroMockup: React.FC<{ onOpen: () => void }> = ({ onOpen }) => {
             {[
               { icon: Sliders, t: '调色', d: 'ASC-CDL · 示波器', c: '#fb7185' },
               { icon: Type, t: '文字', d: '120+ 动态标题', c: '#fbbf24' },
-              { icon: Volume2, t: '音频', d: 'AI 降噪 · 混音', c: '#34d399' },
+              { icon: Volume2, t: '音频', d: '噪声门 · 多轨混音', c: '#34d399' },
               { icon: Sparkles, t: 'AI', d: '智能成片', c: '#a78bfa' },
             ].map((r) => (
               <div key={r.t} className="flex items-center gap-3 rounded-xl border border-white/5 bg-white/[0.03] p-3 hover:border-white/15 transition-colors">
@@ -379,7 +379,7 @@ export const LandingPage: React.FC = () => {
                   把重复劳动交给 AI，你只负责创意。
                 </p>
                 <ul className="mt-6 space-y-3">
-                  {['智能场景识别 · 一键粗剪', '语音转字幕 · 双语对齐', '文案成片 · 分镜自动生成', 'Gemini 驱动的创意对话'].map((t) => (
+                  {['AI 智能粗剪 · 分镜编排', '文案转字幕 · 逐句上轨', '文案成片 · 分镜自动生成', 'Gemini 驱动的创意对话'].map((t) => (
                     <li key={t} className="flex items-center gap-2.5 text-sm text-neutral-300">
                       <CheckCircle2 className="w-4 h-4 text-violet-300 shrink-0" /> {t}
                     </li>
@@ -399,7 +399,7 @@ export const LandingPage: React.FC = () => {
                     帮我把这段旅拍素材剪成 30 秒卡点短片
                   </div>
                   <div className="max-w-[85%] rounded-2xl rounded-bl-md bg-white/[0.05] border border-white/10 px-4 py-2.5 text-neutral-300">
-                    已识别 12 个场景 · 按鼓点完成粗剪，生成 3 组转场与双语字幕，预览看看效果？
+                    已按文案完成粗剪，排好分镜与转场，并生成字幕轨，预览看看效果？
                   </div>
                   <div className="flex gap-2">
                     {['应用粗剪', '换种风格', '导出看看'].map((b) => (
@@ -466,7 +466,7 @@ export const LandingPage: React.FC = () => {
         </Reveal>
         <div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { icon: Cpu, t: 'WebCodecs', d: '硬件级编解码，导出飞快' },
+            { icon: Cpu, t: 'MP4 导出', d: '按浏览器编码能力真实导出' },
             { icon: Layers, t: 'PixiJS WebGL', d: 'GPU 合成实时预览' },
             { icon: Film, t: 'OPFS 存储', d: '本地工程毫秒级存取' },
             { icon: MonitorPlay, t: 'Lottie 引擎', d: '矢量动效无限缩放' },
