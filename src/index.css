@@ -150,6 +150,95 @@
     background: transparent;
   }
 
+  ::-webkit-scrollbar-thumb:active {
+    background: #3f4c6b;
+    background-clip: content-box;
+    border: 2px solid transparent;
+  }
+
+  body {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* —— Range sliders: one designed look for every panel ———————
+     Most inspector/panel sliders are bare <input type="range"> with
+     ad-hoc accent classes; style them all here. The hand-tuned
+     .kf-slider (timeline zoom, gradient fill via --fill) keeps its
+     own track painting, so the track rule skips it. */
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+  }
+  input[type="range"]:not(.kf-slider)::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 999px;
+    background: #232a3d;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #fff;
+    border: none;
+    margin-top: -4.5px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.18);
+    transition: transform var(--kf-dur-fast) var(--kf-ease-out), box-shadow var(--kf-dur-fast);
+  }
+  input[type="range"]:hover::-webkit-slider-thumb,
+  input[type="range"]:focus-visible::-webkit-slider-thumb {
+    transform: scale(1.2);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.6), 0 0 0 4px rgba(34, 211, 238, 0.18);
+  }
+  input[type="range"]:not(.kf-slider)::-moz-range-track {
+    height: 4px;
+    border-radius: 999px;
+    background: #232a3d;
+  }
+  input[type="range"]:not(.kf-slider)::-moz-range-progress {
+    height: 4px;
+    border-radius: 999px;
+    background: var(--kf-accent);
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #fff;
+    border: none;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.18);
+  }
+  input[type="range"]:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* number inputs: hide native steppers (panels provide their own steppers) */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    accent-color: var(--kf-accent);
+  }
+
+  /* compat: a few components use the Tailwind-style `animate-fadeIn`
+     class name, which has no utility in this setup — map it onto the
+     design-system fade so those surfaces actually animate. */
+  .animate-fadeIn {
+    animation: kf-fade-in var(--kf-dur-med) var(--kf-ease-out) both;
+  }
+
   /* tabular numbers for timecodes */
   .tnum, time, .font-mono {
     font-variant-numeric: tabular-nums;

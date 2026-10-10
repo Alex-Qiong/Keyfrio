@@ -265,7 +265,7 @@ export const RemotionPanel: React.FC = () => {
                             field.type === 'number' ? Number(e.target.value) : e.target.value
                           )
                         }
-                        className="flex-1 min-w-0 rounded border border-white/10 bg-[var(--kf-surface-3)] px-2 py-1.5 text-white outline-none focus:border-cyan-400/60"
+                        className="kf-input flex-1 min-w-0 px-2 py-1.5 text-white"
                       />
                     )}
                   </label>
@@ -274,7 +274,7 @@ export const RemotionPanel: React.FC = () => {
                 <button
                   onClick={handleRender}
                   disabled={isRendering || adding}
-                  className="mt-1 flex items-center justify-center gap-2 rounded-lg bg-cyan-500 px-3 py-2 font-bold text-white transition-all hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="kf-btn kf-btn-primary mt-1 px-3 py-2 text-xs"
                 >
                   {isRendering || adding ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
