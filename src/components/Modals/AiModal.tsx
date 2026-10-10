@@ -9,9 +9,10 @@ import {
   Zap,
 } from 'lucide-react';
 import { useEditor } from '../../context/EditorContext';
+import { AiUnavailableBanner } from '../common/AiUnavailableBanner';
 
 export const AiModal: React.FC = () => {
-  const { isAiModalOpen, closeAiModal, project, totalDuration, addTrack, addClip } = useEditor();
+  const { isAiModalOpen, closeAiModal, project, totalDuration, addTrack, addClip, aiAvailable } = useEditor();
   const [tab, setTab] = useState<'captions' | 'script' | 'titles'>('captions');
   const [loading, setLoading] = useState(false);
 
@@ -113,6 +114,8 @@ export const AiModal: React.FC = () => {
           </button>
         </div>
 
+        <AiUnavailableBanner />
+
         {/* Tab switcher */}
         <div className="flex border-b border-white/[0.06] bg-[var(--kf-surface-1)] p-1 gap-1">
           {[
@@ -139,7 +142,7 @@ export const AiModal: React.FC = () => {
         </div>
 
         {/* Content */}
-        <div className="p-4 flex flex-col gap-3.5 max-h-[60vh] overflow-y-auto">
+        <div className={`p-4 flex flex-col gap-3.5 max-h-[60vh] overflow-y-auto ${aiAvailable === false ? 'opacity-50 pointer-events-none' : ''}`}>
           {tab === 'captions' && (
             <div className="flex flex-col gap-2.5">
               <label className="text-[10px] font-semibold text-neutral-400 block">

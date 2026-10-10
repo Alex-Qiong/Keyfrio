@@ -24,6 +24,7 @@ import {
   Sliders,
 } from 'lucide-react';
 import { useEditor } from '../../context/EditorContext';
+import { AiUnavailableBanner } from '../common/AiUnavailableBanner';
 
 interface ActionItem {
   type: string;
@@ -53,6 +54,7 @@ export const AiCopilotDrawer: React.FC = () => {
     executeBatchAiActions,
     undo,
     setAspectRatio,
+    aiAvailable,
   } = useEditor();
 
   const [inputMessage, setInputMessage] = useState('');
@@ -229,6 +231,8 @@ export const AiCopilotDrawer: React.FC = () => {
         </button>
       </div>
 
+      <AiUnavailableBanner />
+
       {/* Project Status Bar */}
       <div className="px-3 py-1.5 bg-[var(--kf-surface-3)] border-b border-white/[0.06] flex items-center justify-between text-[10px] text-neutral-300 shrink-0">
         <div className="flex items-center gap-2">
@@ -247,7 +251,7 @@ export const AiCopilotDrawer: React.FC = () => {
       </div>
 
       {/* Message Chat List */}
-      <div className="flex-1 p-3 overflow-y-auto space-y-3.5 min-h-0 text-xs">
+      <div className={`flex-1 p-3 overflow-y-auto space-y-3.5 min-h-0 text-xs ${aiAvailable === false ? 'opacity-50 pointer-events-none' : ''}`}>
         {messages.map((msg) => (
           <div
             key={msg.id}
@@ -331,7 +335,7 @@ export const AiCopilotDrawer: React.FC = () => {
       </div>
 
       {/* Quick Tool Pills Bar */}
-      <div className="px-2.5 py-1.5 bg-[var(--kf-surface-1)] border-t border-white/[0.06] flex items-center gap-1.5 overflow-x-auto shrink-0 scrollbar-none">
+      <div className={`px-2.5 py-1.5 bg-[var(--kf-surface-1)] border-t border-white/[0.06] flex items-center gap-1.5 overflow-x-auto shrink-0 scrollbar-none ${aiAvailable === false ? 'opacity-50 pointer-events-none' : ''}`}>
         <button
           onClick={() => handleSendMessage('一键智能粗剪，搭配背景音乐并加上字幕花字')}
           className="text-[10px] px-2 py-1 bg-[var(--kf-surface-3)] hover:bg-[var(--kf-surface-4)] text-neutral-300 hover:text-white rounded-md border border-white/[0.06] flex items-center gap-1 shrink-0 transition-colors"
@@ -366,7 +370,7 @@ export const AiCopilotDrawer: React.FC = () => {
       </div>
 
       {/* Input Bar */}
-      <div className="p-2.5 bg-[var(--kf-surface-2)] border-t border-white/[0.06] shrink-0">
+      <div className={`p-2.5 bg-[var(--kf-surface-2)] border-t border-white/[0.06] shrink-0 ${aiAvailable === false ? 'opacity-50 pointer-events-none' : ''}`}>
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -380,7 +384,7 @@ export const AiCopilotDrawer: React.FC = () => {
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder="告诉 AI 剪辑指令 (例如: 在开头加个大标题 / 换成9:16竖屏)..."
-            disabled={loading}
+            disabled={loading || aiAvailable === false}
             className="bg-transparent text-xs text-white placeholder-neutral-500 outline-none flex-1 font-normal"
           />
 

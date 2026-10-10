@@ -26,6 +26,7 @@ export const ExportModal: React.FC = () => {
   const [isExporting, setIsExporting] = useState(false);
   const [progress, setProgress] = useState<ExportProgress | null>(null);
   const [exportedBlobUrl, setExportedBlobUrl] = useState<string | null>(null);
+  const [actualFormat, setActualFormat] = useState<'mp4' | 'webm' | null>(null);
   const [exportError, setExportError] = useState<string | null>(null);
 
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -37,6 +38,7 @@ export const ExportModal: React.FC = () => {
     setProgress({ progress: 0, currentFrame: 0, totalFrames: 1, estimatedTimeRemaining: 0 });
     setExportError(null);
     setExportedBlobUrl(null);
+    setActualFormat(null);
 
     // Calculate dimensions
     let width = project.resolution.width;
@@ -72,12 +74,14 @@ export const ExportModal: React.FC = () => {
     abortControllerRef.current = new AbortController();
 
     try {
-      const blob = await exportVideo(
+      const result = await exportVideo(
         project,
         settings,
         (p) => setProgress(p),
         abortControllerRef.current.signal
       );
+      const { blob, format: exportedFormat } = result;
+      setActualFormat(exportedFormat);
 
       const url = URL.createObjectURL(blob);
       setExportedBlobUrl(url);
@@ -85,7 +89,7 @@ export const ExportModal: React.FC = () => {
       // Auto trigger download
       const a = document.createElement('a');
       a.href = url;
-      a.download = `${settings.filename}.${format}`;
+      a.download = `${settings.filename}.${exportedFormat}`;
       a.click();
     } catch (err: any) {
       if (err.name !== 'AbortError') {
@@ -269,11 +273,14 @@ export const ExportModal: React.FC = () => {
               <p className="text-neutral-400 text-[11px] max-w-xs">
                 浏览器已自动开始下载，也可点击下方按钮重新下载。
               </p>
+              {actualFormat && actualFormat !== format && (
+                <p className="text-amber-300 text-[11px]">当前浏览器不支持 MP4 编码，已自动改为 WebM 导出</p>
+              )}
 
               <div className="flex gap-2 mt-2">
                 <a
                   href={exportedBlobUrl}
-                  download={`${project.name}.${format}`}
+                  download={`${project.name}.${actualFormat || format}`}
                   className="px-3.5 py-1.5 bg-cyan-500 hover:bg-cyan-400 text-white rounded-lg font-medium flex items-center gap-1.5 text-xs shadow-md shadow-cyan-500/30"
                 >
                   <Download className="w-3.5 h-3.5" />

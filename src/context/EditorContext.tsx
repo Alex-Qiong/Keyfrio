@@ -101,6 +101,7 @@ interface EditorContextType {
   isShortcutsModalOpen: boolean;
   isAiModalOpen: boolean;
   isAiCopilotDrawerOpen: boolean;
+  aiAvailable: boolean | null;
   isAudioStudioModalOpen: boolean;
   audioStudioTargetClipId: string | null;
   audioStudioTargetAsset: MediaAsset | null;
@@ -2832,7 +2833,15 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [isShortcutsModalOpen, setIsShortcutsModalOpen] = useState<boolean>(false);
   const [isAiModalOpen, setIsAiModalOpen] = useState<boolean>(false);
   const [isAiCopilotDrawerOpen, setIsAiCopilotDrawerOpen] = useState<boolean>(false);
+  const [aiAvailable, setAiAvailable] = useState<boolean | null>(null);
   const [isAudioStudioModalOpen, setIsAudioStudioModalOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    fetch('/api/health')
+      .then((response) => response.json())
+      .then((data) => setAiAvailable(typeof data.aiAvailable === 'boolean' ? data.aiAvailable : false))
+      .catch(() => setAiAvailable(false));
+  }, []);
   const [audioStudioTargetClipId, setAudioStudioTargetClipId] = useState<string | null>(null);
   const [audioStudioTargetAsset, setAudioStudioTargetAsset] = useState<MediaAsset | null>(null);
 
@@ -3392,6 +3401,7 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         isShortcutsModalOpen,
         isAiModalOpen,
         isAiCopilotDrawerOpen,
+        aiAvailable,
         isAudioStudioModalOpen,
         audioStudioTargetClipId,
         audioStudioTargetAsset,

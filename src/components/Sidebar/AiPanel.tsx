@@ -25,6 +25,7 @@ import {
 import { useEditor } from '../../context/EditorContext';
 import { DEFAULT_TEXT, DEFAULT_TRANSFORM, DEFAULT_FILTER } from '../../constants/samples';
 import { generateProceduralWaveform } from '../../utils/audio';
+import { AiUnavailableBanner } from '../common/AiUnavailableBanner';
 
 export const AiPanel: React.FC = () => {
   const {
@@ -36,6 +37,7 @@ export const AiPanel: React.FC = () => {
     executeAiAction,
     executeBatchAiActions,
     openAiCopilotDrawer,
+    aiAvailable,
   } = useEditor();
 
   const [aiMode, setAiMode] = useState<'copilot' | 'tts' | 'captions' | 'script' | 'image' | 'audit'>('copilot');
@@ -305,6 +307,8 @@ export const AiPanel: React.FC = () => {
         </button>
       </div>
 
+      <AiUnavailableBanner />
+
       {/* Sub Tabs */}
       <div className="grid grid-cols-3 border-b border-white/[0.06] bg-[var(--kf-surface-1)] p-1 gap-1 shrink-0">
         {[
@@ -338,7 +342,7 @@ export const AiPanel: React.FC = () => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 overflow-y-auto p-2.5 flex flex-col gap-2.5">
+      <div className={`flex-1 overflow-y-auto p-2.5 flex flex-col gap-2.5 ${aiAvailable === false ? 'opacity-50 pointer-events-none' : ''}`}>
         {/* 1. COPILOT CHAT MODE */}
         {aiMode === 'copilot' && (
           <div className="flex flex-col h-full gap-2">

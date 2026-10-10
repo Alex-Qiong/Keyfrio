@@ -7,7 +7,7 @@ export async function exportVideo(
   settings: ExportSettings,
   onProgress?: (progress: ExportProgress) => void,
   abortSignal?: AbortSignal
-): Promise<Blob> {
+): Promise<{ blob: Blob; mimeType: string; format: 'mp4' | 'webm' }> {
   const { resolution, fps, quality } = settings;
   const totalDuration = project.duration || 10;
   const totalFrames = Math.ceil(totalDuration * fps);
@@ -35,13 +35,28 @@ export async function exportVideo(
     ...audioDest.stream.getAudioTracks(),
   ]);
 
-  // Pick supported mimeType
+  // Pick the requested format when supported, otherwise fall back to WebM.
   let mimeType = 'video/webm;codecs=vp9,opus';
-  if (!MediaRecorder.isTypeSupported(mimeType)) {
-    mimeType = 'video/webm;codecs=vp8,opus';
+  let format: 'mp4' | 'webm' = 'webm';
+  if (settings.format === 'mp4') {
+    const mp4Candidates = [
+      'video/mp4;codecs=avc1.640028,mp4a.40.2',
+      'video/mp4;codecs=avc1.42E01E,mp4a.40.2',
+      'video/mp4',
+    ];
+    const supportedMp4 = mp4Candidates.find((candidate) => MediaRecorder.isTypeSupported(candidate));
+    if (supportedMp4) {
+      mimeType = supportedMp4;
+      format = 'mp4';
+    }
   }
-  if (!MediaRecorder.isTypeSupported(mimeType)) {
-    mimeType = 'video/webm';
+  if (format === 'webm') {
+    if (!MediaRecorder.isTypeSupported(mimeType)) {
+      mimeType = 'video/webm;codecs=vp8,opus';
+    }
+    if (!MediaRecorder.isTypeSupported(mimeType)) {
+      mimeType = 'video/webm';
+    }
   }
 
   const mediaRecorder = new MediaRecorder(combinedStream, {
@@ -59,7 +74,7 @@ export async function exportVideo(
   return new Promise((resolve, reject) => {
     mediaRecorder.onstop = () => {
       const finalBlob = new Blob(recordedChunks, { type: mimeType });
-      resolve(finalBlob);
+      resolve({ blob: finalBlob, mimeType, format });
     };
 
     mediaRecorder.onerror = (err) => {
