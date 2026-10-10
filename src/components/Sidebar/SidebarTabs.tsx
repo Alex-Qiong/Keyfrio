@@ -9,6 +9,7 @@ import {
   Blend,
   Bot,
   Clapperboard,
+  MonitorPlay,
 } from 'lucide-react';
 import { useUiStore } from '../../stores/uiStore';
 import { useEditorActions } from '../../context/EditorContext';
@@ -31,6 +32,7 @@ export const TABS: TabItem[] = [
   { id: 'effects', name: '特效', icon: Sparkles, accent: '#22d3ee' },
   { id: 'transitions', name: '转场', icon: Blend, accent: '#f472b6' },
   { id: 'ai', name: 'AI', icon: Bot, badge: 'AI', accent: '#c4b5fd' },
+  { id: 'remotion', name: '模板', icon: MonitorPlay, badge: 'RM', accent: '#22d3ee' },
 ];
 
 /** Obsidian icon rail — slim, precise, glowing active state */
