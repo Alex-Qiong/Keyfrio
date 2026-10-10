@@ -1,14 +1,28 @@
-import {
+import type {
   Application,
   CanvasSource,
-  Filter,
-  GlProgram,
-  Rectangle,
   Sprite,
   Texture,
   UniformGroup,
 } from 'pixi.js';
 import type { GpuEffectSettings } from '../types/editor';
+
+// pixi.js is loaded lazily via dynamic import() inside initialize() so it
+// stays out of the editor's first-load critical path; until the chunk and
+// the WebGL app are ready, callers use the Canvas2D fallback (by design).
+// The classes are destructured (not kept as a namespace object) so Rollup
+// can tree-shake the async chunk down to what is actually used.
+interface PixiClasses {
+  Application: typeof import('pixi.js').Application;
+  CanvasSource: typeof import('pixi.js').CanvasSource;
+  Filter: typeof import('pixi.js').Filter;
+  GlProgram: typeof import('pixi.js').GlProgram;
+  Rectangle: typeof import('pixi.js').Rectangle;
+  Sprite: typeof import('pixi.js').Sprite;
+  Texture: typeof import('pixi.js').Texture;
+  UniformGroup: typeof import('pixi.js').UniformGroup;
+}
+let P: PixiClasses | null = null;
 
 /**
  * Real PixiJS / WebGL render path for GPU effect clips (gap 9.7).
@@ -221,7 +235,20 @@ let matrixSprites: Sprite[] = [];
 
 async function initialize(width: number, height: number): Promise<void> {
   try {
-    app = new Application();
+    if (!P) {
+      const m = await import('pixi.js');
+      P = {
+        Application: m.Application,
+        CanvasSource: m.CanvasSource,
+        Filter: m.Filter,
+        GlProgram: m.GlProgram,
+        Rectangle: m.Rectangle,
+        Sprite: m.Sprite,
+        Texture: m.Texture,
+        UniformGroup: m.UniformGroup,
+      };
+    }
+    app = new P.Application();
     await app.init({
       width,
       height,
@@ -238,7 +265,7 @@ async function initialize(width: number, height: number): Promise<void> {
 
 function ensureFilterSprite(): boolean {
   if (filterSprite) return true;
-  effectUniforms = new UniformGroup({
+  effectUniforms = new P!.UniformGroup({
     uMode: { value: 0, type: 'f32' },
     uTime: { value: 0, type: 'f32' },
     uIntensity: { value: 0, type: 'f32' },
@@ -247,13 +274,13 @@ function ensureFilterSprite(): boolean {
     uProgress: { value: 0, type: 'f32' },
     uResolution: { value: [1, 1], type: 'vec2<f32>' },
   });
-  const filter = new Filter({
-    glProgram: GlProgram.from({ vertex: FILTER_VERTEX, fragment: FILTER_FRAGMENT, name: 'keyfrio-effects' }),
+  const filter = new P!.Filter({
+    glProgram: P!.GlProgram.from({ vertex: FILTER_VERTEX, fragment: FILTER_FRAGMENT, name: 'keyfrio-effects' }),
     resources: { effectUniforms },
   });
-  canvasSource = new CanvasSource({ resource: document.createElement('canvas') as any });
-  sourceTexture = new Texture({ source: canvasSource });
-  filterSprite = new Sprite(sourceTexture);
+  canvasSource = new P!.CanvasSource({ resource: document.createElement('canvas') as any });
+  sourceTexture = new P!.Texture({ source: canvasSource });
+  filterSprite = new P!.Sprite(sourceTexture);
   filterSprite.filters = [filter];
   app!.stage.addChild(filterSprite);
   return true;
@@ -270,13 +297,13 @@ function ensureParticleTexture(): Texture {
   grad.addColorStop(1, 'rgba(255,255,255,0)');
   g.fillStyle = grad;
   g.fillRect(0, 0, 64, 64);
-  particleTexture = Texture.from(c);
+  particleTexture = P!.Texture.from(c);
   return particleTexture;
 }
 
 function ensureDotSprites(n: number): void {
   while (particleSprites.length < n) {
-    const s = new Sprite(ensureParticleTexture());
+    const s = new P!.Sprite(ensureParticleTexture());
     s.anchor.set(0.5);
     s.visible = false;
     particleSprites.push(s);
@@ -304,11 +331,11 @@ function ensureGlyphTextures(): Texture[] {
     const y = Math.floor(i / GLYPH_COLS) * GLYPH_CELL_H + GLYPH_CELL_H / 2;
     g.fillText(MATRIX_CHARS[i], x, y);
   }
-  const atlas = Texture.from(c);
+  const atlas = P!.Texture.from(c);
   glyphTextures = Array.from({ length: MATRIX_CHARS.length }, (_, i) => {
-    return new Texture({
+    return new P!.Texture({
       source: atlas.source,
-      frame: new Rectangle(
+      frame: new P!.Rectangle(
         (i % GLYPH_COLS) * GLYPH_CELL_W,
         Math.floor(i / GLYPH_COLS) * GLYPH_CELL_H,
         GLYPH_CELL_W,
@@ -322,7 +349,7 @@ function ensureGlyphTextures(): Texture[] {
 function ensureMatrixSprites(n: number): void {
   const glyphs = ensureGlyphTextures();
   while (matrixSprites.length < n) {
-    const s = new Sprite(glyphs[0]);
+    const s = new P!.Sprite(glyphs[0]);
     s.anchor.set(0.5);
     s.visible = false;
     matrixSprites.push(s);
