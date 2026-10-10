@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+/* Webfonts (loaded in index.html from Google Fonts): Latin glyphs come
+   from Inter, CJK glyphs fall through to Noto Sans SC per-character;
+   font-mono utilities use JetBrains Mono for timecodes/readouts. */
+@theme {
+  --font-sans:
+    "Inter", "Noto Sans SC", ui-sans-serif, system-ui, -apple-system,
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  --font-mono:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    Keyfrio Design System v2 — "Obsidian Studio"
    深邃黑曜石质感 · 精密间距 · 克制的光
@@ -99,8 +110,8 @@
     overflow: hidden;
     color: var(--kf-text);
     font-family:
-      "Inter", ui-sans-serif, system-ui, -apple-system, "PingFang SC",
-      "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+      "Inter", "Noto Sans SC", ui-sans-serif, system-ui, -apple-system,
+      "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
     font-feature-settings: "cv11", "ss01";
     letter-spacing: -0.006em;
   }
