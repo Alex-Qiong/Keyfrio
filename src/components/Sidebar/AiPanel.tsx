@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 import { useEditor } from '../../context/EditorContext';
 import { DEFAULT_TEXT, DEFAULT_TRANSFORM, DEFAULT_FILTER } from '../../constants/samples';
-import { generateProceduralWaveform } from '../../utils/audio';
+import { extractWaveformFromBlob, pcmBase64ToWavBlob } from '../../utils/audio';
 import { AiUnavailableBanner } from '../common/AiUnavailableBanner';
 
 export const AiPanel: React.FC = () => {
@@ -56,6 +56,9 @@ export const AiPanel: React.FC = () => {
   const [ttsText, setTtsText] = useState('欢迎收看本期视频，今天我们将一起探索电影级视频剪辑的秘密技巧！');
   const [ttsVoice, setTtsVoice] = useState<'Kore' | 'Puck' | 'Zephyr' | 'Fenrir' | 'Charon'>('Kore');
   const [ttsResultAudio, setTtsResultAudio] = useState<string | null>(null);
+  const [ttsAudioBlob, setTtsAudioBlob] = useState<Blob | null>(null);
+  const [ttsAudioUrl, setTtsAudioUrl] = useState<string | null>(null);
+  const [ttsDuration, setTtsDuration] = useState<number | null>(null);
 
   // Captions State
   const [captionInput, setCaptionInput] = useState('今天给大家分享3个超实用剪辑技巧，让你也能轻松做出电影感大片！第一步是节奏把控，第二步是色彩情绪，第三步是音效细节...');
@@ -124,6 +127,12 @@ export const AiPanel: React.FC = () => {
     if (!ttsText.trim() || loading) return;
     setLoading(true);
     setTtsResultAudio(null);
+    setTtsAudioBlob(null);
+    setTtsDuration(null);
+    if (ttsAudioUrl) {
+      URL.revokeObjectURL(ttsAudioUrl);
+      setTtsAudioUrl(null);
+    }
     try {
       const res = await fetch('/api/ai/tts', {
         method: 'POST',
@@ -135,7 +144,12 @@ export const AiPanel: React.FC = () => {
       });
       const data = await res.json();
       if (data.audioBase64) {
+        const { blob, duration } = pcmBase64ToWavBlob(data.audioBase64, 24000);
+        const url = URL.createObjectURL(blob);
         setTtsResultAudio(data.audioBase64);
+        setTtsAudioBlob(blob);
+        setTtsAudioUrl(url);
+        setTtsDuration(duration);
       }
     } catch (e: any) {
       console.error(e);
@@ -146,23 +160,29 @@ export const AiPanel: React.FC = () => {
   };
 
   // Apply TTS audio into timeline
-  const handleApplyTTSToTimeline = () => {
+  const handleApplyTTSToTimeline = async () => {
+    if (!ttsAudioBlob || !ttsAudioUrl || ttsDuration === null) {
+      alert('请先生成语音后再添加至时间线');
+      return;
+    }
     let audioTrack = project.tracks.find((t) => t.type === 'audio');
     if (!audioTrack) {
       audioTrack = addTrack('audio', 'AI 旁白配音 (Voiceover)');
     }
 
-    const estimatedDuration = Math.max(2, Math.ceil(ttsText.length * 0.35));
+    const waveform = await extractWaveformFromBlob(ttsAudioBlob, 80);
     addClip(audioTrack.id, {
       name: `AI 配音 (${ttsVoice}): ${ttsText.slice(0, 8)}...`,
       type: 'audio',
       start: currentTime,
-      duration: estimatedDuration,
+      duration: ttsDuration,
+      sourceUrl: ttsAudioUrl,
+      sourceBlob: ttsAudioBlob,
       audio: { volume: 0.95, fadeIn: 0.2, fadeOut: 0.4, muted: false, pan: 0 },
-      audioWaveform: generateProceduralWaveform(80, 7),
+      audioWaveform: waveform,
     });
 
-    alert(`🎉 成功将 AI 旁白语音导入音频轨 (时长约 ${estimatedDuration}s)！`);
+    alert(`🎉 成功将 AI 旁白语音导入音频轨 (时长约 ${ttsDuration.toFixed(1)}s)！`);
   };
 
   // 3. Auto Captions Generator
@@ -472,6 +492,13 @@ export const AiPanel: React.FC = () => {
                   <Check className="w-3.5 h-3.5 text-emerald-400" />
                   语音合成完毕
                 </span>
+                {ttsAudioUrl && (
+                  <audio
+                    controls
+                    src={ttsAudioUrl}
+                    className="w-full h-8 rounded bg-[var(--kf-surface-4)]"
+                  />
+                )}
                 <button
                   onClick={handleApplyTTSToTimeline}
                   className="w-full py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded font-medium text-xs flex items-center justify-center gap-1 transition-all"

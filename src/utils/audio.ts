@@ -340,7 +340,7 @@ export function sliceAudioBuffer(buffer: AudioBuffer, startSec: number, endSec: 
 /**
  * Synthesize rich AudioMass-style Sound Effects directly to playable/exportable WAV
  */
-export function synthesizeBgmBlob(toneType: string, duration = 20): Blob {
+function createSynthesizedBgmBuffer(toneType: string, duration: number): AudioBuffer {
   const sampleRate = 44100;
   const totalSamples = Math.max(1, Math.floor(sampleRate * duration));
   const ctx = getAudioContext();
@@ -368,7 +368,52 @@ export function synthesizeBgmBlob(toneType: string, duration = 20): Blob {
     left[i] = s;
     right[i] = s;
   }
-  return audioBufferToWavBlob(buffer);
+  return buffer;
+}
+
+export function synthesizeBgmBlob(toneType: string, duration = 20): Blob {
+  return audioBufferToWavBlob(createSynthesizedBgmBuffer(toneType, duration));
+}
+
+export function synthesizeBgmWithWaveform(
+  toneType: string,
+  duration: number
+): { blob: Blob; waveform: number[]; duration: number } {
+  const buffer = createSynthesizedBgmBuffer(toneType, duration);
+  const waveform: number[] = [];
+  const sampleCount = 80;
+  const samples = buffer.getChannelData(0);
+  const blockSize = Math.max(1, Math.floor(samples.length / sampleCount));
+  let maxPeak = 0;
+
+  for (let i = 0; i < sampleCount; i++) {
+    const start = i * blockSize;
+    const end = Math.min(samples.length, i === sampleCount - 1 ? samples.length : start + blockSize);
+    let peak = 0;
+    for (let j = start; j < end; j++) peak = Math.max(peak, Math.abs(samples[j]));
+    waveform.push(peak);
+    maxPeak = Math.max(maxPeak, peak);
+  }
+
+  return {
+    blob: audioBufferToWavBlob(buffer),
+    waveform: waveform.map((peak) => (maxPeak > 0 ? peak / maxPeak : 0)),
+    duration: buffer.duration,
+  };
+}
+
+export function pcmBase64ToWavBlob(base64: string, sampleRate = 24000): { blob: Blob; duration: number } {
+  const binary = atob(base64);
+  const frames = Math.floor(binary.length / 2);
+  const buffer = getAudioContext().createBuffer(1, frames, sampleRate);
+  const samples = buffer.getChannelData(0);
+  for (let i = 0; i < frames; i++) {
+    const offset = i * 2;
+    const sample = binary.charCodeAt(offset) | (binary.charCodeAt(offset + 1) << 8);
+    const signedSample = sample & 0x8000 ? sample - 0x10000 : sample;
+    samples[i] = signedSample / 32768;
+  }
+  return { blob: audioBufferToWavBlob(buffer), duration: frames / sampleRate };
 }
 
 export function synthesizeSfxBlob(toneType: string, duration = 1.0): Blob {

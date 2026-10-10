@@ -26,6 +26,7 @@ import {
 } from '../types/editor';
 import {
   ASPECT_RATIOS,
+  SAMPLE_VIDEOS,
   DEFAULT_TRANSFORM,
   DEFAULT_FILTER,
   DEFAULT_AUDIO,
@@ -33,7 +34,12 @@ import {
 } from '../constants/samples';
 import { LOTTIE_PRESETS } from '../constants/lottieSamples';
 import { buildDemoProject, buildTemplateProject } from '../domain/presetProjects';
-import { generateProceduralWaveform, playSynthesizedTone, fetchAndExtractWaveform } from '../utils/audio';
+import {
+  generateProceduralWaveform,
+  playSynthesizedTone,
+  fetchAndExtractWaveform,
+  synthesizeBgmWithWaveform,
+} from '../utils/audio';
 import {
   isTrackOverlapping,
   findTrackWithoutOverlap,
@@ -3165,13 +3171,19 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           case 'ADJUST_AUDIO': {
             if (payload.addBgm) {
               const audioTrack = project.tracks.find((t) => t.type === 'audio') || addTrack('audio', '背景音乐 (BGM)');
+              const acceptedTones = ['upbeat', 'cinematic', 'synthwave', 'lofi'];
+              const tone = acceptedTones.includes(payload.addBgm.type) ? payload.addBgm.type : 'upbeat';
+              const duration = Math.max(5, Math.min(30, totalDuration || 20));
+              const { blob, waveform } = synthesizeBgmWithWaveform(tone, duration);
               addClip(audioTrack.id, {
                 type: 'audio',
-                name: payload.addBgm.name || 'AI 推荐背景音乐.mp3',
+                name: payload.addBgm.name || 'AI 推荐背景音乐.wav',
                 start: 0,
-                duration: totalDuration || 20,
+                duration,
+                sourceUrl: URL.createObjectURL(blob),
+                sourceBlob: blob,
                 audio: { volume: payload.volume ?? 0.7, fadeIn: payload.fadeIn ?? 1, fadeOut: payload.fadeOut ?? 1.5, muted: false, pan: 0 },
-                audioWaveform: generateProceduralWaveform(80, 5),
+                audioWaveform: waveform,
               });
             }
             if (selectedClipId && payload.volume !== undefined) {
@@ -3204,25 +3216,24 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             const importedVideos = userAssets.filter((a) => a.type === 'video');
             const importedAudios = userAssets.filter((a) => a.type === 'audio');
 
-            if (importedVideos.length > 0) {
-              let curTime = 0;
-              importedVideos.forEach((v, idx) => {
-                const dur = Math.min(v.duration, 8);
-                addClip(videoTrack.id, {
-                  name: v.name,
-                  type: 'video',
-                  start: curTime,
-                  duration: dur,
-                  sourceUrl: v.url,
-                  sourceBlob: v.blob,
-                  thumbnailUrl: v.thumbnail,
-                  thumbnails: v.thumbnails,
-                  filter: { ...DEFAULT_FILTER, brightness: 105, contrast: 110 },
-                  transition: idx > 0 ? { type: 'crossDissolve', duration: 0.8 } : undefined,
-                });
-                curTime += dur;
+            const videosToUse = importedVideos.length > 0 ? importedVideos : SAMPLE_VIDEOS.slice(0, 3);
+            let curTime = 0;
+            videosToUse.forEach((v, idx) => {
+              const dur = Math.min(v.duration, 8);
+              addClip(videoTrack.id, {
+                name: v.name,
+                type: 'video',
+                start: curTime,
+                duration: dur,
+                sourceUrl: v.url,
+                sourceBlob: 'blob' in v ? v.blob : undefined,
+                thumbnailUrl: 'thumbnail' in v ? v.thumbnail : undefined,
+                thumbnails: 'thumbnails' in v ? v.thumbnails : undefined,
+                filter: { ...DEFAULT_FILTER, brightness: 105, contrast: 110 },
+                transition: idx > 0 ? { type: 'crossDissolve', duration: 0.8 } : undefined,
               });
-            }
+              curTime += dur;
+            });
 
             if (importedAudios.length > 0) {
               const bgm = importedAudios[0];
@@ -3235,6 +3246,19 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 sourceBlob: bgm.blob,
                 audio: { volume: 0.75, fadeIn: 0.5, fadeOut: 1.5, muted: false, pan: 0 },
                 audioWaveform: bgm.audioWaveform,
+              });
+            } else {
+              const bgmDuration = Math.max(5, Math.min(30, curTime || 15));
+              const { blob, waveform } = synthesizeBgmWithWaveform('cinematic', bgmDuration);
+              addClip(audioTrack.id, {
+                name: 'AI 电影感背景音乐.wav',
+                type: 'audio',
+                start: 0,
+                duration: bgmDuration,
+                sourceUrl: URL.createObjectURL(blob),
+                sourceBlob: blob,
+                audio: { volume: 0.75, fadeIn: 0.5, fadeOut: 1.5, muted: false, pan: 0 },
+                audioWaveform: waveform,
               });
             }
 
