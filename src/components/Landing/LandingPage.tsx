@@ -194,7 +194,7 @@ export const LandingPage: React.FC = () => {
 
   const handleUseTemplate = async (t: TemplateCard) => {
     await createNewProject(t.title, t.aspect, t.fps,
-      { width: t.width, height: t.height, aspectRatio: t.aspect, label: t.title }, t.desc);
+      { width: t.width, height: t.height, aspectRatio: t.aspect, label: t.title }, t.desc, t.id);
     openEditor();
   };
 

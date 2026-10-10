@@ -340,6 +340,37 @@ export function sliceAudioBuffer(buffer: AudioBuffer, startSec: number, endSec: 
 /**
  * Synthesize rich AudioMass-style Sound Effects directly to playable/exportable WAV
  */
+export function synthesizeBgmBlob(toneType: string, duration = 20): Blob {
+  const sampleRate = 44100;
+  const totalSamples = Math.max(1, Math.floor(sampleRate * duration));
+  const ctx = getAudioContext();
+  const buffer = ctx.createBuffer(2, totalSamples, sampleRate);
+  const left = buffer.getChannelData(0);
+  const right = buffer.getChannelData(1);
+  const modes: Record<string, number[][]> = {
+    upbeat: [[261.63, 329.63, 392], [196, 246.94, 293.66], [220, 277.18, 329.63], [174.61, 220, 261.63]],
+    cinematic: [[220, 261.63, 329.63], [196, 246.94, 293.66], [174.61, 220, 261.63], [146.83, 174.61, 220]],
+    synthwave: [[220, 277.18, 329.63], [196, 246.94, 293.66], [164.81, 207.65, 246.94], [185, 233.08, 277.18]],
+    lofi: [[261.63, 311.13, 392], [220, 261.63, 329.63], [196, 246.94, 293.66], [233.08, 293.66, 349.23]],
+  };
+  const chords = modes[toneType] || modes.lofi;
+  for (let i = 0; i < totalSamples; i++) {
+    const t = i / sampleRate;
+    const chord = chords[Math.floor(t / 3) % chords.length];
+    let s = chord.reduce((sum, f, n) => {
+      const wave = toneType === 'synthwave' ? 2 * ((f * t) % 1) - 1 : Math.sin(2 * Math.PI * f * t);
+      return sum + wave * (n === 0 ? 0.11 : 0.07);
+    }, 0);
+    const bass = Math.sin(2 * Math.PI * chord[0] * 0.5 * t) * (toneType === 'cinematic' || toneType === 'synthwave' ? 0.1 : 0.04);
+    const noise = toneType === 'lofi' ? (Math.random() * 2 - 1) * 0.012 : 0;
+    const fade = Math.min(1, i / (sampleRate * 0.5), (totalSamples - i) / (sampleRate * 0.5));
+    s = Math.max(-1, Math.min(1, (s + bass + noise) * fade));
+    left[i] = s;
+    right[i] = s;
+  }
+  return audioBufferToWavBlob(buffer);
+}
+
 export function synthesizeSfxBlob(toneType: string, duration = 1.0): Blob {
   const sampleRate = 44100;
   const totalSamples = Math.floor(sampleRate * duration);

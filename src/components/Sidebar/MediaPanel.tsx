@@ -20,6 +20,8 @@ import {
 import { useEditor } from '../../context/EditorContext';
 import { MediaCard } from './MediaCard';
 import { isFileSystemAccessSupported } from '../../utils/fileSystem';
+import { SAMPLE_VIDEOS, SAMPLE_IMAGES, SAMPLE_AUDIOS } from '../../constants/samples';
+import { synthesizeBgmBlob, synthesizeSfxBlob, extractWaveformFromBlob } from '../../utils/audio';
 
 export const MediaPanel: React.FC = () => {
   const {
@@ -96,6 +98,15 @@ export const MediaPanel: React.FC = () => {
     for (const asset of filteredAssets) {
       await addMediaToTimeline(asset);
     }
+  };
+
+  const addSampleAudio = async (sample: (typeof SAMPLE_AUDIOS)[number]) => {
+    const blob = sample.toneType.startsWith('sfx-')
+      ? synthesizeSfxBlob(sample.toneType, sample.duration)
+      : synthesizeBgmBlob(sample.toneType, sample.duration);
+    const url = URL.createObjectURL(blob);
+    const audioWaveform = await extractWaveformFromBlob(blob);
+    await addMediaToTimeline({ name: sample.name, type: 'audio', url, duration: sample.duration, audioWaveform });
   };
 
   return (
@@ -344,6 +355,21 @@ export const MediaPanel: React.FC = () => {
             </p>
           </div>
         )}
+
+        {/* Sample Media */}
+        <div className="flex flex-col gap-1.5">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">示例素材</span>
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            {[...SAMPLE_VIDEOS, ...SAMPLE_IMAGES].map((asset) => (
+              <MediaCard key={asset.id} name={asset.name} type={asset.type} url={asset.url} thumbnail={asset.thumbnail} duration={asset.duration} onAdd={() => addMediaToTimeline({ name: asset.name, type: asset.type, url: asset.url, duration: asset.duration, thumbnail: asset.thumbnail })} badge="示例" />
+            ))}
+            {SAMPLE_AUDIOS.map((asset) => (
+              <MediaCard key={asset.id} name={asset.name} type="audio" url="" duration={asset.duration} onAdd={() => addSampleAudio(asset)} badge={asset.category} />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

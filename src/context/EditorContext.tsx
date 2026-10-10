@@ -32,6 +32,7 @@ import {
   DEFAULT_TEXT,
 } from '../constants/samples';
 import { LOTTIE_PRESETS } from '../constants/lottieSamples';
+import { buildDemoProject, buildTemplateProject } from '../domain/presetProjects';
 import { generateProceduralWaveform, playSynthesizedTone, fetchAndExtractWaveform } from '../utils/audio';
 import {
   isTrackOverlapping,
@@ -119,7 +120,7 @@ interface EditorContextType {
   openProjectManager: () => void;
   closeProjectManager: () => void;
   switchProject: (projectId: string) => Promise<void>;
-  createNewProject: (name?: string, aspect?: AspectRatio, fps?: number, customResolution?: Resolution, description?: string) => Promise<Project>;
+  createNewProject: (name?: string, aspect?: AspectRatio, fps?: number, customResolution?: Resolution, description?: string, templateId?: string) => Promise<Project>;
   duplicateProject: (projectId: string) => Promise<void>;
   renameProject: (projectId: string, newName: string) => Promise<void>;
   deleteProject: (projectId: string) => Promise<void>;
@@ -927,7 +928,8 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       aspect: AspectRatio = '16:9',
       fps: number = 30,
       customResolution?: Resolution,
-      description?: string
+      description?: string,
+      templateId?: string
     ) => {
       const videoTrack: Track = {
         id: `track-video-${Date.now()}`,
@@ -968,6 +970,12 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         tracks: [videoTrack, audioTrack],
         lastModified: Date.now(),
       };
+
+      if (templateId) {
+        const preset = buildTemplateProject(templateId, { name: newProj.name, aspect, fps, resolution: targetResolution });
+        newProj.tracks = preset.tracks;
+        newProj.duration = preset.duration;
+      }
 
       await saveProjectToDB(newProj);
       localStorage.setItem('opencut_active_project_id', newProj.id);
@@ -2796,9 +2804,11 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   );
 
   const loadDemoProject = useCallback(() => {
-    const demo = createInitialProject();
+    const demo = buildDemoProject();
     setProject(demo);
     pushHistory(demo.tracks);
+    setSelectedClipIds([]);
+    setCurrentTime(0);
     setCurrentView('editor');
   }, [pushHistory]);
 

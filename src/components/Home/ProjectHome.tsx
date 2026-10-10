@@ -164,7 +164,7 @@ export const ProjectHome: React.FC = () => {
     const resolution: Resolution = { width: template.width, height: template.height, aspectRatio: template.aspect, label: template.title };
     await createNewProject(
       `${template.title} (${new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })})`,
-      template.aspect, template.fps, resolution, template.desc
+      template.aspect, template.fps, resolution, template.desc, template.id
     );
   };
   const formatTimeAgo = (timestamp: number) => {
