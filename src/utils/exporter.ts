@@ -1,6 +1,7 @@
 import { Project, ExportSettings, ExportProgress } from '../types/editor';
 import { renderFrame } from './canvasRenderer';
 import { getAudioContext } from './audio';
+import { ensureFontsForTracks } from './fontLoader';
 
 export async function exportVideo(
   project: Project,
@@ -9,6 +10,11 @@ export async function exportVideo(
   abortSignal?: AbortSignal
 ): Promise<{ blob: Blob; mimeType: string; format: 'mp4' | 'webm' }> {
   const { resolution, fps, quality } = settings;
+
+  // Make sure every Google Font used by text clips is fully loaded before
+  // frames are drawn, otherwise the export bakes in fallback typefaces.
+  await ensureFontsForTracks(project.tracks);
+
   const totalDuration = project.duration || 10;
   const totalFrames = Math.ceil(totalDuration * fps);
 

@@ -4,6 +4,7 @@ import { renderGpuEffectOnCanvas } from './pixiEngine';
 import { getOrCreateVideoElement, getOrCreateImageElement } from './mediaPlayback';
 import { getClipActiveTransformAtTime, getClipActiveFilterAtTime } from './keyframeEngine';
 import { applyColorGradingToImageData } from './colorGradingEngine';
+import { primeFontForStack } from './fontLoader';
 
 let offscreenCaptureCanvas: HTMLCanvasElement | null = null;
 let offscreenColorGradeCanvas: HTMLCanvasElement | null = null;
@@ -379,6 +380,7 @@ export function renderFrame(
         displayText = cfg.text.slice(0, Math.min(cfg.text.length, charCount));
       }
 
+      primeFontForStack(cfg.fontFamily);
       ctx.font = `${cfg.fontStyle} ${cfg.fontWeight} ${cfg.fontSize}px ${cfg.fontFamily}`;
       ctx.textAlign = cfg.align || 'center';
       ctx.textBaseline = 'middle';
@@ -549,6 +551,7 @@ export function renderFrame(
         // Accurately calculated bounding box matching the rendered media
         let { width: boxW, height: boxH } = getMediaBaseDimensions(clip, width, height);
         if (clip.type === 'text' && clip.text) {
+          primeFontForStack(clip.text.fontFamily);
           ctx.font = `${clip.text.fontStyle} ${clip.text.fontWeight} ${clip.text.fontSize}px ${clip.text.fontFamily}`;
           const m = ctx.measureText(clip.text.text);
           const pad = clip.text.bgPadding || 16;

@@ -21,13 +21,18 @@ interface TextInspectorTabProps {
   onUpdate: (updates: Partial<Clip>) => void;
 }
 
-const FONT_PRESETS = [
-  { label: '系统黑体 (System Sans)', value: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' },
-  { label: '经典衬线 (Serif)', value: 'Georgia, "Times New Roman", serif' },
-  { label: '现代等宽 (Monospace)', value: '"Courier New", Consolas, monospace' },
-  { label: '厚重海报 (Impact)', value: 'Impact, "Arial Black", sans-serif' },
-  { label: '优美楷体 (Cursive/Calligraphy)', value: '"Comic Sans MS", "Brush Script MT", cursive' },
-];
+import {
+  GOOGLE_FONT_GROUPS,
+  GOOGLE_FONT_OPTIONS,
+  SYSTEM_FONT_PRESETS,
+  parsePrimaryFamily,
+} from '../../constants/googleFonts';
+import { ensureGoogleFontLoaded } from '../../utils/fontLoader';
+
+const knownFontValues = new Set<string>([
+  ...GOOGLE_FONT_OPTIONS.map((f) => f.stack),
+  ...SYSTEM_FONT_PRESETS.map((f) => f.value),
+]);
 
 const TEXT_STYLE_PRESETS = [
   {
@@ -168,15 +173,39 @@ export const TextInspectorTab: React.FC<TextInspectorTabProps> = ({ clip, onUpda
           <label className="text-[10px] text-neutral-400 block mb-1">选择字体：</label>
           <select
             value={textCfg.fontFamily}
-            onChange={(e) => updateText({ fontFamily: e.target.value })}
+            onChange={(e) => {
+              const value = e.target.value;
+              updateText({ fontFamily: value });
+              // Start loading the picked Google Font right away so the
+              // preview canvas swaps from fallback to the real face.
+              void ensureGoogleFontLoaded(parsePrimaryFamily(value));
+            }}
+            style={{ fontFamily: textCfg.fontFamily }}
             className="w-full bg-[var(--kf-surface-1)] border border-white/[0.06] text-white p-1.5 rounded-lg outline-none text-xs cursor-pointer"
           >
-            {FONT_PRESETS.map((f) => (
-              <option key={f.label} value={f.value}>
-                {f.label}
-              </option>
+            {!knownFontValues.has(textCfg.fontFamily) && (
+              <option value={textCfg.fontFamily}>当前字体（自定义）</option>
+            )}
+            {GOOGLE_FONT_GROUPS.map((group) => (
+              <optgroup key={group} label={`Google 字体 · ${group}（开源）`}>
+                {GOOGLE_FONT_OPTIONS.filter((f) => f.group === group).map((f) => (
+                  <option key={f.family} value={f.stack}>
+                    {f.label}
+                  </option>
+                ))}
+              </optgroup>
             ))}
+            <optgroup label="系统字体">
+              {SYSTEM_FONT_PRESETS.map((f) => (
+                <option key={f.label} value={f.value}>
+                  {f.label}
+                </option>
+              ))}
+            </optgroup>
           </select>
+          <p className="mt-1 text-[10px] leading-relaxed text-neutral-500">
+            Google 字体均为开源字体，首次选用时按需从 CDN 加载；工程打开与导出时会自动预加载已用字体。
+          </p>
         </div>
 
         {/* Font Size with Stepper */}

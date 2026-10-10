@@ -49,6 +49,7 @@ import {
 import { findSnapTime } from '../utils/time';
 import { extractVideoMetadataAndFilmstrip, extractAudioMetadataAndWaveform, createFallbackThumbnail } from '../utils/mediaExtractor';
 import { syncMediaPlayback, pauseAllMedia } from '../utils/mediaPlayback';
+import { primeFontForStack } from '../utils/fontLoader';
 import {
   saveProjectToDB,
   loadProjectFromDB,
@@ -2848,6 +2849,16 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       .then((data) => setAiAvailable(typeof data.aiAvailable === 'boolean' ? data.aiAvailable : false))
       .catch(() => setAiAvailable(false));
   }, []);
+
+  // Preload Google Fonts used by this project's text clips so the preview
+  // canvas renders the real faces instead of fallbacks.
+  useEffect(() => {
+    for (const track of project.tracks) {
+      for (const clip of track.clips) {
+        if (clip.text?.fontFamily) primeFontForStack(clip.text.fontFamily);
+      }
+    }
+  }, [project]);
   const [audioStudioTargetClipId, setAudioStudioTargetClipId] = useState<string | null>(null);
   const [audioStudioTargetAsset, setAudioStudioTargetAsset] = useState<MediaAsset | null>(null);
 
