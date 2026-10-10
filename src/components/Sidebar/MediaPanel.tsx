@@ -16,6 +16,8 @@ import {
   HardDrive,
   Unlock,
   AlertTriangle,
+  ChevronDown,
+  ArrowUpDown,
 } from 'lucide-react';
 import { useEditor } from '../../context/EditorContext';
 import { MediaCard } from './MediaCard';
@@ -39,6 +41,8 @@ export const MediaPanel: React.FC = () => {
   } = useEditor();
 
   const [filterType, setFilterType] = useState<'all' | 'video' | 'image' | 'audio' | 'lottie'>('all');
+  const [sortKey, setSortKey] = useState<'recent' | 'name' | 'duration' | 'size'>('recent');
+  const [samplesOpen, setSamplesOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -83,15 +87,41 @@ export const MediaPanel: React.FC = () => {
     handleFileUpload(e.dataTransfer.files);
   };
 
+  const typeCounts = useMemo(() => {
+    const counts = { all: userAssets.length, video: 0, image: 0, audio: 0, lottie: 0 };
+    for (const a of userAssets) {
+      if (a.type === 'video') counts.video++;
+      else if (a.type === 'image') counts.image++;
+      else if (a.type === 'audio') counts.audio++;
+      else if (a.type === 'lottie') counts.lottie++;
+    }
+    return counts;
+  }, [userAssets]);
+
   const filteredAssets = useMemo(() => {
-    return userAssets.filter((a) => {
+    const filtered = userAssets.filter((a) => {
       if (filterType !== 'all' && a.type !== filterType) return false;
       if (searchQuery.trim() && !a.name.toLowerCase().includes(searchQuery.toLowerCase().trim())) {
         return false;
       }
       return true;
     });
-  }, [userAssets, filterType, searchQuery]);
+    const sorted = [...filtered];
+    switch (sortKey) {
+      case 'name':
+        sorted.sort((x, y) => x.name.localeCompare(y.name, 'zh-CN'));
+        break;
+      case 'duration':
+        sorted.sort((x, y) => (y.duration || 0) - (x.duration || 0));
+        break;
+      case 'size':
+        sorted.sort((x, y) => (y.size || 0) - (x.size || 0));
+        break;
+      default:
+        break; // 'recent' keeps import order
+    }
+    return sorted;
+  }, [userAssets, filterType, searchQuery, sortKey]);
 
   // Batch add all filtered assets to timeline
   const handleAddAllToTimeline = async () => {
@@ -132,6 +162,12 @@ export const MediaPanel: React.FC = () => {
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
             )}
           </button>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-3">
+        {/* Type filter row (with per-type counts) */}
+        {userAssets.length > 0 && (
           <div className="flex gap-0.5 bg-black/30 p-0.5 rounded-lg border border-white/[0.06]">
             {(
               [
@@ -144,20 +180,19 @@ export const MediaPanel: React.FC = () => {
               <button
                 key={item.id}
                 onClick={() => setFilterType(item.id)}
-                className={`px-2 py-1 rounded-md text-[10px] font-medium transition-all cursor-pointer ${
+                className={`flex-1 px-2 py-1 rounded-md text-[10px] font-medium transition-all cursor-pointer flex items-center justify-center gap-1 ${
                   filterType === item.id
                     ? 'bg-[var(--kf-accent-soft)] text-[var(--kf-accent)] shadow-[inset_0_0_0_1px_var(--kf-accent-line)]'
                     : 'text-neutral-500 hover:text-neutral-200'
                 }`}
               >
                 {item.label}
+                <span className="font-mono text-[9px] opacity-70">{typeCounts[item.id]}</span>
               </button>
             ))}
           </div>
-        </div>
-      </div>
+        )}
 
-      <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-3">
         {/* Offline / Need Permission Alert Block */}
         {(needsPermissionCount > 0 || offlineAssetsCount > 0) && (
           <div className="p-3 rounded-xl bg-amber-500/[0.06] border border-amber-500/25 flex flex-col gap-2">
@@ -247,7 +282,7 @@ export const MediaPanel: React.FC = () => {
         <div className="grid grid-cols-3 gap-1.5">
           <button
             onClick={() => openRecordModal('screen')}
-            className="bg-[var(--kf-surface-3)] hover:bg-[#1e202c] border border-white/[0.06] p-1.5 rounded-md flex flex-col items-center gap-0.5 text-neutral-300 hover:text-white transition-colors"
+            className="bg-[var(--kf-surface-3)] hover:bg-[var(--kf-surface-4)] border border-white/[0.06] p-1.5 rounded-md flex flex-col items-center gap-0.5 text-neutral-300 hover:text-white transition-colors"
             title="录制电脑屏幕画面"
           >
             <Monitor className="w-3.5 h-3.5 text-cyan-300" />
@@ -255,7 +290,7 @@ export const MediaPanel: React.FC = () => {
           </button>
           <button
             onClick={() => openRecordModal('camera')}
-            className="bg-[var(--kf-surface-3)] hover:bg-[#1e202c] border border-white/[0.06] p-1.5 rounded-md flex flex-col items-center gap-0.5 text-neutral-300 hover:text-white transition-colors"
+            className="bg-[var(--kf-surface-3)] hover:bg-[var(--kf-surface-4)] border border-white/[0.06] p-1.5 rounded-md flex flex-col items-center gap-0.5 text-neutral-300 hover:text-white transition-colors"
             title="录制高清摄像头实拍"
           >
             <Video className="w-3.5 h-3.5 text-rose-400" />
@@ -263,7 +298,7 @@ export const MediaPanel: React.FC = () => {
           </button>
           <button
             onClick={() => openRecordModal('audio')}
-            className="bg-[var(--kf-surface-3)] hover:bg-[#1e202c] border border-white/[0.06] p-1.5 rounded-md flex flex-col items-center gap-0.5 text-neutral-300 hover:text-white transition-colors"
+            className="bg-[var(--kf-surface-3)] hover:bg-[var(--kf-surface-4)] border border-white/[0.06] p-1.5 rounded-md flex flex-col items-center gap-0.5 text-neutral-300 hover:text-white transition-colors"
             title="录制麦克风旁白"
           >
             <Mic className="w-3.5 h-3.5 text-amber-400" />
@@ -281,13 +316,26 @@ export const MediaPanel: React.FC = () => {
                 placeholder="搜索导入的素材..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[#161720] border border-white/[0.06] rounded pl-6 pr-2 py-1 text-[10px] text-neutral-200 placeholder-neutral-500 focus:outline-hidden focus:border-cyan-400"
+                className="kf-input w-full pl-6 pr-2 py-1 text-[10px]"
               />
+            </div>
+            <div className="relative shrink-0" title="排序方式">
+              <ArrowUpDown className="w-3 h-3 text-neutral-500 absolute left-1.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <select
+                value={sortKey}
+                onChange={(e) => setSortKey(e.target.value as typeof sortKey)}
+                className="kf-input pl-6 pr-1.5 py-1 text-[10px] cursor-pointer appearance-none"
+              >
+                <option value="recent">导入顺序</option>
+                <option value="name">名称</option>
+                <option value="duration">时长</option>
+                <option value="size">大小</option>
+              </select>
             </div>
             {filteredAssets.length > 0 && (
               <button
                 onClick={handleAddAllToTimeline}
-                className="px-2 py-1 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border border-cyan-400/30 rounded text-[10px] font-medium flex items-center gap-1 shrink-0"
+                className="kf-btn kf-btn-primary px-2 py-1 text-[10px] shrink-0"
                 title="批量将当前素材导入时间线"
               >
                 <Layers className="w-3 h-3" />
@@ -296,7 +344,7 @@ export const MediaPanel: React.FC = () => {
             )}
             <button
               onClick={clearUserAssets}
-              className="p-1 hover:bg-red-500/20 text-neutral-500 hover:text-red-400 rounded border border-transparent hover:border-red-500/30 transition-colors shrink-0"
+              className="kf-btn kf-btn-danger-ghost p-1 shrink-0"
               title="清空素材库"
             >
               <Trash2 className="w-3 h-3" />
@@ -307,9 +355,10 @@ export const MediaPanel: React.FC = () => {
         {/* User Imported Real Media Assets Grid */}
         {filteredAssets.length > 0 ? (
           <div className="flex flex-col gap-1.5">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
-                已导入素材 ({filteredAssets.length})
+            <div className="kf-section-title">
+              已导入素材
+              <span className="font-mono normal-case tracking-normal text-[var(--kf-text-faint)]">
+                {filteredAssets.length}
               </span>
             </div>
             <div className="grid grid-cols-2 gap-2">
@@ -324,6 +373,7 @@ export const MediaPanel: React.FC = () => {
                   duration={asset.duration}
                   width={asset.width}
                   height={asset.height}
+                  size={asset.size}
                   isOffline={asset.isOffline}
                   needsPermission={asset.needsPermission}
                   onRelink={openRelinkModal}
@@ -356,19 +406,32 @@ export const MediaPanel: React.FC = () => {
           </div>
         )}
 
-        {/* Sample Media */}
+        {/* Sample Media (collapsible) */}
         <div className="flex flex-col gap-1.5">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">示例素材</span>
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            {[...SAMPLE_VIDEOS, ...SAMPLE_IMAGES].map((asset) => (
-              <MediaCard key={asset.id} name={asset.name} type={asset.type} url={asset.url} thumbnail={asset.thumbnail} duration={asset.duration} onAdd={() => addMediaToTimeline({ name: asset.name, type: asset.type, url: asset.url, duration: asset.duration, thumbnail: asset.thumbnail })} badge="示例" />
-            ))}
-            {SAMPLE_AUDIOS.map((asset) => (
-              <MediaCard key={asset.id} name={asset.name} type="audio" url="" duration={asset.duration} onAdd={() => addSampleAudio(asset)} badge={asset.category} />
-            ))}
-          </div>
+          <button
+            type="button"
+            onClick={() => setSamplesOpen((v) => !v)}
+            className="kf-section-title w-full cursor-pointer text-left"
+            title={samplesOpen ? '收起示例素材' : '展开示例素材'}
+          >
+            示例素材
+            <span className="font-mono normal-case tracking-normal text-[var(--kf-text-faint)]">
+              {SAMPLE_VIDEOS.length + SAMPLE_IMAGES.length + SAMPLE_AUDIOS.length}
+            </span>
+            <ChevronDown
+              className={`w-3.5 h-3.5 shrink-0 text-neutral-500 transition-transform ${samplesOpen ? '' : '-rotate-90'}`}
+            />
+          </button>
+          {samplesOpen && (
+            <div className="grid grid-cols-2 gap-2">
+              {[...SAMPLE_VIDEOS, ...SAMPLE_IMAGES].map((asset) => (
+                <MediaCard key={asset.id} name={asset.name} type={asset.type} url={asset.url} thumbnail={asset.thumbnail} duration={asset.duration} onAdd={() => addMediaToTimeline({ name: asset.name, type: asset.type, url: asset.url, duration: asset.duration, thumbnail: asset.thumbnail })} badge="示例" />
+              ))}
+              {SAMPLE_AUDIOS.map((asset) => (
+                <MediaCard key={asset.id} name={asset.name} type="audio" url="" duration={asset.duration} onAdd={() => addSampleAudio(asset)} badge={asset.category} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
